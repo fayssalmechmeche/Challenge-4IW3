@@ -124,7 +124,7 @@ class Devis
     /**
      * Get the value of paymentStatus
      */
-    public function getPaymentStatus()
+    public function getPaymentStatus(): PaymentStatus
     {
         return $this->paymentStatus;
     }
@@ -134,7 +134,7 @@ class Devis
      *
      * @return  self
      */
-    public function setPaymentStatus($paymentStatus)
+    public function setPaymentStatus($paymentStatus): self
     {
         $this->paymentStatus = $paymentStatus;
 

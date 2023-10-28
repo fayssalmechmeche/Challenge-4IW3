@@ -14,6 +14,9 @@ class Invoice
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: "string", enumType: PaymentStatus::class, nullable: true)]
+    private PaymentStatus $paymentStatus;
+
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Devis $devis = null;
@@ -91,6 +94,26 @@ class Invoice
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of paymentStatus
+     */
+    public function getPaymentStatus(): PaymentStatus
+    {
+        return $this->paymentStatus;
+    }
+
+    /**
+     * Set the value of paymentStatus
+     *
+     * @return  self
+     */
+    public function setPaymentStatus($paymentStatus): self
+    {
+        $this->paymentStatus = $paymentStatus;
 
         return $this;
     }
