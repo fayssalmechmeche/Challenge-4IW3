@@ -79,3 +79,14 @@ Executer les requètes en DB
 `docker compose exec php bin/console doctrine:schema:update --force`
 
 `docker compose exec php bin/console d:s:u --force`
+
+## 28/09/2023
+
+Ajout des entités pour la base de données
+
+```php
+
+docker compose exec php bin/console m:m
+docker compose exec php bin/console d:m:m
+
+```
