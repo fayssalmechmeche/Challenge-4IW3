@@ -90,3 +90,14 @@ docker compose exec php bin/console m:m
 docker compose exec php bin/console d:m:m
 
 ```
+
+## 5/11/2023
+
+Ajout de webpack encore sur le projet
+
+```
+docker compose exec php composer install
+docker compose up
+docker compose exec php npm install
+docker compose exec php npm run dev
+```
