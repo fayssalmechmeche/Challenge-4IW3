@@ -100,4 +100,9 @@ docker compose exec php composer install
 docker compose up
 docker compose exec php npm install
 docker compose exec php npm run dev
+
+install tailwindcss
+
+docker compose exec php npm install -D tailwindcss postcss postcss-loader autoprefixer
+
 ```
