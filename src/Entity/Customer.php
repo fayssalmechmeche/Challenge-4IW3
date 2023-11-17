@@ -37,6 +37,7 @@ class Customer
     public function __construct()
     {
         $this->devis = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int

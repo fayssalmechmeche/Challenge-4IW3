@@ -16,8 +16,7 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
+
 
     #[ORM\Column]
     private ?int $price = null;
@@ -25,11 +24,11 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?ProductCategory $productCategory = null;
+    #[ORM\Column(type: "string")]
+    private ?string $productCategory = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Society $society = null;
 
     public function getId(): ?int
@@ -45,18 +44,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -85,12 +72,12 @@ class Product
         return $this;
     }
 
-    public function getProductCategory(): ?ProductCategory
+    public function getProductCategory(): ?string
     {
         return $this->productCategory;
     }
 
-    public function setProductCategory(?ProductCategory $productCategory): static
+    public function setProductCategory(?string $productCategory): self
     {
         $this->productCategory = $productCategory;
 

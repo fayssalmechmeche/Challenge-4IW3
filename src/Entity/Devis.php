@@ -8,7 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-
+enum PaymentStatus: string
+{
+    case null = "";
+    case Pending = "PENDING";
+    case Paid = "PAID";
+    case Partial = "PARTIAL";
+    case Refunded = "REFUNDED";
+}
 
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
 class Devis
@@ -36,9 +43,7 @@ class Devis
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'devis')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Society $society = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
@@ -54,7 +59,16 @@ class Devis
     {
         $this->productItems = new ArrayCollection();
         $this->invoices = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->paymentStatus = PaymentStatus::Pending;
     }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
 
     public function getId(): ?int
     {
@@ -141,17 +155,6 @@ class Devis
         return $this;
     }
 
-    public function getSociety(): ?Society
-    {
-        return $this->society;
-    }
-
-    public function setSociety(?Society $society): static
-    {
-        $this->society = $society;
-
-        return $this;
-    }
 
     public function getCustomer(): ?Customer
     {
