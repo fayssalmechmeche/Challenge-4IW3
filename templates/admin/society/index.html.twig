@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Societé
+{% endblock %}
+
+{% block body %}
+
+	<table>
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th>Adresse</th>
+				<th>Téléphone</th>
+				<th>Email</th>
+				<th>Siret</th>
+				<th colspan="2">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for society in societies %}
+				<tr>
+					<td>{{ society.id }}</td>
+					<td>{{ society.name }}</td>
+					<td>{{ society.address }}</td>
+					<td>{{ society.phone }}</td>
+					<td>{{ society.email }}</td>
+					<td>{{ society.siret }}</td>
+					<td>
+						<a href="{{ path('admin_society_edit', {'id': society.id}) }}\">Modifier</a>
+						<a href="{{ path('admin_society_delete', {'id': society.id,'token':csrf_token('delete-society' ~ society.id) }) }}\">Supprimer</a>
+					</td>
+				</tr>
+			{% endfor %}
+
+
+		</tbody>
+	</table>
+
+{% endblock %}

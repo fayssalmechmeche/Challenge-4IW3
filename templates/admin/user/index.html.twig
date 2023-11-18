@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Societé
+{% endblock %}
+
+{% block body %}
+
+	<table>
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th>Téléphone</th>
+				<th>Email</th>
+				<th>Siret</th>
+				<th colspan="2">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+				<tr>
+					<td>{{ user.id }}</td>
+					<td>{{ user.name }}
+						{{ user.lastName }}</td>
+					<td>{{ user.email }}</td>
+					<td>
+						<a href="{{ path('admin_user_edit', {'id': user.id}) }}\">Modifier</a>
+						<a href="{{ path('admin_user_delete', {'id': user.id,'token':csrf_token('delete-users' ~ user.id) }) }}\">Supprimer</a>
+					</td>
+				</tr>
+			{% endfor %}
+
+
+		</tbody>
+	</table>
+
+{% endblock %}

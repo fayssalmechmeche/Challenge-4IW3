@@ -8,6 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+enum PaymentStatus: string
+{
+    case null = "";
+    case Pending = "PENDING";
+    case Paid = "PAID";
+    case Partial = "PARTIAL";
+    case Refunded = "REFUNDED";
+}
 
 
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
