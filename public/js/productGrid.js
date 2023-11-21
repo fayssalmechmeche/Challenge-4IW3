@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
             then: data => data.map(product => [
                 product.name,
                 product.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
-                gridjs.html(product.image ? `<img src='/images/products/${product.image}' alt='Image' style='height: 50px;' />` : 'No Image'),
+                gridjs.html(product.image ? `<img src='/images/products/${product.image}' alt='Image' style='height: 50px;' />` : 'Aucune image'),
                 product.productCategory,
                 gridjs.html(`
                     <a href='/product/${product.id}/edit' class='btn btn-primary btn-sm'>Modifier</a>

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-git enum PaymentStatus: string
+ enum PaymentStatus: string
 {
     case null = "";
     case Pending = "PENDING";
@@ -16,7 +16,6 @@ git enum PaymentStatus: string
     case Partial = "PARTIAL";
     case Refunded = "REFUNDED";
 }
-
 
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
 class Devis
