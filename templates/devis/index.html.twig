@@ -13,5 +13,8 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        var csrfToken = '{{ csrf_token('delete_devis') }}';
+    </script>
     <script src="{{ asset('js/devisGrid.js') }}"></script>
 {% endblock %}

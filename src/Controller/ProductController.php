@@ -143,13 +143,16 @@ class ProductController extends AbstractController
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete_product', $request->request->get('_token'))) {
-            $imageName = $product->getImage();
-            if ($imageName) {
-                $imagePath = $this->getParameter('images_directory') . '/' . $imageName;
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
+            // Vérifiez si le produit est utilisé dans une formule
+            if (!$product->getProductFormulas()->isEmpty()) {
+                $this->addFlash('error', 'Ce produit est utilisé dans une formule. Supprimez d\'abord la formule liée.');
+                return $this->redirectToRoute('app_product_index');
             }
+            if (!$product->getDevisProducts()->isEmpty()) {
+                $this->addFlash('error', 'Ce produit est utilisé dans un devis. Supprimez d\'abord le devis lié.');
+                return $this->redirectToRoute('app_product_index');
+            }
+
             $entityManager->remove($product);
             $entityManager->flush();
         }

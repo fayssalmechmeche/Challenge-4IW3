@@ -55,12 +55,16 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisProduct::class,cascade: ['persist'], orphanRemoval: true)]
+    private Collection $devisProducts;
+
     public function __construct()
     {
         $this->productItems = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->paymentStatus = PaymentStatus::Pending;
+        $this->devisProducts = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -186,6 +190,29 @@ class Devis
         return $this;
     }
 
+    public function addDevisProduct(DevisProduct $devisProduct): self
+    {
+        if (!$this->devisProducts->contains($devisProduct)) {
+            $this->devisProducts[] = $devisProduct;
+            $devisProduct->setDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisProduct(DevisProduct $devisProduct): self
+    {
+        if ($this->devisProducts->removeElement($devisProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($devisProduct->getDevis() === $this) {
+                $devisProduct->setDevis(null);
+            }
+        }
+
+        return $this;
+    }
+
+
     public function removeProductItem(ProductItem $productItem): static
     {
         if ($this->productItems->removeElement($productItem)) {
@@ -196,6 +223,14 @@ class Devis
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisProduct>
+     */
+    public function getDevisProducts(): Collection
+    {
+        return $this->devisProducts;
     }
 
     /**

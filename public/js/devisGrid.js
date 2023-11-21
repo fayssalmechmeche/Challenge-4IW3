@@ -3,29 +3,32 @@ document.addEventListener('DOMContentLoaded', function () {
         server: {
             url: '/devis/api',
             then: data => data.map(devis => [
-                devis.id,
-                devis.taxe,
-                devis.totalPrice,
-                devis.totalDuePrice,
+                devis.customer, // Assurez-vous que l'API renvoie un champ 'customer' approprié
+                devis.totalPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
+                devis.totalDuePrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
                 devis.paymentStatus,
-                devis.createdAt ? new Date(devis.createdAt).toLocaleString() : '',
-                devis.updatedAt ? new Date(devis.updatedAt).toLocaleString() : '',
-                gridjs.html(`<a href='/devis/${devis.id}/show'>show</a> <a href='/devis/${devis.id}/edit'>edit</a>`)
+                devis.createdAt ? new Date(devis.createdAt).toLocaleDateString() : '',
+                gridjs.html(`
+                    <a href='/devis/${devis.id}/show' class='btn btn-primary btn-sm'>Voir</a>
+                    <a href='/devis/${devis.id}/edit' class='btn btn-secondary btn-sm'>Modifier</a>
+                    <form action='/devis/${devis.id}' method='POST' onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer ce devis ?");'>
+                        <input type='hidden' name='_method' value='DELETE'>
+                        <input type='hidden' name='_token' value='${csrfToken}'>
+                        <button type='submit' class='btn btn-danger btn-sm'>Supprimer</button>
+                    </form>
+                `)
             ])
         },
         columns: [
-            'ID',
-            'Taxe',
-            'Total Price',
-            'Total Due Price',
-            'Payment Status',
-            'Created At',
-            'Updated At',
+            'Client',
+            'Prix Total',
+            'Total Dû',
+            'Statut de Paiement',
+            'Créé Le',
             'Actions'
         ],
         search: true,
         pagination: true,
         sort: true,
-        // autres options...
     }).render(document.getElementById('devis-table'));
 });

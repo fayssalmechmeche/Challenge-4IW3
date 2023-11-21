@@ -7,6 +7,7 @@ use App\Entity\Customer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DevisType extends AbstractType
@@ -24,7 +25,14 @@ class DevisType extends AbstractType
                 },
                 'label' => 'Client'
             ])
-        ;
+            ->add('devisProducts', CollectionType::class, [
+                'entry_type' => DevisProductType::class,
+                'label' => false,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -20,12 +20,16 @@ class Formula
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $picture = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class)]
-    private Collection $products;
+    #[ORM\OneToMany(mappedBy: 'formula', targetEntity: ProductFormula::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $productFormulas;
+
+    #[ORM\Column]
+    private ?int $price = null;
+
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->productFormulas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,34 +59,44 @@ class Formula
         return $this;
     }
 
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
+        return $this;
+    }
+
     /**
-     * @return Collection<int, Product>
+     * @return Collection<int, ProductFormula>
      */
-    public function getProducts(): Collection
+    public function getProductFormulas(): Collection
     {
-        return $this->products;
+        return $this->productFormulas;
     }
 
-    public function addProduct(Product $product): self
+    public function addProductFormula(ProductFormula $productFormula): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
+        if (!$this->productFormulas->contains($productFormula)) {
+            $this->productFormulas->add($productFormula);
+            $productFormula->setFormula($this);
         }
+
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function removeProductFormula(ProductFormula $productFormula): self
     {
-        $this->products->removeElement($product);
+        if ($this->productFormulas->removeElement($productFormula)) {
+            if ($productFormula->getFormula() === $this) {
+                $productFormula->setFormula(null);
+            }
+        }
+
         return $this;
     }
 
-    public function getTotalPrice(): int
-    {
-        $total = 0;
-        foreach ($this->products as $product) {
-            $total += $product->getPrice();
-        }
-        return $total;
-    }
 }

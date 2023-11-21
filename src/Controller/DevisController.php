@@ -10,15 +10,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\DevisProduct;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 #[Route('/devis')]
 class DevisController extends AbstractController
 {
+    private CsrfTokenManagerInterface $csrfTokenManager;
+
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[Route('/', name: 'app_devis_index', methods: ['GET'])]
     public function index(DevisRepository $devisRepository): Response
     {
+        $csrfToken = $this->csrfTokenManager->getToken('delete_devis')->getValue();
+
         return $this->render('devis/index.html.twig', [
             'devis' => $devisRepository->findAll(),
+            'csrf_token' => $csrfToken,
         ]);
     }
 
@@ -32,13 +44,10 @@ class DevisController extends AbstractController
         foreach ($devis as $devi) {
             $data[] = [
                 'id' => $devi->getId(),
-                'taxe' => $devi->getTaxe(),
                 'totalPrice' => $devi->getTotalPrice(),
                 'totalDuePrice' => $devi->getTotalDuePrice(),
                 'paymentStatus' => $devi->getPaymentStatus() ? $devi->getPaymentStatus()->value : '',
-                'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d H:i:s') : '',
-                'updatedAt' => $devi->getUpdatedAt() ? $devi->getUpdatedAt()->format('Y-m-d H:i:s') : '',
-                'society' => $devi->getSociety() ? $devi->getSociety()->getName() : '', // Assurez-vous que getName() existe dans l'entité Society
+                'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d ') : '',
                 'customer' => $devi->getCustomer() ? $devi->getCustomer()->getName() : '', // Assurez-vous que getName() existe dans l'entité Customer
                 // Ajoutez d'autres champs si nécessaire
             ];
@@ -50,22 +59,30 @@ class DevisController extends AbstractController
     #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devi = new Devis();
-        $form = $this->createForm(DevisType::class, $devi);
+        $devis = new Devis();
+
+        // Initialisation d'un objet DevisProduct
+        $devisProduct = new DevisProduct();
+        $devis->addDevisProduct($devisProduct);
+
+        $form = $this->createForm(DevisType::class, $devis);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($devi);
+
+
+            $entityManager->persist($devis);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('devis/new.html.twig', [
-            'devi' => $devi,
-            'form' => $form,
+            'devis' => $devis,
+            'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_devis_show', methods: ['GET'])]
     public function show(Devis $devi): Response
@@ -78,20 +95,21 @@ class DevisController extends AbstractController
     #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Devis $devi, EntityManagerInterface $entityManager): Response
     {
+        // Pas besoin d'initialiser un nouveau DevisProduct ici, car on édite un devis existant
         $form = $this->createForm(DevisType::class, $devi);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
             return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('devis/edit.html.twig', [
             'devi' => $devi,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_devis_delete', methods: ['POST'])]
     public function delete(Request $request, Devis $devi, EntityManagerInterface $entityManager): Response

@@ -4,6 +4,11 @@
 
 {% block body %}
     <h1>Product index</h1>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     <!-- Conteneur pour le tableau Grid.js -->
     <div id="product-table"></div>
@@ -14,7 +19,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var csrfToken = '{{ csrf_token('delete_product') }}'; // Générer le jeton CSRF
+        var csrfToken = '{{ csrf_token('delete_product') }}';
     </script>
     <script src="{{ asset('js/productGrid.js') }}"></script>
 {% endblock %}

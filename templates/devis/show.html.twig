@@ -8,14 +8,6 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ devi.id }}</td>
-            </tr>
-            <tr>
-                <th>Taxe</th>
-                <td>{{ devi.taxe }}</td>
-            </tr>
-            <tr>
                 <th>TotalPrice</th>
                 <td>{{ devi.totalPrice }}</td>
             </tr>
@@ -31,10 +23,7 @@
                 <th>CreatedAt</th>
                 <td>{{ devi.createdAt ? devi.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ devi.updatedAt ? devi.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+
         </tbody>
     </table>
 
