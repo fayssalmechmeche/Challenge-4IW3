@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-git enum PaymentStatus: string
+enum PaymentStatus: string
 {
     case null = "";
     case Pending = "PENDING";
@@ -24,6 +24,7 @@ class Devis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
