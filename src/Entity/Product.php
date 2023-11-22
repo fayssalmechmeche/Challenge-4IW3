@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -16,8 +18,7 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
+
 
     #[ORM\Column]
     private ?int $price = null;
@@ -25,12 +26,24 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?ProductCategory $productCategory = null;
+    #[ORM\Column(type: "string")]
+    private ?string $productCategory = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Society $society = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductFormula::class, orphanRemoval: true)]
+    private Collection $productFormulas;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: DevisProduct::class)]
+    private Collection $devisProducts;
+
+    public function __construct()
+    {
+        $this->productFormulas = new ArrayCollection();
+        $this->devisProducts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -45,18 +58,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -85,12 +86,12 @@ class Product
         return $this;
     }
 
-    public function getProductCategory(): ?ProductCategory
+    public function getProductCategory(): ?string
     {
         return $this->productCategory;
     }
 
-    public function setProductCategory(?ProductCategory $productCategory): static
+    public function setProductCategory(?string $productCategory): self
     {
         $this->productCategory = $productCategory;
 
@@ -105,6 +106,66 @@ class Product
     public function setSociety(?Society $society): static
     {
         $this->society = $society;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductFormula>
+     */
+    public function getProductFormulas(): Collection
+    {
+        return $this->productFormulas;
+    }
+
+    public function addProductFormula(ProductFormula $productFormula): static
+    {
+        if (!$this->productFormulas->contains($productFormula)) {
+            $this->productFormulas->add($productFormula);
+            $productFormula->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductFormula(ProductFormula $productFormula): static
+    {
+        if ($this->productFormulas->removeElement($productFormula)) {
+            // set the owning side to null (unless already changed)
+            if ($productFormula->getProduct() === $this) {
+                $productFormula->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DevisProduct>
+     */
+    public function getDevisProducts(): Collection
+    {
+        return $this->devisProducts;
+    }
+
+    public function addDevisProduct(DevisProduct $devisProduct): static
+    {
+        if (!$this->devisProducts->contains($devisProduct)) {
+            $this->devisProducts->add($devisProduct);
+            $devisProduct->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisProduct(DevisProduct $devisProduct): static
+    {
+        if ($this->devisProducts->removeElement($devisProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($devisProduct->getProduct() === $this) {
+                $devisProduct->setProduct(null);
+            }
+        }
 
         return $this;
     }

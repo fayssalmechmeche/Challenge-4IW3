@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Devis index{% endblock %}
+
+{% block body %}
+    <h1>Devis index</h1>
+
+    <!-- Conteneur pour le tableau Grid.js -->
+    <div id="devis-table"></div>
+
+    <a href="{{ path('app_devis_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var csrfToken = '{{ csrf_token('delete_devis') }}';
+    </script>
+    <script src="{{ asset('js/devisGrid.js') }}"></script>
+{% endblock %}

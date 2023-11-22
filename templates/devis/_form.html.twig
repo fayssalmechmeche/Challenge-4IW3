@@ -1,0 +1,24 @@
+{{ form_start(form) }}
+    {{ form_widget(form.taxe) }}
+    {{ form_widget(form.taxePrice) }}
+    {{ form_widget(form.discount) }}
+    {{ form_widget(form.discountPrice) }}
+    {{ form_widget(form.totalDiscountPrice) }}
+    {{ form_widget(form.totalTaxePrice) }}
+    {{ form_widget(form.totalPrice) }}
+    {{ form_widget(form.totalDuePrice) }}
+    {{ form_widget(form.customer) }}
+
+<h3>Séléctionner vos produits</h3>
+<div id="devisProducts" data-prototype="{{ form_widget(form.devisProducts.vars.prototype)|e('html_attr') }}" data-index="{{ form.devisProducts|length }}">
+    {% for devisProduct in form.devisProducts %}
+        <div class="devisProductItem">
+            {{ form_row(devisProduct) }}
+            <button type="button" class="remove_product_button">Supprimer le produit</button>
+        </div>
+    {% endfor %}
+</div>
+<button type="button" id="add_product_button">Ajouter un produit</button>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

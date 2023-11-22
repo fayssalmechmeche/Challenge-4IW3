@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'une nouvelle formule{% endblock %}
+
+{% block body %}
+    <h1>Créer une nouvelle formule</h1>
+
+    {{ include('formula/_form.html.twig') }}
+
+    <a href="{{ path('app_formula_index') }}">back to list</a>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/formula.js') }}"></script>
+{% endblock %}
+

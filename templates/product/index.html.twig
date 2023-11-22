@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+    <h1>Product index</h1>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <!-- Conteneur pour le tableau Grid.js -->
+    <div id="product-table"></div>
+
+    <a href="{{ path('app_product_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var csrfToken = '{{ csrf_token('delete_product') }}';
+    </script>
+    <script src="{{ asset('js/productGrid.js') }}"></script>
+{% endblock %}

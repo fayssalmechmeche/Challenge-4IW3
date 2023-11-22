@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Devis{% endblock %}
+
+{% block body %}
+    <h1>Edit Devis</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.taxe) }}
+    {{ form_row(form.totalPrice) }}
+    {{ form_row(form.totalDuePrice) }}
+    {{ form_row(form.customer) }}
+
+    <h3>Produits</h3>
+    <div id="devisProducts" data-prototype="{{ form_widget(form.devisProducts.vars.prototype)|e('html_attr') }}" data-index="{{ form.devisProducts|length }}">
+        {% for devisProduct in form.devisProducts %}
+            <div class="devisProductItem">
+                {{ form_row(devisProduct.product) }}
+                {{ form_row(devisProduct.quantity) }}
+                <button type="button" class="remove_product_button">Supprimer le produit</button>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add_product_button">Ajouter un produit</button>
+    </br>
+    <button class="btn">{{ button_label|default('Update') }}</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_devis_index') }}">back to list</a>
+
+    {{ include('devis/_delete_form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/devis.js') }}"></script>
+{% endblock %}

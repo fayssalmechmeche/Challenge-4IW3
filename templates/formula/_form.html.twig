@@ -1,0 +1,25 @@
+{{ form_start(form) }}
+ {{ form_label(form.name) }}
+ {{ form_widget(form.name) }}
+   </br>
+    {{ form_label(form.picture) }}
+    {{ form_widget(form.picture) }}
+    </br>
+
+
+<div class="productFormulas" data-prototype="{{ form_widget(form.productFormulas.vars.prototype)|e('html_attr') }}" data-index="{{ form.productFormulas|length }}">
+    {% for productFormula in form.productFormulas %}
+        <div class="productFormulaItem">
+            {{ form_row(productFormula) }}
+            <button type="button" class="remove_product_button">Supprimer le produit</button>
+        </div>
+    {% endfor %}
+</div>
+
+<button type="button" class="add_product_button">Ajouter un produit</button>
+</br>
+    {{ form_label(form.price) }}
+    {{ form_widget(form.price) }}
+</br>
+<button class="btn">Sauvegarder</button>
+{{ form_end(form) }}

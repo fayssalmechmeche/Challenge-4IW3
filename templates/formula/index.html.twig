@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formula index{% endblock %}
+
+{% block body %}
+    <h1>Formula index</h1>
+
+    <div id="formula-table"></div>
+
+    <a href="{{ path('app_formula_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var csrfToken = '{{ csrf_token('delete_formula') }}';
+    </script>
+    <script src="{{ asset('js/formulaGrid.js') }}"></script>
+{% endblock %}
+
