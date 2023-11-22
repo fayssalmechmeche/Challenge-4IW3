@@ -22,6 +22,21 @@ class CustomerController extends AbstractController
         ]);
     }
 
+    #[Route('/api', name: 'api_customer_index', methods: ['GET'])]
+    public function apiIndex(EntityManagerInterface $entityManager): Response
+    {
+        $productRepository = $entityManager->getRepository(Customer::class);
+        $customers = $productRepository->findAll();
+        $data = [];
+        foreach ($customers as $customer) {
+            $data[] = [
+                'id' => $customer->getId(),
+                'name' => $customer->getName(),
+            ];
+        }
+        return $this->json($data);
+    }
+
     #[Route('/new', name: 'app_customer_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -71,11 +86,13 @@ class CustomerController extends AbstractController
     #[Route('/{id}', name: 'app_customer_delete', methods: ['POST'])]
     public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$customer->getId(), $request->request->get('_token'))) {
+        // Remplacer 'delete_customer' par un nom de token spécifique à la suppression des clients
+        if ($this->isCsrfTokenValid('delete_customer', $request->request->get('_token'))) {
             $entityManager->remove($customer);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

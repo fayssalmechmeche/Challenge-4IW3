@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
         server: {
             url: '/devis/api',
             then: data => data.map(devis => [
-                devis.customer, // Assurez-vous que l'API renvoie un champ 'customer' approprié
+                devis.customer,
                 devis.totalPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
                 devis.totalDuePrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
                 devis.paymentStatus,

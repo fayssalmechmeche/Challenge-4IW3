@@ -17,7 +17,7 @@ class Formula
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column( length: 255, nullable: true)]
     private ?string $picture = null;
 
     #[ORM\OneToMany(mappedBy: 'formula', targetEntity: ProductFormula::class, cascade: ['persist'], orphanRemoval: true)]
@@ -53,7 +53,7 @@ class Formula
         return $this->picture;
     }
 
-    public function setPicture(?string $picture): self
+    public function setPicture(?string $picture): static
     {
         $this->picture = $picture;
         return $this;

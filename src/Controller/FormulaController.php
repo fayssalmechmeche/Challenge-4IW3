@@ -38,7 +38,7 @@ class FormulaController extends AbstractController
             $data[] = [
                 'id' => $formula->getId(),
                 'name' => $formula->getName(),
-                'image' => $formula->getPicture() ? '/images/formulas/'.$formula->getPicture() : null,
+                'image' => $formula->getPicture(),
                 'price' => $formula->getPrice(),
             ];
         }

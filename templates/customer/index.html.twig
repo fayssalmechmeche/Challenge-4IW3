@@ -4,36 +4,23 @@
 
 {% block body %}
     <h1>Customer index</h1>
+    <h2 class='underline font-bold text-lime-500'>Actions</h2>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>LastName</th>
-                <th>Address</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for customer in customers %}
-            <tr>
-                <td>{{ customer.id }}</td>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.lastName }}</td>
-                <td>{{ customer.address }}</td>
-                <td>
-                    <a href="{{ path('app_customer_show', {'id': customer.id}) }}">show</a>
-                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <!-- Conteneur pour le tableau Grid.js -->
+    <div id="product-table"></div>
 
     <a href="{{ path('app_customer_new') }}">Create new</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var csrfToken = '{{ csrf_token('delete_customer') }}';
+    </script>
+    <script src="{{ asset('js/customerGrid.js') }}"></script>
 {% endblock %}
