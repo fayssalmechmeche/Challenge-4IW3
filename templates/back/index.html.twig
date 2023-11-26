@@ -1,0 +1,22 @@
+{% extends 'back/base.back.html.twig' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+    <section
+        id="InfoCards"
+        class="flex h-1/6 w-full justify-around max-sm:h-1/4"
+      >
+        {# <div data-component="cardNbrEntreprise"></div>
+        <div data-component="cardTotalCa"></div> #}
+        {% include "back/component/cardNbrCompany.html.twig" %}
+        {% include "back/component/cardTotalCa.html.twig" %}
+      </section>
+      <section id="InfosEntreprise" class="mt-8 h-full">
+        <div id="gridSociety" class="h-full"></div>
+      </section>
+{% endblock %}
+
+{% block script_js %}
+<script src="{{ asset('js/back/societyGrid.js') }}"></script>
+{% endblock %}
