@@ -5,7 +5,17 @@
 {% block body %}
     <h1>Create new Customer</h1>
 
+    <div class="form-group">
+        <label for="switchClientType">Type de Client :</label>
+        <input type="checkbox" id="switchClientType" />
+        <label for="switchClientType">Société</label>
+    </div>
+
     {{ include('customer/_form.html.twig') }}
 
     <a href="{{ path('app_customer_index') }}">back to list</a>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/customer.js') }}"></script>
 {% endblock %}

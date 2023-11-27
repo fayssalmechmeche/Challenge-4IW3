@@ -42,19 +42,29 @@ class DevisController extends AbstractController
 
         $data = [];
         foreach ($devis as $devi) {
+            $customer = $devi->getCustomer();
+
+            $customerName = '';
+            if ($customer) {
+                if ($customer->getNameSociety() !== null) {
+                    $customerName = $customer->getNameSociety();
+                } else {
+                    $customerName = $customer->getName() . ' ' . $customer->getLastName();
+                }
+            }
+
             $data[] = [
                 'id' => $devi->getId(),
                 'totalPrice' => $devi->getTotalPrice(),
                 'totalDuePrice' => $devi->getTotalDuePrice(),
                 'paymentStatus' => $devi->getPaymentStatus() ? $devi->getPaymentStatus()->value : '',
                 'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d ') : '',
-                'customer' => $devi->getCustomer() ? $devi->getCustomer()->getName() : '', // Assurez-vous que getName() existe dans l'entité Customer
+                'customer' => $customerName,
             ];
         }
 
         return $this->json($data);
     }
-
     #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

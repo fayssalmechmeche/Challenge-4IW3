@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 class Customer
@@ -19,14 +21,31 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Devis::class, orphanRemoval: true)]
     private Collection $devis;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(groups: ["individual"])]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(groups: ["individual"])]
     private ?string $lastName = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(groups: ["society"])]
+    private ?string $nameSociety = null;
+
     #[ORM\Column(length: 255)]
-    private ?string $address = null;
+    private ?string $streetName = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $streetNumber = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $postalCode = null;
+
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -45,42 +64,14 @@ class Customer
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Devis>
-     */
-    public function getDevis(): Collection
-    {
-        return $this->devis;
-    }
-
-    public function addDevi(Devis $devi): static
-    {
-        if (!$this->devis->contains($devi)) {
-            $this->devis->add($devi);
-            $devi->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDevi(Devis $devi): static
-    {
-        if ($this->devis->removeElement($devi)) {
-            // set the owning side to null (unless already changed)
-            if ($devi->getCustomer() === $this) {
-                $devi->setCustomer(null);
-            }
-        }
-
-        return $this;
-    }
+    // ... autres méthodes ...
 
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -92,9 +83,21 @@ class Customer
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): static
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getNameSociety(): ?string
+    {
+        return $this->nameSociety;
+    }
+
+    public function setNameSociety(?string $nameSociety): self
+    {
+        $this->nameSociety = $nameSociety;
 
         return $this;
     }
@@ -104,7 +107,7 @@ class Customer
         return $this->address;
     }
 
-    public function setAddress(string $address): static
+    public function setAddress(string $address): self
     {
         $this->address = $address;
 
@@ -116,7 +119,7 @@ class Customer
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -128,10 +131,85 @@ class Customer
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+
+    public function getStreetName(): ?string
+    {
+        return $this->streetName;
+    }
+
+    public function setStreetName(?string $streetName): self
+    {
+        $this->streetName = $streetName;
+
+        return $this;
+    }
+
+
+    public function getStreetNumber(): ?int
+    {
+        return $this->streetNumber;
+    }
+
+    public function setStreetNumber(?int $streetNumber): self
+    {
+        $this->streetNumber = $streetNumber;
+
+        return $this;
+    }
+
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getDevis(): Collection
+    {
+        return $this->devis;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload): void
+    {
+        if ($this->name && $this->nameSociety) {
+            $context->buildViolation('Vous ne pouvez pas remplir à la fois le Nom/Prénom et le Nom de la Société')
+                ->atPath('nameSociety')
+                ->addViolation();
+        }
+
+        if ((!$this->name || !$this->lastName) && !$this->nameSociety) {
+            $context->buildViolation('Vous devez remplir soit le Nom/Prénom soit le Nom de la Société')
+                ->atPath('name')
+                ->addViolation();
+        }
     }
 }
