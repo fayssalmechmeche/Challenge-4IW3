@@ -38,10 +38,38 @@ class FormulaController extends AbstractController
             $data[] = [
                 'id' => $formula->getId(),
                 'name' => $formula->getName(),
-                'image' => $formula->getPicture() ? '/images/formulas/'.$formula->getPicture() : null,
+                'image' => $formula->getPicture(),
                 'price' => $formula->getPrice(),
             ];
         }
+
+        return $this->json($data);
+    }
+
+    #[Route('/api/{id}', name: 'api_formula_details', methods: ['GET'])]
+    public function apiFormulaDetails(EntityManagerInterface $entityManager, $id): Response
+    {
+        $formulaRepository = $entityManager->getRepository(Formula::class);
+        $formula = $formulaRepository->find($id);
+
+        $productsData = [];
+        foreach ($formula->getProductFormulas() as $productFormula) {
+            $product = $productFormula->getProduct();
+            $productsData[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'quantity' => $productFormula->getQuantity()
+
+            ];
+        }
+
+        $data = [
+            'id' => $formula->getId(),
+            'name' => $formula->getName(),
+            'image' => $formula->getPicture(),
+            'price' => $formula->getPrice(),
+            'products' => $productsData
+        ];
 
         return $this->json($data);
     }
@@ -82,6 +110,7 @@ class FormulaController extends AbstractController
         return $this->render('formula/new.html.twig', [
             'formula' => $formula,
             'form' => $form->createView(),
+            'form_action' => $this->generateUrl('app_formula_new')
         ]);
     }
 
@@ -108,6 +137,7 @@ class FormulaController extends AbstractController
         return $this->render('formula/edit.html.twig', [
             'formula' => $formula,
             'form' => $form,
+            'form_action' => $this->generateUrl('app_formula_edit', ['id' => $formula->getId()])
         ]);
     }
 

@@ -7,7 +7,80 @@
 
     <div id="formula-table"></div>
 
+    <button onclick="openFormulaCreateModal()" class="btn btn-success">Créer un nouvelle formule</button>
+
+    <div class="modal fade" id="formulaCreateModal" tabindex="-1" role="dialog" aria-labelledby="formulaCreateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formulaCreateModalLabel">Créer une nouvelle formule</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Le formulaire de création sera chargé ici -->
+                    <div>
+                        <select id="productSelect"><!-- Liste des produits --></select>
+                        <input type="number" id="productQuantity" placeholder="Quantité">
+                        <button id="addProductButton" class="btn btn-primary">Ajouter</button>
+                    </div>
+                    <div id="productGrid" class="gridjs-container"></div> <!-- Conteneur pour le tableau Grid.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="openFormulaEditModal" tabindex="-1" role="dialog" aria-labelledby="formulaUpdateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formulaCreateModalLabel">Modifier la formule</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Le formulaire de création sera chargé ici -->
+                    <div>
+                        <select id="productSelect"><!-- Liste des produits --></select>
+                        <input type="number" id="productQuantity" placeholder="Quantité">
+                        <button id="addProductButton" class="btn btn-primary">Ajouter</button>
+                    </div>
+                    <div id="productGridUpdate" class="gridjs-container"></div> <!-- Conteneur pour le tableau Grid.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <a href="{{ path('app_formula_new') }}">Create new</a>
+    <div class="modal fade" id="formulaDetailsModal" tabindex="-1" role="dialog" aria-labelledby="formulaDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formulaDetailsModalLabel">Détails de la formule</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Nom: <span id="formulaName"></span></p>
+                    <p>Prix: <span id="formulaPrice"></span></p>
+                    <div id="productsTable"></div> <!-- Conteneur pour le tableau Grid.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #formulaDetailsModal #productsTable, #formulaCreateModal #productGrid {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}
@@ -15,6 +88,6 @@
     <script>
         var csrfToken = '{{ csrf_token('delete_formula') }}';
     </script>
+    <script src="{{ asset('js/formula.js') }}"></script>
     <script src="{{ asset('js/formulaGrid.js') }}"></script>
 {% endblock %}
-
