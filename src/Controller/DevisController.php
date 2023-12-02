@@ -42,20 +42,29 @@ class DevisController extends AbstractController
 
         $data = [];
         foreach ($devis as $devi) {
+            $customer = $devi->getCustomer();
+
+            $customerName = '';
+            if ($customer) {
+                if ($customer->getNameSociety() !== null) {
+                    $customerName = $customer->getNameSociety();
+                } else {
+                    $customerName = $customer->getName() . ' ' . $customer->getLastName();
+                }
+            }
+
             $data[] = [
                 'id' => $devi->getId(),
                 'totalPrice' => $devi->getTotalPrice(),
                 'totalDuePrice' => $devi->getTotalDuePrice(),
                 'paymentStatus' => $devi->getPaymentStatus() ? $devi->getPaymentStatus()->value : '',
                 'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d ') : '',
-                'customer' => $devi->getCustomer() ? $devi->getCustomer()->getName() : '', // Assurez-vous que getName() existe dans l'entité Customer
-                // Ajoutez d'autres champs si nécessaire
+                'customer' => $customerName,
             ];
         }
 
         return $this->json($data);
     }
-
     #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -114,11 +123,12 @@ class DevisController extends AbstractController
     #[Route('/{id}', name: 'app_devis_delete', methods: ['POST'])]
     public function delete(Request $request, Devis $devi, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$devi->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete_devis', $request->request->get('_token'))) {
             $entityManager->remove($devi);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

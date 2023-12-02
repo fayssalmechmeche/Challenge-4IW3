@@ -1,25 +1,35 @@
-{{ form_start(form) }}
- {{ form_label(form.name) }}
- {{ form_widget(form.name) }}
-   </br>
-    {{ form_label(form.picture) }}
+{{ form_start(form, {'action': form_action}) }}
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }}
+<br>
+{{ form_label(form.picture) }}
     {{ form_widget(form.picture) }}
-    </br>
+<br>
 
-
-<div class="productFormulas" data-prototype="{{ form_widget(form.productFormulas.vars.prototype)|e('html_attr') }}" data-index="{{ form.productFormulas|length }}">
-    {% for productFormula in form.productFormulas %}
-        <div class="productFormulaItem">
-            {{ form_row(productFormula) }}
-            <button type="button" class="remove_product_button">Supprimer le produit</button>
-        </div>
-    {% endfor %}
+<!-- Zone pour sélectionner un produit -->
+<div>
+    {{ form_label(form.selectedProduct) }}
+    {{ form_widget(form.selectedProduct) }}
+    <input type="number" id="productQuantity" placeholder="Quantité">
+    <button id="addProductButton" type="button" class="btn btn-primary">Ajouter à la formule</button>
 </div>
+<br>
 
-<button type="button" class="add_product_button">Ajouter un produit</button>
-</br>
-    {{ form_label(form.price) }}
-    {{ form_widget(form.price) }}
-</br>
-<button class="btn">Sauvegarder</button>
+<!-- Conteneur pour le tableau Grid.js -->
+<div id="productGrid" class="gridjs-container"></div>
+<br>
+
+
+<div id="productDataContainer">
+
+        {{ form_widget(form.productFormulasData) }}
+
+
+</div>
+<br>
+
+{{ form_label(form.price) }}
+{{ form_widget(form.price) }}
+<br>
+<button type="submit" class="btn">Sauvegarder</button>
 {{ form_end(form) }}

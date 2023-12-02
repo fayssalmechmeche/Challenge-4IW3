@@ -5,9 +5,23 @@
 {% block body %}
     <h1>Edit Customer</h1>
 
+    <div class="form-group">
+        <label for="switchClientType">Type de Client :</label>
+        <input type="checkbox" id="switchClientType" />
+        <label for="switchClientType">Société</label>
+    </div>
+
     {{ include('customer/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_customer_index') }}">back to list</a>
 
     {{ include('customer/_delete_form.html.twig') }}
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var isSociety = {{ customer.nameSociety is not null ? 'true' : 'false' }};
+    </script>
+    <script src="{{ asset('js/customer.js') }}"></script>
+{% endblock %}
+
