@@ -4,8 +4,14 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class=''>Liste des Clients</h1>
-	<h2 class='underline font-bold text-lime-500'>Actions</h2>
+
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Liste des Clients</h1>
+		<button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Créer un Nouveau Client</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="product-table"></div>
+	</div>
+
 	{% for message in app.flashes('error') %}
 		<div class="alert alert-danger">
 			{{ message }}
@@ -18,11 +24,7 @@
 		</div>
 	{% endfor %}
 
-	<!-- Conteneur pour le tableau Grid.js -->
-	<div id="product-table"></div>
-
-	<button onclick="openCustomerCreateModal()" class="btn btn-success">Créer un Nouveau Client</button>
-	<button onclick="toggleModal('monModalId', 'monModalContentId')" class="btn btn-success">Créer un Nouveau Client V2</button>
+	{# <button onclick="openCustomerCreateModal()" class="btn btn-success">Créer un Nouveau Client</button> #}
 
 	{% set dynamicContent %}
 	<div>
@@ -31,8 +33,8 @@
 	{% endset %}
 
 	{% include 'components/modal.html.twig' with {
-        'modal_id': 'monModalId',
-        'modal_content_id': 'monModalContentId',
+        'modal_id': 'newModalId',
+        'modal_content_id': 'newModalModalContentId',
         'content': dynamicContent
     } %}
 

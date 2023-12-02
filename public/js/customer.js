@@ -95,12 +95,13 @@ function openCustomerCreateModal() {
   fetch(`/customer/new`)
     .then((response) => response.text())
     .then((html) => {
-      const modalBody = document.querySelector(
-        "#customerCreateModal .modal-body"
-      );
+      // Assurez-vous que cet ID correspond à l'ID de votre modal dans le template Twig
+      const modalBody = document.querySelector("#newModalModalContentId");
       modalBody.innerHTML = html;
       initializeFormFields();
-      $("#customerCreateModal").modal("show");
+
+      // Cette ligne doit être mise à jour pour correspondre à la manière dont vous affichez votre modal dans Twig
+      toggleModal("newModalId", "newModalModalContentId");
     })
     .catch((error) =>
       console.error("Erreur lors de la récupération du formulaire:", error)
@@ -110,8 +111,8 @@ function openCustomerCreateModal() {
 //achraf
 
 function toggleModal(modalId, modalContentId) {
-  const modal = document.getElementById(modalId);
-  const modalContent = document.getElementById(modalContentId);
+  let modal = document.getElementById(modalId);
+  let modalContent = document.getElementById(modalContentId);
 
   if (modal.classList.contains("opacity-0")) {
     //OVERLAY
@@ -142,7 +143,7 @@ function toggleModal(modalId, modalContentId) {
 
     // Permettre un bref délai pour que la classe 'hidden' soit complètement enlevée
     setTimeout(() => {
-      modalContent.classList.remove("top-[-100%]");
+      modalContent.classList.remove("top-[-1000px]");
       modalContent.classList.add("top-1/2");
     }, 10); // Un délai très court est généralement suffisant
   } else {
@@ -169,11 +170,30 @@ function toggleModal(modalId, modalContentId) {
     //MODAL CONTENT
     // Animer la fermeture
     modalContent.classList.remove("top-1/2");
-    modalContent.classList.add("top-[-100%]");
+    modalContent.classList.add("top-[-1000px]");
 
     // Ajouter 'hidden' après que la transition soit terminée
     setTimeout(() => {
       modalContent.classList.add("hidden");
     }, 500); // Assurez-vous que ce délai correspond à la durée de la transition
+  }
+}
+
+function toggleSwitch() {
+  var checkbox = document.getElementById("switchClientType");
+  var switchBackground = document.getElementById("switchBackground");
+  var switchDot = document.getElementById("switchDot");
+
+  checkbox.checked = !checkbox.checked;
+  checkbox.dispatchEvent(new Event("change"));
+
+  if (checkbox.checked) {
+    switchBackground.classList.remove("bg-gray-200");
+    switchBackground.classList.add("bg-green-400");
+    switchDot.classList.add("translate-x-full");
+  } else {
+    switchBackground.classList.remove("bg-green-400");
+    switchBackground.classList.add("bg-gray-200");
+    switchDot.classList.remove("translate-x-full");
   }
 }
