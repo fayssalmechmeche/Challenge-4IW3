@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Society;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
@@ -33,6 +34,12 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $society = new Society();
+            $society->setName($form->get('societyForm')->get('name')->getData());
+            $society->setAddress($form->get('societyForm')->get('address')->getData());
+            $society->setPhone($form->get('societyForm')->get('phone')->getData());
+            $society->setEmail($form->get('societyForm')->get('email')->getData());
+            $society->setSiret($form->get('societyForm')->get('siret')->getData());
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -41,11 +48,18 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setIsVerified(true);
+            $user->setRoles(['ROLE_SOCIETY']);
+            $user->setCreatedAt(new \DateTime());
+            $user->setSociety($society);
+            $entityManager->persist($society);
             $entityManager->persist($user);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            // $this->emailVerifier->sendEmailConfirmation(
+            //     'app_verify_email',
+            //     $user,
             //     (new TemplatedEmail())
             //         ->from(new Address('mailer@your-domain.com', 'Acme Mail Bot'))
             //         ->to($user->getEmail())
