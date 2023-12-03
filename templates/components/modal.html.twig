@@ -3,13 +3,13 @@
 
 <!-- Modal -->
 <div
-	class="absolute  top-[-1000px] hidden left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-95% p-5 border w-96 shadow-lg rounded-md bg-white overflow-y-auto" id="{{ modal_content_id }}">
+	class="absolute  top-[-1000px] hidden left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-95% p-3 border w-96 shadow-lg rounded-md bg-white overflow-y-auto" id="{{ modal_content_id }}">
 	<!-- Close Button -->
 	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('monModalId', 'monModalContentId')">
 		Fermer
 	</button>
 	<div
-		class="h-full w-full flex flex-col justify-start items-start gap-3">
+		class="h-full w-full flex flex-col justify-start items-start">
 		<!-- Contenu dynamique ici -->
 		{{ content | raw }}
 	</div>
