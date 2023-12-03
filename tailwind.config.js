@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./assets/**/*.js", "./templates/**/*.html.twig"],
-  safelist: ["bg-green-400", "top-1/2", "translate-x-full"],
+  safelist: ["bg-green-400", "top-1/2", "translate-x-full", 'bg-orange-400','hover:bg-orange-600'],
   theme: {
     extend: {
       colors: {
