@@ -58,6 +58,26 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisProduct::class,cascade: ['persist'], orphanRemoval: true)]
     private Collection $devisProducts;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user;
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User|null $user
+     */
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
     public function __construct()
     {
         $this->productItems = new ArrayCollection();

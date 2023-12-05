@@ -14,22 +14,35 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 
+
 #[Route('/product')]
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
+        $user = $this->getUser();
+
+        if ($user) {
+            $products = $productRepository->findBy(['user' => $user]);
+        } else {
+            $products = [];
+        }
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }
 
     #[Route('/api', name: 'api_product_index', methods: ['GET'])]
-    public function apiIndex(EntityManagerInterface $entityManager): Response
+    public function apiIndex(ProductRepository $productRepository): Response
     {
-        $productRepository = $entityManager->getRepository(Product::class);
-        $products = $productRepository->findAll();
+        $user = $this->getUser();
+
+        if ($user) {
+            $products = $productRepository->findBy(['user' => $user]);
+        } else {
+            $products = [];
+        }
 
         $data = [];
         foreach ($products as $product) {
@@ -39,12 +52,12 @@ class ProductController extends AbstractController
                 'price' => $product->getPrice(),
                 'image' => $product->getImage(),
                 'productCategory' => $product->getProductCategory(),
-
             ];
         }
 
         return $this->json($data);
     }
+
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -72,6 +85,7 @@ class ProductController extends AbstractController
                 $product->setImage($newFilename);
             }
 
+            $product->setUser($this->getUser());
             $entityManager->persist($product);
             $entityManager->flush();
 

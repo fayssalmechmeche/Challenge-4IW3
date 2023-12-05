@@ -26,31 +26,40 @@ class DevisController extends AbstractController
     #[Route('/', name: 'app_devis_index', methods: ['GET'])]
     public function index(DevisRepository $devisRepository): Response
     {
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+
+        if ($user) {
+            $devis = $devisRepository->findBy(['user' => $user]);
+        } else {
+            $devis = []; // Si aucun utilisateur n'est connecté, aucun devis n'est retourné
+        }
+
         $csrfToken = $this->csrfTokenManager->getToken('delete_devis')->getValue();
 
         return $this->render('devis/index.html.twig', [
-            'devis' => $devisRepository->findAll(),
+            'devis' => $devis,
             'csrf_token' => $csrfToken,
         ]);
     }
 
     #[Route('/api', name: 'api_devis_index', methods: ['GET'])]
-    public function apiIndex(EntityManagerInterface $entityManager): Response
+    public function apiIndex(DevisRepository $devisRepository): Response
     {
-        $devisRepository = $entityManager->getRepository(Devis::class);
-        $devis = $devisRepository->findAll();
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+
+        if ($user) {
+            $devis = $devisRepository->findBy(['user' => $user]);
+        } else {
+            return $this->json([]); // Retourne une réponse vide si aucun utilisateur n'est connecté
+        }
 
         $data = [];
         foreach ($devis as $devi) {
             $customer = $devi->getCustomer();
-
             $customerName = '';
+
             if ($customer) {
-                if ($customer->getNameSociety() !== null) {
-                    $customerName = $customer->getNameSociety();
-                } else {
-                    $customerName = $customer->getName() . ' ' . $customer->getLastName();
-                }
+                $customerName = $customer->getNameSociety() ?: $customer->getName() . ' ' . $customer->getLastName();
             }
 
             $data[] = [
@@ -58,28 +67,25 @@ class DevisController extends AbstractController
                 'totalPrice' => $devi->getTotalPrice(),
                 'totalDuePrice' => $devi->getTotalDuePrice(),
                 'paymentStatus' => $devi->getPaymentStatus() ? $devi->getPaymentStatus()->value : '',
-                'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d ') : '',
+                'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d') : '',
                 'customer' => $customerName,
             ];
         }
 
         return $this->json($data);
     }
+
+
     #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $devis = new Devis();
-
-        // Initialisation d'un objet DevisProduct
-        $devisProduct = new DevisProduct();
-        $devis->addDevisProduct($devisProduct);
+        $devis->setUser($this->getUser()); // Associez le devis à l'utilisateur connecté
 
         $form = $this->createForm(DevisType::class, $devis);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $entityManager->persist($devis);
             $entityManager->flush();
 

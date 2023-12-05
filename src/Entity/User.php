@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Customer;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -46,6 +49,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Society $society = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Customer::class)]
+    private Collection $customers;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
+    private Collection $products;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
+    private Collection $formula;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
+    private Collection $devis;
+
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
@@ -74,6 +89,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function __construct() {
+        $this->customers = new ArrayCollection();
+        $this->products = new ArrayCollection();
+        $this->formula = new ArrayCollection();
+        $this->devis = new ArrayCollection();
     }
 
     /**
@@ -163,6 +185,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Customer[]
+     */
+    public function getCustomers(): Collection
+    {
+        return $this->customers;
+    }
+
+    /**
+     * Add a customer to the user.
+     */
+    public function addCustomer(Customer $customer): self
+    {
+        if (!$this->customers->contains($customer)) {
+            $this->customers[] = $customer;
+            $customer->setUser($this);
+        }
 
         return $this;
     }
