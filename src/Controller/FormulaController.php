@@ -10,28 +10,37 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Repository\FormulaRepository;
 use App\Entity\ProductFormula;
 
 #[Route('/formula')]
 class FormulaController extends AbstractController
 {
     #[Route('/', name: 'app_formula_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(FormulaRepository $formulaRepository): Response
     {
-        $formulas = $entityManager
-            ->getRepository(Formula::class)
-            ->findAll();
+        $user = $this->getUser();
 
+        if ($user) {
+            $formulas = $formulaRepository->findBy(['user' => $user]);
+        } else {
+            $formulas = [];
+        }
         return $this->render('formula/index.html.twig', [
             'formulas' => $formulas,
         ]);
     }
 
     #[Route('/api', name: 'api_formula_index', methods: ['GET'])]
-    public function apiIndex(EntityManagerInterface $entityManager): Response
+    public function apiIndex(FormulaRepository $formulaRepository): Response
     {
-        $formulaRepository = $entityManager->getRepository(Formula::class);
-        $formulas = $formulaRepository->findAll();
+        $user = $this->getUser();
+
+        if ($user) {
+            $formulas = $formulaRepository->findBy(['user' => $user]);
+        } else {
+            $formulas = [];
+        }
 
         $data = [];
         foreach ($formulas as $formula) {
@@ -45,6 +54,7 @@ class FormulaController extends AbstractController
 
         return $this->json($data);
     }
+
 
     #[Route('/api/{id}', name: 'api_formula_details', methods: ['GET'])]
     public function apiFormulaDetails(EntityManagerInterface $entityManager, $id): Response
@@ -78,7 +88,6 @@ class FormulaController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $formula = new Formula();
-
         $form = $this->createForm(FormulaType::class, $formula);
         $form->handleRequest($request);
 
@@ -95,11 +104,14 @@ class FormulaController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Gérer l'exception si quelque chose se passe mal
+                    // Gérer l'exception si nécessaire
                 }
 
                 $formula->setPicture($newFilename);
             }
+
+            // Associez la formule à l'utilisateur connecté
+            $formula->setUser($this->getUser());
 
             $entityManager->persist($formula);
             $entityManager->flush();
@@ -113,6 +125,7 @@ class FormulaController extends AbstractController
             'form_action' => $this->generateUrl('app_formula_new')
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_formula_show', methods: ['GET'])]
     public function show(Formula $formula): Response
