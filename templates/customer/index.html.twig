@@ -39,38 +39,18 @@
     } %}
 
 	<!-- Modal pour la modification d'un client -->
-	<div class="modal fade" id="customerEditModal" tabindex="-1" role="dialog" aria-labelledby="customerEditModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="customerEditModalLabel">Modifier le Client</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div
-					class="modal-body"><!-- Le formulaire de modification sera chargé ici -->
-				</div>
-			</div>
-		</div>
-	</div>
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'customerEditModal',
+        'modal_content_id': 'customerEditModalContent',
+        'content': dynamicContent
+    } %}
 
 	<!-- Modal Bootstrap pour les détails du client -->
-	<div class="modal fade" id="customerDetailsModal" tabindex="-1" role="dialog" aria-labelledby="customerDetailsModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="customerDetailsModalLabel">Détails du Client</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div
-					class="modal-body"><!-- Les détails du client seront chargés ici -->
-				</div>
-			</div>
-		</div>
-	</div>
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'customerDetailsModal',
+        'modal_content_id': 'customerDetailsModalContainer',
+        'content': dynamicContent
+    } %}
 {% endblock %}
 
 {% block javascripts %}
