@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Formula;
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -19,6 +20,7 @@ class FormulaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['user'];
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la formule'
@@ -44,6 +46,11 @@ class FormulaType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Sélectionner un produit',
                 'mapped' => false,
+                'query_builder' => function (ProductRepository $pr) use ($user) {
+                    return $pr->createQueryBuilder('p')
+                        ->where('p.user = :user')
+                        ->setParameter('user', $user);
+                },
             ])
             ->add('productFormulas', CollectionType::class, [
                 'entry_type' => ProductFormulaType::class,
@@ -67,6 +74,7 @@ class FormulaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Formula::class,
+            'user' => null,
         ]);
     }
 }

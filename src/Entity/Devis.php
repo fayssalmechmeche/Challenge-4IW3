@@ -58,6 +58,9 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisProduct::class,cascade: ['persist'], orphanRemoval: true)]
     private Collection $devisProducts;
 
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisFormula::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $devisFormulas;
+
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
@@ -85,6 +88,7 @@ class Devis
         $this->createdAt = new \DateTime();
         $this->paymentStatus = PaymentStatus::Pending;
         $this->devisProducts = new ArrayCollection();
+        $this->devisFormulas = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -232,6 +236,28 @@ class Devis
         return $this;
     }
 
+    public function addDevisFormula(DevisFormula $devisFormula): self
+    {
+        if (!$this->devisFormulas->contains($devisFormula)) {
+            $this->devisFormulas[] = $devisFormula;
+            $devisFormula->setDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisFormula(DevisFormula $devisFormula): self
+    {
+        if ($this->devisFormulas->removeElement($devisFormula)) {
+            // set the owning side to null (unless already changed)
+            if ($devisFormula->getDevis() === $this) {
+                $devisFormula->setDevis(null);
+            }
+        }
+
+        return $this;
+    }
+
 
     public function removeProductItem(ProductItem $productItem): static
     {
@@ -251,6 +277,14 @@ class Devis
     public function getDevisProducts(): Collection
     {
         return $this->devisProducts;
+    }
+
+    /**
+     * @return Collection<int, DevisFormula>
+     */
+    public function getDevisFormulas(): Collection
+    {
+        return $this->devisFormulas;
     }
 
     /**

@@ -88,7 +88,10 @@ class FormulaController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $formula = new Formula();
-        $form = $this->createForm(FormulaType::class, $formula);
+        $user = $this->getUser();
+        $form = $this->createForm(FormulaType::class, $formula, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -104,14 +107,15 @@ class FormulaController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Gérer l'exception si nécessaire
+
                 }
 
                 $formula->setPicture($newFilename);
             }
 
             // Associez la formule à l'utilisateur connecté
-            $formula->setUser($this->getUser());
+            $user = $this->getUser();
+            $formula->setUser($user);
 
             $entityManager->persist($formula);
             $entityManager->flush();
@@ -127,6 +131,7 @@ class FormulaController extends AbstractController
     }
 
 
+
     #[Route('/{id}', name: 'app_formula_show', methods: ['GET'])]
     public function show(Formula $formula): Response
     {
@@ -138,7 +143,10 @@ class FormulaController extends AbstractController
     #[Route('/{id}/edit', name: 'app_formula_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Formula $formula, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(FormulaType::class, $formula);
+        $user = $this->getUser();
+        $form = $this->createForm(FormulaType::class, $formula, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

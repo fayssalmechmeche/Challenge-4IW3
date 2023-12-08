@@ -80,9 +80,12 @@ class DevisController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $devis = new Devis();
-        $devis->setUser($this->getUser()); // Associez le devis à l'utilisateur connecté
+        $user = $this->getUser();
+        $devis->setUser($this->getUser());
 
-        $form = $this->createForm(DevisType::class, $devis);
+        $form = $this->createForm(DevisType::class, $devis, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -99,7 +102,7 @@ class DevisController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'app_devis_show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'app_devis_show', methods: ['GET'])]
     public function show(Devis $devi): Response
     {
         return $this->render('devis/show.html.twig', [
@@ -110,8 +113,11 @@ class DevisController extends AbstractController
     #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Devis $devi, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         // Pas besoin d'initialiser un nouveau DevisProduct ici, car on édite un devis existant
-        $form = $this->createForm(DevisType::class, $devi);
+        $form = $this->createForm(DevisType::class, $devi, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

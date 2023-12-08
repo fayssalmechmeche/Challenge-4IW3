@@ -20,5 +20,12 @@
 </div>
 <button type="button" id="add_product_button">Ajouter un produit</button>
 
+<div id="devisFormulas">
+    {{ form_label(form.devisFormulas) }}
+    {{ form_widget(form.devisFormulas) }}
+</div>
+<button type="button" id="add_formula_button">Ajouter une formule</button>
+
+
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

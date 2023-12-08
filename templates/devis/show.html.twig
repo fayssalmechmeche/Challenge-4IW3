@@ -7,29 +7,40 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>TotalPrice</th>
-                <td>{{ devi.totalPrice }}</td>
-            </tr>
-            <tr>
-                <th>TotalDuePrice</th>
-                <td>{{ devi.totalDuePrice }}</td>
-            </tr>
-            <tr>
-                <th>PaymentStatus</th>
-                <td>{{ devi.paymentStatus }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ devi.createdAt ? devi.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-
+        <tr>
+            <th>TotalPrice</th>
+            <td>{{ devi.totalPrice }}</td>
+        </tr>
+        <tr>
+            <th>TotalDuePrice</th>
+            <td>{{ devi.totalDuePrice }}</td>
+        </tr>
+        <tr>
+            <th>PaymentStatus</th>
+            <td>{{ devi.paymentStatus.value }}</td>
+        </tr>
+        <tr>
+            <th>CreatedAt</th>
+            <td>{{ devi.createdAt ? devi.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 
+    <h2>Produits</h2>
+    <ul>
+        {% for product in devi.devisProducts %}
+            <li>{{ product.product.name }} - Quantité: {{ product.quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Formules</h2>
+    <ul>
+        {% for formula in devi.devisFormulas %}
+            <li>{{ formula.formula.name }} - Quantité: {{ formula.quantity }}</li>
+        {% endfor %}
+    </ul>
+
     <a href="{{ path('app_devis_index') }}">back to list</a>
-
     <a href="{{ path('app_devis_edit', {'id': devi.id}) }}">edit</a>
-
     {{ include('devis/_delete_form.html.twig') }}
 {% endblock %}

@@ -22,6 +22,16 @@
     </div>
     <button type="button" id="add_product_button">Ajouter un produit</button>
 </br>
+    <h3>Formules</h3>
+    <div id="devisFormulas" data-prototype="{{ form_widget(form.devisFormulas.vars.prototype)|e('html_attr') }}" data-index="{{ form.devisFormulas|length }}">
+        {% for devisFormula in form.devisFormulas %}
+            <div class="devisFormulaItem">
+                {{ form_row(devisFormula) }}
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add_formula_button">Ajouter une formule</button>
+</br>
     <button class="btn">{{ button_label|default('Save') }}</button>
     {{ form_end(form) }}
 
