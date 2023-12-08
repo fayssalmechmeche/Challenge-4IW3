@@ -3,7 +3,7 @@
 {% block title %}Nouveau Devis{% endblock %}
 
 {% block body  %}
-    {# <h1>Créer un nouveau Devis</h1>
+     <h1>Créer un nouveau Devis</h1>
 
     {{ form_start(form) }}
     {{ form_row(form.taxe) }}
@@ -35,7 +35,7 @@
     <button class="btn">{{ button_label|default('Save') }}</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_devis_index') }}">Retour à la liste</a> #}
+    <a href="{{ path('app_devis_index') }}">Retour à la liste</a> }
 
 
       <nav class="flex justify-between w-full items-center py-3 px-5 h-14 bg-[#353535] ">
@@ -158,11 +158,10 @@
     </div>
     <script src="index.js" type="module"></script>
 
-
-
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/devis.js') }}"></script>
+  <script src="{{ asset('js/devis.js') }}" type="module"></script>
+
 {% endblock %}

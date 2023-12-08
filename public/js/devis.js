@@ -44,18 +44,34 @@ document.addEventListener('DOMContentLoaded', function() {
 function handleCollectionItems(collectionId, addButtonId, itemClass, updatePriceFunction) {
     const collectionHolder = document.getElementById(collectionId);
 
+    // Vérifie si l'élément collectionHolder existe
+    if (!collectionHolder) {
+        console.error("Element non trouvé:", collectionId);
+        return; // Stoppe l'exécution de la fonction si l'élément n'existe pas
+    }
+
+    // Maintenant, on peut utiliser querySelectorAll en toute sécurité
     collectionHolder.querySelectorAll('.' + itemClass).forEach(function(item) {
         addRemoveButton(item, itemClass);
         updatePriceFunction(item);
     });
 
-    document.getElementById(addButtonId).addEventListener('click', function(e) {
-        e.preventDefault();
-        let newFormDiv = addFormToCollection(collectionHolder, itemClass);
-        addRemoveButton(newFormDiv, itemClass);
-        updatePriceFunction(newFormDiv);
-    });
+    // Ajout d'un bouton pour gérer les nouveaux éléments
+    const addButton = document.getElementById(addButtonId);
+    if (addButton) {
+        addButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            let newFormDiv = addFormToCollection(collectionHolder, itemClass);
+            addRemoveButton(newFormDiv, itemClass);
+            updatePriceFunction(newFormDiv);
+        });
+    } else {
+        console.error("Bouton non trouvé:", addButtonId);
+    }
 }
+
+
+
 
 function addFormToCollection(collectionHolder, itemClass) {
     const prototype = collectionHolder.dataset.prototype;
