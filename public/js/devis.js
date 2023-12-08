@@ -1,6 +1,44 @@
+import {
+    Grid,
+    html
+} from "https://unpkg.com/gridjs?module";
+
 document.addEventListener('DOMContentLoaded', function() {
     handleCollectionItems('devisProducts', 'add_product_button', 'devisProductItem', updateProductPriceDisplay);
     handleCollectionItems('devisFormulas', 'add_formula_button', 'devisFormulaItem', updateFormulaPriceDisplay);
+    // Grid JS
+
+    
+    const grid = new Grid({
+      columns: ["Produit", "Qté", "Prix unitaire",'Total HT'],
+      data: [
+        ["Formule 1", "50", "25 €",'1250 €'],
+        ["Formule 2", "100", "20 €",'2000 €'],
+        ["Formule 3", "150", "15 €",'2250 €'],
+      ],
+      style: {
+        table: {
+          border: '1px solid #ccc'
+        },
+        th: {
+          'background-color': '#d4d4d4',
+          color: '#000',
+          'border-bottom': '1px solid #ccc',
+          'text-align': 'center'
+        },
+        td: {
+          'text-align': 'center'
+        }
+      }
+    });
+    
+    
+    grid.render(document.getElementById("wrapper"));
+
+
+
+
+
 });
 
 function handleCollectionItems(collectionId, addButtonId, itemClass, updatePriceFunction) {
