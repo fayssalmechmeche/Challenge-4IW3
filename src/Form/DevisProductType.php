@@ -10,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class DevisProductType extends AbstractType
 {
@@ -30,6 +31,11 @@ class DevisProductType extends AbstractType
             ->add('quantity', IntegerType::class, [
                 'attr' => ['min' => 0],
                 'label' => 'Quantité'
+            ])
+            ->add('displayedPrice', TextType::class, [
+                'mapped' => false, // ce champ n'est pas mappé à l'entité
+                'disabled' => true, // désactivé pour l'édition
+                'label' => 'Prix affiché'
             ]);
     }
 

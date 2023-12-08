@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Devis;
 use App\Form\DevisType;
 use App\Repository\DevisRepository;
+use App\Repository\FormulaRepository;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -108,6 +111,26 @@ class DevisController extends AbstractController
         return $this->render('devis/show.html.twig', [
             'devi' => $devi,
         ]);
+    }
+
+    #[Route('/product/{id}/price', name: 'api_product_price', methods: ['GET'])]
+    public function getProductPrice($id, ProductRepository $productRepository): JsonResponse
+    {
+        $product = $productRepository->find($id);
+        if (!$product) {
+            return new JsonResponse(['error' => 'Produit non trouvé'], 404);
+        }
+        return new JsonResponse(['price' => $product->getPrice()]);
+    }
+
+    #[Route('/formula/{id}/price', name: 'api_formula_price', methods: ['GET'])]
+    public function getFormulaPrice($id, FormulaRepository $formulaRepository): JsonResponse
+    {
+        $formula = $formulaRepository->find($id);
+        if (!$formula) {
+            return new JsonResponse(['error' => 'Formule non trouvée'], 404);
+        }
+        return new JsonResponse(['price' => $formula->getPrice()]);
     }
 
     #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]

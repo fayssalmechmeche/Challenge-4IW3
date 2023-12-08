@@ -9,11 +9,11 @@
         <tbody>
         <tr>
             <th>TotalPrice</th>
-            <td>{{ devi.totalPrice }}</td>
+            <td>{{ devi.totalPrice|number_format(2, ',', ' ') }} €</td>
         </tr>
         <tr>
             <th>TotalDuePrice</th>
-            <td>{{ devi.totalDuePrice }}</td>
+            <td>{{ devi.totalDuePrice|number_format(2, ',', ' ') }} €</td>
         </tr>
         <tr>
             <th>PaymentStatus</th>
@@ -29,18 +29,18 @@
     <h2>Produits</h2>
     <ul>
         {% for product in devi.devisProducts %}
-            <li>{{ product.product.name }} - Quantité: {{ product.quantity }}</li>
+            <li>{{ product.product.name }} - Quantité: {{ product.quantity }} - Prix unitaire: {{ product.product.price|number_format(2, ',', ' ') }} € - Total: {{ (product.product.price * product.quantity)|number_format(2, ',', ' ') }} €</li>
         {% endfor %}
     </ul>
 
     <h2>Formules</h2>
     <ul>
         {% for formula in devi.devisFormulas %}
-            <li>{{ formula.formula.name }} - Quantité: {{ formula.quantity }}</li>
+            <li>{{ formula.formula.name }} - Quantité: {{ formula.quantity }} - Prix unitaire: {{ formula.formula.price|number_format(2, ',', ' ') }} € - Total: {{ (formula.formula.price * formula.quantity)|number_format(2, ',', ' ') }} €</li>
         {% endfor %}
     </ul>
 
-    <a href="{{ path('app_devis_index') }}">back to list</a>
-    <a href="{{ path('app_devis_edit', {'id': devi.id}) }}">edit</a>
+    <a href="{{ path('app_devis_index') }}">Retour à la liste</a>
+    <a href="{{ path('app_devis_edit', {'id': devi.id}) }}">Modifier</a>
     {{ include('devis/_delete_form.html.twig') }}
 {% endblock %}

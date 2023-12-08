@@ -9,6 +9,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 class DevisFormulaType extends AbstractType
 {
@@ -29,6 +31,11 @@ class DevisFormulaType extends AbstractType
             ->add('quantity', IntegerType::class, [
                 'attr' => ['min' => 1],
                 'label' => 'Quantité'
+            ])
+            ->add('displayedPrice', TextType::class, [
+                'mapped' => false,
+                'disabled' => true,
+                'label' => 'Prix affiché'
             ]);
     }
 
