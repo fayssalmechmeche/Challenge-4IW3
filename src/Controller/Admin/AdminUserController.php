@@ -39,7 +39,7 @@ class AdminUserController extends AbstractController
                 'email' => $user->getEmail(),
                 'roles' => $user->getRoles(),
                 'status' => $user->isVerified(),
-                'society' => $user->getSociety(),
+                'society' => $user->getSociety()->getName(),
             ];
         }
         return $this->json($data);
