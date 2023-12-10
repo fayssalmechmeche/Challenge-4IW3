@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Society;
-use App\Form\SocietyType;
+use App\Form\Admin\SocietyType;
 use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
 use App\Repository\SocietyRepository;
@@ -26,6 +26,24 @@ class AdminSocietyController extends AbstractController
         return $this->render('admin/society/index.html.twig', [
             'societies' => $societies = $this->entityManagerInterface->getRepository(Society::class)->findAll(),
         ]);
+    }
+
+    #[Route('/api', name: 'api_society_index', methods: ['GET'])]
+    public function apiIndex(EntityManagerInterface $entityManager): Response
+    {
+        $societyRepository = $entityManager->getRepository(Society::class);
+        $societies = $societyRepository->findAll();
+        $data = [];
+        foreach ($societies as $society) {
+            $data[] = [
+                'id' => $society->getId(),
+                'name' => $society->getName(),
+                'address' => $society->getAddress(),
+                'phone' => $society->getPhone(),
+                'email' => $society->getEmail(),
+            ];
+        }
+        return $this->json($data);
     }
 
     #[Route('/new', name: 'new')]

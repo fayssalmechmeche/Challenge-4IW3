@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\AdminUserType;
+use App\Form\Admin\AdminUserType;
 use App\Repository\DevisRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +27,24 @@ class AdminUserController extends AbstractController
         ]);
     }
 
+    #[Route('/api', name: 'api_user_index', methods: ['GET'])]
+    public function apiIndex(EntityManagerInterface $entityManager): Response
+    {
+        $userRepository = $entityManager->getRepository(User::class);
+        $users = $userRepository->findAll();
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+                'status' => $user->isVerified(),
+                'society' => $user->getSociety(),
+            ];
+        }
+        return $this->json($data);
+    }
+
 
     #[Route('/new', name: 'new')]
     public function new(Request $request)
@@ -38,7 +56,7 @@ class AdminUserController extends AbstractController
             $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
             $user->setCreatedAt(new \DateTime());
             $user->setSociety($this->getUser()->getSociety());
-            $user->setVerified(false);
+            $user->setIsVerified(false);
             $request->get("roles");
             if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
