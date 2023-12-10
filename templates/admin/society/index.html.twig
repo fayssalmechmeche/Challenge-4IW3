@@ -1,0 +1,27 @@
+{% extends 'admin/base.back.html.twig' %}
+
+{% block title %}Dashboard Société{% endblock %}
+
+{% block body %}
+    
+  <main
+      class="flex min-h-80vh w-full flex-col items-center justify-center rounded-2xl bg-blue-100 p-4"
+    >
+      <h1 class="mb-4 text-3xl">Dashboard Société</h1>
+      <section
+        id="InfoCards"
+        class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4"
+      >
+        {% include "admin/component/cardNbrCompany.html.twig" %}
+        {% include "admin/component/cardTotalCa.html.twig" %}
+      </section>
+
+      <section id="InfosEntreprise" class="h-full w-full">
+        <div id="tabSocietyGridJs" class="h-full w-full"></div>
+      </section>
+    </main>
+{% endblock %}
+
+{% block script_js %}
+<script src="{{ asset('js/admin/societyGrid.js') }}"></script>
+{% endblock %}

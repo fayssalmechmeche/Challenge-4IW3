@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ asset('css/mermaid.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+  </head>
+  <body class="bg-slate-200">
+    <div
+      class="mega-container flex h-auto w-[99vw] flex-nowrap items-start justify-around"
+    >
+      <!-- hidden element used to reserve place of the navbar that are fixed -->
+      <div class="ml-8 h-90-vh w-1/5"></div>
+      <!-- Navbar -->
+      <div
+        class="vertical-nav fixed left-2 top-8 ml-8 flex h-90-vh w-1/5 flex-col items-start justify-start rounded-2xl bg-white shadow-md"
+      >
+        <!-- Head -->
+        <div
+          class="head relative flex w-full flex-col items-start justify-start p-7"
+        >
+          <span
+            class="material-symbols-outlined absolute right-5 cursor-pointer rounded-full p-1 text-gray-500 transition duration-300 ease-in-out hover:bg-black hover:text-white"
+          >
+            arrow_back
+          </span>
+          <img
+            id="user-image"
+            class="mb-4 h-14 w-14 rounded-full object-cover"
+            src="/src/pexels-photo-2130795.jpeg"
+            alt="user-image"
+          />
+          <div class="flex h-full w-3/4 flex-col items-start justify-center">
+            <h2 class="text-2xl font-semibold leading-none">John Doe</h2>
+            <p class="text-the-grey">Freelance</p>
+          </div>
+        </div>
+        <!-- Divider -->
+        <div
+          class="devider mx-auto my-2 h-2px w-95% bg-the-grey opacity-50"
+        ></div>
+        <!-- end divider -->
+        <!-- Body -->
+        <div
+          class="body flex h-full w-full flex-col items-center justify-start"
+        >
+          <!-- Navbar item -->
+          <div
+            class="group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out hover:bg-black"
+          >
+            <span
+              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              home
+            </span>
+            <p
+              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              Tableau de bord
+            </p>
+          </div>
+          <!-- end item -->
+          <!-- Navbar item -->
+          <div
+            class="group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out hover:bg-black"
+          >
+            <span
+              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              description
+            </span>
+            <p
+              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              Description
+            </p>
+          </div>
+          <!-- end item -->
+          <!-- Navbar item -->
+          <div
+            class="group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out hover:bg-black"
+          >
+            <span
+              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              payments
+            </span>
+            <p
+              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              Facture
+            </p>
+          </div>
+          <!-- end item -->
+          <!-- logout -->
+          <div
+            class="group mb-2 mt-auto flex h-12 w-95% cursor-pointer items-center justify-start justify-self-end rounded-10px transition duration-300 ease-in-out hover:bg-black"
+          >
+            <span
+              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              power_settings_new
+            </span>
+            <p
+              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+            >
+              Logout
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="site-content my-8 flex h-auto min-h-90vh w-3/4 items-center justify-center rounded-2xl bg-white py-4"
+      >
+        {% block body %}{% endblock %}
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+    {% block script_js %}{% endblock %}
+  </body>
+</html>
