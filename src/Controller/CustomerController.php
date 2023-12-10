@@ -17,16 +17,24 @@ class CustomerController extends AbstractController
     #[Route('/', name: 'app_customer_index', methods: ['GET', 'POST'])]
     public function index(CustomerRepository $customerRepository): Response
     {
+        $user = $this->getUser();
+        $customers = $customerRepository->findBy(['user' => $user]);
         return $this->render('customer/index.html.twig', [
-            'customers' => $customerRepository->findAll(),
+            'customers' => $customers,
         ]);
     }
 
     #[Route('/api', name: 'api_customer_index', methods: ['GET'])]
-    public function apiIndex(EntityManagerInterface $entityManager): Response
+    public function apiIndex(CustomerRepository $customerRepository): Response
     {
-        $productRepository = $entityManager->getRepository(Customer::class);
-        $customers = $productRepository->findAll();
+        $user = $this->getUser();
+
+        if ($user) {
+            $customers = $customerRepository->findBy(['user' => $user]);
+        } else {
+            $customers = [];
+        }
+
         $data = [];
         foreach ($customers as $customer) {
             $data[] = [
@@ -38,6 +46,7 @@ class CustomerController extends AbstractController
         }
         return $this->json($data);
     }
+
 
     #[Route('/api/{id}', name: 'api_customer_details', methods: ['GET'])]
     public function apiCustomerDetails(Customer $customer): Response
@@ -81,10 +90,12 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Associer le client à l'utilisateur connecté
+            $customer->setUser($this->getUser());
+
             $entityManager->persist($customer);
             $entityManager->flush();
 
-            // Ajouter un message flash ICI si le formulaire est soumis et valide
             $this->addFlash('success', 'Le nouveau client a été créé avec succès.');
 
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
@@ -96,6 +107,7 @@ class CustomerController extends AbstractController
             'form_action' => $this->generateUrl('app_customer_new')
         ]);
     }
+
 
 
 

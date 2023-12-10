@@ -26,6 +26,26 @@ class Formula
     #[ORM\Column]
     private ?int $price = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'formulas')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user;
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User|null $user
+     */
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
 
     public function __construct()
     {
