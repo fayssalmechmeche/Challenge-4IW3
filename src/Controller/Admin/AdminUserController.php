@@ -38,7 +38,7 @@ class AdminUserController extends AbstractController
             $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
             $user->setCreatedAt(new \DateTime());
             $user->setSociety($this->getUser()->getSociety());
-            $user->setVerified(false);
+            $user->setIsVerified(false);
             $request->get("roles");
             if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
