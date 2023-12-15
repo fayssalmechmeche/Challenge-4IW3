@@ -1,14 +1,36 @@
-{% extends 'admin/base.back.html.twig' %}
+{# {% extends 'admin/base.back.html.twig' %} #}
 
-{% block title %}Création d'une Société{% endblock %}
+{# {% block title %}Création d'une Société{% endblock %} #}
 
 {% block body %}
-    <div>
-        <h1>Création d'une Société</h1>
+	<div>
+		<h1 class="mb-8 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold">
+			Création d'une Société
+		</h1>
 
-        {{ form_start(form) }}
-            {{ form_rest(form) }}
-            <button type="submit">Créer</button>
-        {{ form_end(form) }}
-    </div>
+		{{ form_start(form) }}
+
+			<label for="{{ form.name.vars.id }}" class="mb-1 block">Nom</label>
+			{{ form_widget(form.name, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+			{{ form_errors(form.name) }}
+
+			<label for="{{ form.address.vars.id }}" class="mb-1 block">Adresse</label>
+			{{ form_widget(form.address, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+			{{ form_errors(form.address) }}
+
+			<label for="{{ form.phone.vars.id }}" class="mb-1 block">Téléphone</label>
+			{{ form_widget(form.phone, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+			{{ form_errors(form.phone) }}
+
+			<label for="{{ form.email.vars.id }}" class="mb-1 block">Email</label>
+			{{ form_widget(form.email, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+			{{ form_errors(form.email) }}
+
+			<label for="{{ form.siret.vars.id }}" class="mb-1 block">Siret</label>
+			{{ form_widget(form.siret, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+			{{ form_errors(form.siret) }}
+
+			<button type="submit">Créer</button>
+		{{ form_end(form) }}
+	</div>
 {% endblock %}

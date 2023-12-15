@@ -1,0 +1,23 @@
+<!-- Modal OVERLAY -->
+<div
+  class="absolute top-0 left-0 hidden h-full w-full bg-gray-600 bg-opacity-50 opacity-40"
+  id="modal_id"
+  onclick="displayModal(false)"
+></div>
+
+<!-- Modal -->
+<div
+  class="absolute left-1/2 top-[-1000px] hidden max-h-80-vh w-96 transform overflow-y-auto rounded-md border bg-white p-3 shadow-lg -translate-x-1/2 -translate-y-1/2 transition-all duration-500"
+  id="modal_content_id"
+>
+  <!-- Close Button -->
+  <button
+    class="absolute right-3 top-3 rounded-lg bg-red-500 px-2 py-1 font-medium text-white transition-all duration-300 ease-out hover:bg-red-700"
+    onclick="displayModal(false)"
+  >
+    Fermer
+  </button>
+  <div id="content" class="flex h-full w-full flex-col items-start justify-start">
+    <!-- Contenu dynamique ici -->
+  </div>
+</div>
