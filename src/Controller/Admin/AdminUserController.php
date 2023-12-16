@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/user', name: 'admin_user_')]
@@ -28,7 +29,7 @@ class AdminUserController extends AbstractController
     }
 
     #[Route('/api', name: 'api_user_index', methods: ['GET'])]
-    public function apiIndex(EntityManagerInterface $entityManager): Response
+    public function apiIndex(EntityManagerInterface $entityManager, CsrfTokenManagerInterface $tokenManager): Response
     {
         $userRepository = $entityManager->getRepository(User::class);
         $users = $userRepository->findAll();
@@ -45,6 +46,7 @@ class AdminUserController extends AbstractController
                 'roles' => $user->getRoles(),
                 'status' => $user->isVerified(),
                 'society' => $user->getSociety()->getName(),
+                'token' => $tokenManager->getToken('delete-users' . $user->getId())->getValue(),
             ];
         }
         return $this->json($data);

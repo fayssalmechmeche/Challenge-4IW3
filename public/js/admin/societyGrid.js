@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="flex">
             <button onclick="openSocietyShowModal(${society.id})">👁‍🗨</button>
             <button onclick="openSocietyEditModal(${society.id})">📝</button>
-            <button href="/admin/society/delete/${society.id}/${society.token}">❌</button>
+            <a href="/admin/society/delete/${society.id}/${society.token}">❌</a>
           </div>`),
         ]),
     },

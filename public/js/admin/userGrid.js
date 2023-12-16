@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="flex">
             <button onclick="openUserShowModal(${user.id})">👁‍🗨</button>
             <button onclick="openUserEditModal(${user.id})">📝</button>
-            <button onclick="">❌</button>
+            <a href="/admin/user/delete/${user.id}/${user.token}">❌</a>
           </div>`),
         ]),
     },

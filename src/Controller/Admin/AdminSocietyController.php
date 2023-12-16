@@ -10,8 +10,9 @@ use App\Repository\SocietyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/society', name: 'admin_society_')]
@@ -30,7 +31,7 @@ class AdminSocietyController extends AbstractController
     }
 
     #[Route('/api', name: 'api_society_index', methods: ['GET'])]
-    public function apiIndex(EntityManagerInterface $entityManager): Response
+    public function apiIndex(EntityManagerInterface $entityManager, CsrfTokenManagerInterface $tokenManager): Response
     {
         $societyRepository = $entityManager->getRepository(Society::class);
         $societies = $societyRepository->findAll();
@@ -42,7 +43,7 @@ class AdminSocietyController extends AbstractController
                 'address' => $society->getAddress(),
                 'phone' => $society->getPhone(),
                 'email' => $society->getEmail(),
-                'token' => new CsrfToken('token_id', 'delete-society' . $society->getId())
+                'token' => $tokenManager->getToken('delete-society' . $society->getId())->getValue(),
             ];
         }
         return $this->json($data);
@@ -93,6 +94,8 @@ class AdminSocietyController extends AbstractController
     #[Route('/delete/{id}/{token}', name: 'delete')]
     public function delete(Society $society, string $token): Response
     {
+
+
         if (!$this->isCsrfTokenValid('delete-society' . $society->getId(), $token)) {
             $this->addFlash('error', 'Token invalide');
             return $this->redirectToRoute('admin_society_index');
