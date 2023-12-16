@@ -69,6 +69,7 @@ class AdminUserController extends AbstractController
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
             $this->addFlash('success', 'Utilisateur ajouté avec succès');
+            $this->redirectToRoute('admin_user_index');
         }
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
@@ -87,7 +88,7 @@ class AdminUserController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(User $user, Request $request): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(AdminUserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (in_array('ROLE_ADMIN', $form->get('Roles')->getData())) {
@@ -98,6 +99,10 @@ class AdminUserController extends AbstractController
             $this->addFlash('success', 'Utilisateur modifié avec succès');
             return $this->redirectToRoute('admin_user_index');
         }
+        return $this->render('admin/user/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user
+        ]);
     }
 
     #[Route('/delete/{id}/{token}', name: 'delete')]
