@@ -23,12 +23,14 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="flex">
             <button onclick="openSocietyShowModal(${society.id})">👁‍🗨</button>
             <button onclick="openSocietyEditModal(${society.id})">📝</button>
-            <button onclick="">❌</button>
+            <button href="/admin/society/delete/${society.id}/${society.token}">❌</button>
           </div>`),
         ]),
     },
     search: true,
-    pagination: true,
+    pagination: {
+      limit: 5,
+    },
     sort: true,
     // style: {
     //   td: {

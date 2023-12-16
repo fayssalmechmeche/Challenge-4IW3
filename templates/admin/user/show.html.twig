@@ -1,0 +1,30 @@
+{# {% extends 'admin/base.back.html.twig' %} #}
+
+{# {% block title %}Création d'une Société{% endblock %} #}
+
+{% block body %}
+		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold">
+			Visualisation d'une Société
+		</h1>
+
+		<div class='flex-col items-start w-full'>
+			{# <div class="w-48% max-md:w-full"> #}
+                <label class="mb-1 block">Nom</label>
+                <p class="mb-3 bg-white w-full rounded-sm p-2">
+					{{society.name}}
+                </p>
+				<label class="mb-1 block">Adresse</label>
+                <p class="mb-3 bg-white w-full rounded-sm p-2">
+					{{society.address}}
+                </p>
+				<label class="mb-1 block">Téléphone</label>
+                <p class="mb-3 bg-white w-full rounded-sm p-2">
+					{{society.phone}}
+                </p>
+				<label class="mb-1 block">Email</label>
+                <p class="mb-3 bg-white w-full rounded-sm p-2">
+					{{society.email}}
+                </p>
+            {# </div> #}
+		</div>
+{% endblock %}

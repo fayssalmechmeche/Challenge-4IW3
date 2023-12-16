@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/society', name: 'admin_society_')]
@@ -41,6 +42,7 @@ class AdminSocietyController extends AbstractController
                 'address' => $society->getAddress(),
                 'phone' => $society->getPhone(),
                 'email' => $society->getEmail(),
+                'token' => new CsrfToken('token_id', 'delete-society' . $society->getId())
             ];
         }
         return $this->json($data);

@@ -1,47 +1,44 @@
-function openSocietyCreateModal() {
-  fetch(`/admin/society/new`)
-    .then((response) => response.text())
-    .then((html) => {
-      console.log(html);
-      document.getElementById("content").innerHTML = html;
-      displayModal(true);
-    })
-    .catch((error) =>
-      console.error("Erreur lors de la récupération du formulaire:", error)
-    );
-}
-
-function openSocietyEditModal(id) {
-  fetch(`/admin/society/edit/${id}`)
-    .then((response) => response.text())
-    .then((html) => {
-      console.log(html);
-      document.getElementById("content").innerHTML = html;
-      // document.getElementById(
-      //   "formEditSociety"
-      // ).action = `/admin/society/edit/${id}`;
-      displayModal(true);
-    })
-    .catch((error) =>
-      console.error("Erreur lors de la récupération du formulaire:", error)
-    );
-}
-
-function openSocietyShowModal(id) {
-  fetch(`/admin/society/show/${id}`)
-    .then((response) => response.text())
-    .then((html) => {
-      console.log(html);
-      document.getElementById("content").innerHTML = html;
-      displayModal(true);
-    })
-    .catch((error) =>
-      console.error("Erreur lors de la récupération du formulaire:", error)
-    );
-}
-
 function openUserCreateModal() {
   fetch(`/admin/user/new`)
+    .then((response) => response.text())
+    .then((html) => {
+      console.log(html);
+      document.getElementById("content").innerHTML = html;
+      displayModal(true);
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la récupération du formulaire:", error)
+    );
+}
+
+function openUserEditModal(id) {
+  fetch(`/admin/user/edit/${id}`)
+    .then((response) => response.text())
+    .then((html) => {
+      console.log(html);
+      document.getElementById("content").innerHTML = html;
+      displayModal(true);
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la récupération du formulaire:", error)
+    );
+}
+
+function openUserShowModal(id) {
+  fetch(`/admin/user/show/${id}`)
+    .then((response) => response.text())
+    .then((html) => {
+      console.log(html);
+      document.getElementById("content").innerHTML = html;
+      displayModal(true);
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la récupération du formulaire:", error)
+    );
+}
+
+function openSocietyCreateModal() {
+  fetch(`/admin/society/new`)
     .then((response) => response.text())
     .then((html) => {
       console.log(html);

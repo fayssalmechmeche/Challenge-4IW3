@@ -36,6 +36,8 @@ class AdminUserController extends AbstractController
         foreach ($users as $user) {
             $data[] = [
                 'id' => $user->getId(),
+                'name' => $user->getName(),
+                'lastName' => $user->getLastName(),
                 'email' => $user->getEmail(),
                 'roles' => $user->getRoles(),
                 'status' => $user->isVerified(),

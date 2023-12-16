@@ -8,7 +8,7 @@
 		</h1>
 
 		<div class='flex-col items-start w-full'>
-		{{ form_start(form, {'action': path('admin_society_edit', {"id": society.id}), 'attr': {'id': 'formEditSociety'}}) }}
+		{{ form_start(form, {'action': path('admin_user_edit', {"id": user.id}), 'attr': {'id': 'formEditUser'}}) }}
 
 			<label for="{{ form.name.vars.id }}" class="mb-1 block">Nom :</label>
 			{{ form_widget(form.name, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
@@ -31,7 +31,7 @@
 			{{ form_errors(form.siret) }}
 
 			<div class="flex justify-center">
-				<button type="submit" class="cursor-pointer rounded-xl bg-blue-700 px-6 py-2 text-white transition-all hover:bg-blue-600">
+				<button type="submit" class="cursor-pointer rounded-xl bg-indigo-600 px-6 py-2 text-white transition-all hover:bg-indigo-500">
 					Modifier
 				</button>
 			</div>
