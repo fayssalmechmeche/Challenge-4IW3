@@ -34,6 +34,9 @@ class AdminUserController extends AbstractController
         $users = $userRepository->findAll();
         $data = [];
         foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                continue;
+            }
             $data[] = [
                 'id' => $user->getId(),
                 'name' => $user->getName(),
@@ -91,7 +94,7 @@ class AdminUserController extends AbstractController
         $form = $this->createForm(AdminUserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (in_array('ROLE_ADMIN', $form->get('Roles')->getData())) {
+            if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
                 return $this->redirectToRoute('admin_user_index');
             }

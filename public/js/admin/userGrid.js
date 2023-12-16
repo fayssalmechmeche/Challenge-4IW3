@@ -16,7 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
         data.map((user) => [
           user.name,
           user.lastName,
-          user.roles,
+          user.roles.includes('ROLE_ACCOUNTANT') ? 'Comptable' : (
+            user.roles.includes('ROLE_USER') ? 'Utilisateur' : user.roles.join(', ')
+          ),
           user.status ? "Validé" : "Invalidé",
           gridjs.html(`
           <div class="flex">
