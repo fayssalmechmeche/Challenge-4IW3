@@ -64,8 +64,6 @@ class AdminSocietyController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/show/{id}', name: 'show')]
     public function show(Society $society): Response
     {

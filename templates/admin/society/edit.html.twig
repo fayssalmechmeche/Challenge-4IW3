@@ -4,11 +4,11 @@
 
 {% block body %}
 		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold">
-			Création d'une Société
+			Modification d'une Société
 		</h1>
 
 		<div class='flex-col items-start w-full'>
-		{{ form_start(form, {'action': path('admin_society_new')}) }}
+		{{ form_start(form, {'attr': {'id': 'formEditSociety'}}) }}
 
 			<label for="{{ form.name.vars.id }}" class="mb-1 block">Nom :</label>
 			{{ form_widget(form.name, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
@@ -32,7 +32,7 @@
 
 			<div class="flex justify-center">
 				<button type="submit" class="cursor-pointer rounded-xl bg-indigo-600 px-6 py-2 text-white transition-all hover:bg-indigo-500">
-					Créer
+					Modifier
 				</button>
 			</div>
 
