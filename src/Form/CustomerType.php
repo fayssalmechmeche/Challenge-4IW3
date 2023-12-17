@@ -23,8 +23,13 @@ class CustomerType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'required' => false,
-                'attr' => ['id' => 'customerName'],
+                'attr' => [
+                    'id' => 'customerName',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Nom',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([
                         'groups' => ['individual'],
@@ -34,8 +39,13 @@ class CustomerType extends AbstractType
             ])
             ->add('lastName', TextType::class, [
                 'required' => false,
-                'attr' => ['id' => 'customerLastName'],
+                'attr' => [
+                    'id' => 'customerLastName',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Prénom',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([
                         'groups' => ['individual'],
@@ -45,8 +55,13 @@ class CustomerType extends AbstractType
             ])
             ->add('nameSociety', TextType::class, [
                 'required' => false,
-                'attr' => ['id' => 'customerNameSociety'],
+                'attr' => [
+                    'id' => 'customerNameSociety',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Nom de la Société',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([
                         'groups' => ['society'],
@@ -55,19 +70,43 @@ class CustomerType extends AbstractType
                 ],
             ])
             ->add('streetName', TextType::class, [
+                'attr' => [
+                    'id' => 'customerStreetName',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Nom de la rue',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('streetNumber', IntegerType::class, [
+                'attr' => [
+                    'id' => 'customerStreetNumber',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Numéro de rue',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('city', TextType::class, [
+                'attr' => [
+                    'id' => 'customerCity',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Ville',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('postalCode', TextType::class, [
+                'attr' => [
+                    'id' => 'customerPostalCode',
+                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                ],
                 'label' => 'Code postal',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('email', EmailType::class, [

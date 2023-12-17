@@ -2,7 +2,25 @@
 module.exports = {
 
   content: ["**/**.html.twig"],
-
+  safelist: [
+    "rotate-45",
+    "translate-y-3.5",
+    "absolute",
+    "duration-300",
+    "ease-out",
+    "bg-nav-btn",
+    "opacity-0",
+    "-rotate-45",
+    "-translate-y-3.5",
+    "top-[-1000px]",
+    "top-28",
+    "duration-300",
+    "ease-out",
+    "top-[-1000px]",
+    "duration-300",
+    "ease",
+    "bg-green-400", "top-1/2", "translate-x-full", 'bg-orange-400','hover:bg-orange-600'
+  ],
   theme: {
     extend: {
       colors: {
@@ -14,6 +32,9 @@ module.exports = {
         "landing-bg": "#FDB833",
         "button-blue": "#0252C5",
         "button-blue-hover": "#023c8d",
+        "nav-bg": "#FBFCFC",
+        "nav-menu": "#000D31",
+        "nav-btn": "#3347FD",
       },
       spacing: {
         "90-vh": "90vh",
