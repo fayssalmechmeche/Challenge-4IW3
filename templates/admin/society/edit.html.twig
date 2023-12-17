@@ -1,0 +1,12 @@
+{# {% extends 'admin/base.back.html.twig' %} #}
+
+{# {% block title %}Création d'une Société{% endblock %} #}
+
+	{% block body %}
+		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold"> Modification d'une Société
+	</h1>
+
+	<div class='flex-col items-start w-full'>
+		{% include "admin/society/_form.html.twig" with  {"action" :'admin_society_edit',"actionId":society.id,"id":"formEditSociety" }%}
+	</div>
+{% endblock %}

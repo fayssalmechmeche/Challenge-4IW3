@@ -2,7 +2,9 @@
 
 namespace App\Form\Admin;
 
+use App\Entity\Society;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +22,12 @@ class AdminUserType extends AbstractType
                     'Entreprise' => 'ROLE_SOCIETY',
                     'Comptable' => 'ROLE_ACCOUNTANT',
                 ]
+            ])
+            ->add('society', EntityType::class, [
+                'class' => Society::class,
+                'choice_label' => 'name',
+                'mapped' => false,
+                'required' => true,
             ])
             ->add('name')
             ->add('lastName');

@@ -36,8 +36,6 @@ class Society
     #[ORM\OneToMany(mappedBy: 'society', targetEntity: Product::class, orphanRemoval: true)]
     private Collection $products;
 
-    #[ORM\OneToMany(mappedBy: 'society', targetEntity: Devis::class, orphanRemoval: true)]
-    private Collection $devis;
 
     public function __construct()
     {

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: "jit",
   content: ["**/**.html.twig"],
   safelist: [
     "rotate-45",
@@ -18,7 +19,7 @@ module.exports = {
     "top-[-1000px]",
     "duration-300",
     "ease",
-    "bg-green-400", "top-1/2", "translate-x-full", 'bg-orange-400','hover:bg-orange-600'
+    "bg-green-400", "top-1/2", "translate-x-full", 'bg-orange-400', 'hover:bg-orange-600'
   ],
   theme: {
     extend: {
@@ -34,9 +35,13 @@ module.exports = {
         "nav-bg": "#FBFCFC",
         "nav-menu": "#000D31",
         "nav-btn": "#3347FD",
+        "card-grey": "#8A92A6",
+        "progress-bar-1": "#3A57E8",
+        "progress-bar-2": "#08B1BA",
       },
       spacing: {
         "90-vh": "90vh",
+        "80-vh": "80vh",
         "95%": "95%",
         "2px": "2px",
         "15%": "15%",
@@ -47,6 +52,13 @@ module.exports = {
         "35%": "35%",
         "50px": "50px",
         "70%": "70%",
+        "closed-nav": "48px",
+        "open-nav": "257px",
+      },
+      width: {
+        "content-space-open": "calc(100% - 257px)",
+        "content-space-closed": "calc(100% - 48px)",
+        "grid-dashboard-space": "calc(100% - 410px)",
       },
       borderRadius: {
         "10px": "10px",
@@ -59,6 +71,7 @@ module.exports = {
       },
       minHeight: {
         "90vh": "90vh",
+        "80vh": "80vh",
       },
     },
   },

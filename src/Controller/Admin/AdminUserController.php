@@ -3,12 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\AdminUserType;
+use App\Form\Admin\AdminUserType;
 use App\Repository\DevisRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin/user', name: 'admin_user_')]
@@ -27,6 +28,30 @@ class AdminUserController extends AbstractController
         ]);
     }
 
+    #[Route('/api', name: 'api_user_index', methods: ['GET'])]
+    public function apiIndex(EntityManagerInterface $entityManager, CsrfTokenManagerInterface $tokenManager): Response
+    {
+        $userRepository = $entityManager->getRepository(User::class);
+        $users = $userRepository->findAll();
+        $data = [];
+        foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                continue;
+            }
+            $data[] = [
+                'id' => $user->getId(),
+                'name' => $user->getName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+                'status' => $user->isVerified(),
+                'society' => $user->getSociety()->getName(),
+                'token' => $tokenManager->getToken('delete-users' . $user->getId())->getValue(),
+            ];
+        }
+        return $this->json($data);
+    }
+
 
     #[Route('/new', name: 'new')]
     public function new(Request $request)
@@ -37,7 +62,7 @@ class AdminUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
             $user->setCreatedAt(new \DateTime());
-            $user->setSociety($this->getUser()->getSociety());
+            $user->setSociety($form->get('society') ? $form->get('society')->getData() : $this->getUser()->getSociety());
             $user->setIsVerified(false);
             $request->get("roles");
             if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
@@ -48,7 +73,7 @@ class AdminUserController extends AbstractController
 
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
-            $this->addFlash('success', 'Utilisateur ajouté avec succès');
+            return $this->redirectToRoute('admin_user_index');
         }
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
@@ -67,10 +92,10 @@ class AdminUserController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(User $user, Request $request): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(AdminUserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (in_array('ROLE_ADMIN', $form->get('Roles')->getData())) {
+            if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
                 return $this->redirectToRoute('admin_user_index');
             }
@@ -78,6 +103,10 @@ class AdminUserController extends AbstractController
             $this->addFlash('success', 'Utilisateur modifié avec succès');
             return $this->redirectToRoute('admin_user_index');
         }
+        return $this->render('admin/user/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user
+        ]);
     }
 
     #[Route('/delete/{id}/{token}', name: 'delete')]

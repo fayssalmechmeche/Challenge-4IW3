@@ -1,0 +1,33 @@
+{{ form_start(form, {'action': path(action, {"id": actionId}), 'attr': {'id': id}}) }}
+
+{{ form_label(form.name,'Prénom :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.name, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.name) }}
+
+{{ form_label(form.lastName,'Nom :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.lastName, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.lastName) }}
+
+{{ form_label(form.email,'Email :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.email, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.email) }}
+
+{{ form_label(form.society,'Société :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.society, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.society) }}
+
+{{ form_label(form.roles,'Roles :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.roles, {'attr': {'class': 'mb-6 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.roles) }}
+
+<div class="flex justify-center">
+	<button type="submit" class="cursor-pointer rounded-xl bg-indigo-600 px-6 py-2 text-white transition-all hover:bg-indigo-500">
+		{% if actionId is not null %}
+			Éditer
+		{% else %}
+			Créer
+		{% endif %}
+	</button>
+</div>
+
+{{ form_end(form) }}

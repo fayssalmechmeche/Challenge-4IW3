@@ -1,0 +1,11 @@
+{# {% extends 'admin/base.back.html.twig' %} #}
+
+{% block body %}
+	<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold">
+		Création d'un Utilisateur
+	</h1>
+
+	<div class='flex-col items-start w-full'>
+		{% include "admin/user/_form.html.twig" with  {"action" :'admin_user_new',"actionId":null,"id":null }%}
+	</div>
+{% endblock %}
