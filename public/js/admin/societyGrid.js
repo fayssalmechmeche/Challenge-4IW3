@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   new gridjs.Grid({
     columns: [
       {
-        name: "Raison Sociale",
+        name: "Nom de société",
         formatter: (cell) => gridjs.html(`<b>${cell}</b>`),
       },
       ,
