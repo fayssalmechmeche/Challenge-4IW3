@@ -70,7 +70,7 @@ class AdminSocietyController extends AbstractController
     #[Route('/show/{id}', name: 'show')]
     public function show(Society $society): Response
     {
-        return $this->render('admin/society/show2.html.twig', [
+        return $this->render('admin/society/show.html.twig', [
             'society' => $society,
         ]);
     }
