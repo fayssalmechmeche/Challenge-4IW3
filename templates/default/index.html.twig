@@ -1,20 +1,209 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}Hello DefaultController!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<header class="bg-nav-bg w-full h-28 font-roboto">
+	<nav
+		class="w-4/5 h-full mx-auto flex justify-between items-center">
+		<!-- logo -->
+		<div class="logo z-10"><img class="" src="{{ asset('images/landingPage/logo.svg') }}" alt="logo"/></div>
+		<!-- Bouton menu burger -->
+		<button
+			id="burger" class="xl:hidden block z-10">
+			<!-- Icône du menu burger -->
+			<span class="burger-bar block relative w-9 h-1 bg-black mb-3"></span>
+			<span class="burger-bar block relative w-9 h-1 bg-black mb-3"></span>
+			<span class="burger-bar block relative w-9 h-1 bg-black mb-3"></span>
+		</button>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+		<!-- Menu de navigation -->
+		<div id="menu" class="z-50 flex flex-col xl:flex-row h-auto w-full xl:w-1/2 xl:flex xl:justify-center items-center absolute xl:relative left-0 xl:top-0 bg-white xl:bg-transparent top-[-1000px] hidden">
+			<a class="text-decoration-none text-5xl xl:text-lg text-nav-menu font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease" href="#">Accueil</a>
+			<a class="text-decoration-none text-5xl xl:text-lg text-nav-menu font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Prix</a>
+			<a class="text-decoration-none text-5xl xl:text-lg text-nav-menu font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">FAQ</a>
+			<a class="text-decoration-none text-5xl xl:text-lg text-nav-menu font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
+			<div class="flex flex-col xl:hidden justify-center items-center">
+				<button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2">
+					<a class="text-decoration-none text-5xl xl:text-lg" href="#">Inscription</a>
+				</button>
+				<button class="border border-solid border-nav-btn text-nav-btn px-9 py-5 rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-5 xl:my-2">
+					<a class="text-decoration-none text-5xl xl:text-lg" href="#">Connexion</a>
+				</button>
+			</div>
+		</div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/srv/app/src/Controller/DefaultController.php'|file_link(0) }}">src/Controller/DefaultController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/srv/app/templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code></li>
-    </ul>
-</div>
-{% endblock %}
+		<div class="hidden xl:flex justify-between items-center">
+			<button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out">
+				<a class="text-decoration-none" href="http://">Inscription</a>
+			</button>
+			<button class="border border-solid border-nav-btn text-nav-btn px-9 py-3 rounded-xl ml-5 hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out">
+				<a class="text-decoration-none" href="http://">Connexion</a>
+			</button>
+		</div>
+	</nav>
+</header>
+
+<section class="w-full h-full xl:h-screen bg-gray-100 font-roboto">
+	<div class="w-4/5 mx-auto h-full flex flex-col xl:flex-row justify-between items-center">
+		<div class="landing-info w-full xl:w-1/2 mt-32 xl:mt-0">
+			<h1 class="text-[64px] leading-[80px] font-bold text-black mb-5">
+				Une seule
+				<br/>
+				plateforme pour vos devis et facturation.
+			</h1>
+			<p class="text-black text-2xl mb-5">
+				Gérez toutes vos tâches de devis et de facturation et obtenez un
+													aperçu en temps réel des performances et de la gestion du temps dans
+													une seule application.
+			</p>
+
+			<button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out">
+				<a class="text-decoration-none" href="#">Commencer maintenant</a>
+			</button>
+		</div>
+		<div class="relative landing-img w-full my-20 xl:my-0 xl:w-2/5 rounded-xl">
+			<img class="mx-auto z-10 relative" src="{{ asset('images/landingPage/landing-img.svg') }}" alt="landing page image"/>
+			<img class="z-0 absolute top-[-70px] right-[-15px] md:right-[150px] xl:right-[-50px]" src="{{ asset('images/landingPage/Group 11.svg') }}" alt="landing page image"/>
+			<img class="z-0 absolute bottom-[-70px] left-[-15px] md:left-[150px] xl:left-0" src="{{ asset('images/landingPage/Group 12.svg') }}" alt="landing page image"/>
+		</div>
+	</div>
+</section>
+
+<section class="w-full h-full bg-nav-bg font-roboto py-1">
+	<div class="w-4/5 h-[234px] mx-auto bg-gradient-to-r from-[#011936] to-[#012F63] rounded-[24px] mt-[50px] flex items-center justify-center px-5">
+		<h2 class="text-white text-3xl md:text-5xl leading-[60px] font-bold w-[900px] text-center">
+			Gérez vos devis et vos facturations au même endroit.
+		</h2>
+	</div>
+
+	<div class="w-4/5 mx-auto h-full flex flex-col xl:flex-row justify-between items-center my-28">
+		<div class="relative w-full xl:w-1/2 rounded-xl">
+			<img class="mx-auto w-4/5 z-10 relative border border-solid border-black rounded-3xl" src="{{ asset('images/landingPage/Dashboard.svg') }}" alt="landing page image"/>
+			<img class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="{{ asset('images/landingPage/Rectangle-dashboard.svg') }}" alt="landing page image"/>
+		</div>
+		<div class="landing-info w-full xl:w-1/2 mt-32 xl:mt-0">
+			<span class="text-nav-btn font-bold text-2xl">
+				Maximiser votre productivité
+			</span>
+			<h2 class="text-[64px] leading-[80px] font-bold text-black my-10">
+				Faites simplement et rapidement.
+			</h2>
+			<p class="text-black text-2xl mb-10">
+				Avec une gestion de devis et de facturation qui s'adapte a vos
+													besoins, vous pouvez planifier, suivre et superviser toutes vos
+													 transactions financières.
+			</p>
+
+			<button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out">
+				<a class="text-decoration-none" href="#">Découvrir</a>
+			</button>
+		</div>
+	</div>
+</section>
+
+<section class="w-full h-full bg-nav-bg font-roboto py-1">
+	<div class="w-4/5 h-full mx-auto">
+		<h2 class="text-3xl sm:text-5xl md:text-6xl font-bold text-black my-10">
+			Une plateforme révolutionnaire
+		</h2>
+		<div class="w-full flex-wrap flex justify-around items-center gap-8">
+			<div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white shadow-md p-5 flex flex-col justify-around items-start">
+				<img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon1.svg') }}" alt="icon"/>
+				<h3 class="text-3xl font-medium text-black">Un gain de temps</h3>
+				<p class="text-xl font-normal">
+					Bénéficiez d'un gain de temps notable grâce à notre système
+																automatisé qui simplifie la création de factures et devis,
+																libérant du temps pour vos activités principales.
+				</p>
+			</div>
+			<div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white shadow-md p-5 flex flex-col justify-around items-start">
+				<img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon2.svg') }}" alt="icon"/>
+				<h3 class="text-3xl font-medium text-black">
+					Une organisation infaillible
+				</h3>
+				<p class="text-xl font-normal">
+					Choisissez une gestion transparente et structurée de vos factures
+																et devis, assurant une clarté et une organisations optimales pour
+																toutes vos transactions.
+				</p>
+			</div>
+			<div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white shadow-md p-5 flex flex-col justify-around items-start">
+				<img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon3.svg') }}" alt="icon"/>
+				<h3 class="text-3xl font-medium text-black">
+					Un professionnalisme renforcé
+				</h3>
+				<p class="text-xl font-normal">
+					Renforcez votre professionnalisme avec des factures et devis
+																élégants et personnalisés, reflétant l'excellence de votre marque
+																et de vos services.
+				</p>
+			</div>
+			<div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white shadow-md p-5 flex flex-col justify-around items-start">
+				<img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon4.svg') }}" alt="icon"/>
+				<h3 class="text-3xl font-medium text-black">
+					Un suivi de vos performances
+				</h3>
+				<p class="text-xl font-normal">
+					Suivez vos performances de près avec des analyses détaillées de
+																vos facturations et devis, facilitant une gestion plus précise et
+																des décisions éclairées.
+				</p>
+			</div>
+		</div>
+		<button class="border border-solid border-nav-btn text-nav-btn px-10 py-3 rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-10">
+			<a class="text-decoration-none text-2xl" href="http://">En savoir plus ></a>
+		</button>
+	</div>
+</section>
+
+<footer class="w-full h-full bg-nav-bg font-roboto py-1 border-t border-b border-the-grey">
+	<div class="w-4/5 mx-auto h-auto flex flex-col md:flex-row justify-start md:justify-around items-start md:items-center my-20">
+		<div class="w-full md:w-1/4 flex flex-col justify-start items-start mb-10 md:mb-0">
+			<div class="logo z-10">
+				<img src="{{ asset('images/landingPage/logo.svg') }}" alt="logo"/>
+			</div>
+			<p>
+				Votre outil de gestion de devis et de facturation numéro 1 pour une
+													efficacité accrue.
+			</p>
+			<div class="mt-2">
+				<h5 class="text-xl font-bold">Contact</h5>
+				<a href="mailto:testtest@gmail.com">testtest@gmail.com</a>
+			</div>
+		</div>
+		<div class="w-full md:w-1/2 flex flex-col sm:flex-row justify-around items-start">
+			<div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
+				<h5 class="text-xl font-bold">Company</h5>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">About</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Team</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">FAQs</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Blogs</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Career</a>
+			</div>
+			<div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
+				<h5 class="text-xl font-bold">Product</h5>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Tasks</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Docs</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Goals</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Chat</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Whiteboard</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Dashboard</a>
+			</div>
+			<div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
+				<h5 class="text-xl font-bold">Resources</h5>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Quick Start</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Libraries</a>
+				<a class="text-decoration-none text-lg text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">API Documentation</a>
+			</div>
+		</div>
+	</div>
+	<p class="text-center">
+		2022 @TestTest. All rights reserved. -- Privacy Policy - Terms of
+							Services
+	</p>
+</footer>
+{# {% block javascripts %}
+		<script src="{{ asset('js/landingPage.js') }}"></script>
+	{% endblock %} #}{% endblock %}
