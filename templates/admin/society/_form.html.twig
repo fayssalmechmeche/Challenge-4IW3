@@ -1,0 +1,35 @@
+{{ form_start(form, {'action': path(action, {"id": actionId}), 'attr': {'id': id}}) }}
+
+
+{{ form_label(form.name,'Nom :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.name, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.name) }}
+
+{{ form_label(form.address,'Adresse :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.address, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.address) }}
+
+{{ form_label(form.phone,'Téléphone :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.phone, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.phone) }}
+
+
+{{ form_label(form.email,'Email :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.email, {'attr': {'class': 'mb-3 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.email) }}
+
+{{ form_label(form.siret,'Siret :',{'label_attr':{'class':'mb-1 block'}}) }}
+{{ form_widget(form.siret, {'attr': {'class': 'mb-6 w-full rounded-sm p-2'}}) }}
+{{ form_errors(form.siret) }}
+
+<div class="flex justify-center">
+	<button type="submit" class="cursor-pointer rounded-xl bg-blue-700 px-6 py-2 text-white transition-all hover:bg-blue-600">
+		{% if actionId is not null %}
+			Éditer
+		{% else %}
+			Créer
+		{% endif %}
+	</button>
+</div>
+
+{{ form_end(form) }}

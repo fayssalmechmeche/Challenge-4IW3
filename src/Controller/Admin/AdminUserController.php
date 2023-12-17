@@ -62,7 +62,7 @@ class AdminUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
             $user->setCreatedAt(new \DateTime());
-            $user->setSociety($this->getUser()->getSociety());
+            $user->setSociety($form->get('society') ? $form->get('society')->getData() : $this->getUser()->getSociety());
             $user->setIsVerified(false);
             $request->get("roles");
             if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
@@ -73,8 +73,7 @@ class AdminUserController extends AbstractController
 
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
-            $this->addFlash('success', 'Utilisateur ajouté avec succès');
-            $this->redirectToRoute('admin_user_index');
+            return $this->redirectToRoute('admin_user_index');
         }
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
