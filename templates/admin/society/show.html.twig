@@ -18,7 +18,7 @@
 			{% endfor %}
 			{% set usersNotVerified = society.users|length - usersVerified %}
 
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre utilisateurs","data": society.users|length,'add':true }%}
+			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre utilisateurs","data": society.users|length,'add':false }%}
 			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs vérifiés","data": usersVerified,'add':false }%}
 			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": usersNotVerified,'add':false }%}
 		</section>
