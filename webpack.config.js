@@ -1,5 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
-const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
+const WatchExternalFilesPlugin = require("webpack-watch-files-plugin").default;
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -8,12 +8,6 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
-    .addPlugin(new WatchExternalFilesPlugin({
-        files: [
-            './templates/**/*.html.twig',
-        ],
-        verbose: true
-    }))
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
@@ -63,6 +57,12 @@ Encore
     // enables Sass/SCSS support
     .enableSassLoader()
     .enablePostCssLoader()
+    .addPlugin(new WatchExternalFilesPlugin({
+        files: [
+            './templates/**/*.html.twig',
+        ],
+        verbose: true
+    }))
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -76,9 +76,6 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
-    .configureWatchOptions(watchOptions => {
-        watchOptions.poll = 250; // Vérifie les changements de fichiers toutes les 250ms
-    })
 ;
 
 module.exports = Encore.getWebpackConfig();

@@ -3,13 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Customer;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -44,6 +49,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Society $society = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Customer::class)]
+    private Collection $customers;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
+    private Collection $products;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
+    private Collection $formula;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
+    private Collection $devis;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +89,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function __construct() {
+        $this->customers = new ArrayCollection();
+        $this->products = new ArrayCollection();
+        $this->formula = new ArrayCollection();
+        $this->devis = new ArrayCollection();
     }
 
     /**
@@ -162,6 +189,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection|Customer[]
+     */
+    public function getCustomers(): Collection
+    {
+        return $this->customers;
+    }
+
+    /**
+     * Add a customer to the user.
+     */
+    public function addCustomer(Customer $customer): self
+    {
+        if (!$this->customers->contains($customer)) {
+            $this->customers[] = $customer;
+            $customer->setUser($this);
+        }
+
+        return $this;
+    }
+
     public function getSociety(): ?Society
     {
         return $this->society;
@@ -170,6 +218,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSociety(?Society $society): static
     {
         $this->society = $society;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

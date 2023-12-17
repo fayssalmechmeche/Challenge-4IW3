@@ -21,6 +21,10 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Devis::class, orphanRemoval: true)]
     private Collection $devis;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'customers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user;
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(groups: ["individual"])]
     private ?string $name = null;
@@ -75,6 +79,17 @@ class Customer
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
         return $this;
     }
 
