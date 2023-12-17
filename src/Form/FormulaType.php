@@ -4,9 +4,11 @@ namespace App\Form;
 
 use App\Entity\Formula;
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,37 +16,32 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class FormulaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['user'];
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la formule'
-            ])
-            ->add('picture', FileType::class, [
-                'label' => 'Image de la formule',
-                'required' => false,
-                'mapped' => false,
-                'data_class' => null,
-                'constraints' => [
-                    new Image([
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/svg+xml'
-                        ],
-                        'mimeTypesMessage' => 'Veuillez insérer votre photo dans un des formats autorisé (jpg, jpeg, png, svg)',
-                    ]),
-                ],
             ])
             ->add('selectedProduct', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
                 'label' => 'Sélectionner un produit',
                 'mapped' => false,
+                'query_builder' => function (ProductRepository $pr) use ($user) {
+                    return $pr->createQueryBuilder('p')
+                        ->where('p.user = :user')
+                        ->setParameter('user', $user);
+                },
+                'choice_attr' => function (Product $product) {
+                    return ['data-price' => $product->getPrice()];
+                },
             ])
+
             ->add('productFormulas', CollectionType::class, [
                 'entry_type' => ProductFormulaType::class,
                 'entry_options' => ['label' => false],
@@ -58,8 +55,20 @@ class FormulaType extends AbstractType
                 'allow_add' => true,
                 'mapped' => false,
             ])
-            ->add('price', IntegerType::class, [
+            ->add('price', MoneyType::class, [
                 'label' => 'Prix de la formule',
+                'currency' => 'EUR',
+                'divisor' => 100,
+                'attr' => [
+                    'placeholder' => '12.39 pour 12€39',
+                    'id' => 'formula_price',
+                ],
+            ])
+            ->add('adjustPrice', CheckboxType::class, [
+                'label'    => 'Ajuster le prix',
+                'required' => false,
+                'mapped'   => false,
+                'attr'     => ['class' => 'adjust-price-checkbox'],
             ]);
     }
 
@@ -67,6 +76,7 @@ class FormulaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Formula::class,
+            'user' => null,
         ]);
     }
 }

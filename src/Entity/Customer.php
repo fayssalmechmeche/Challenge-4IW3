@@ -49,7 +49,17 @@ class Customer
     #[ORM\Column(length: 255)]
     private ?string $postalCode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Email]
+    private ?string $email = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: "/^(\+?\d{1,3}?)?(\d{10,15})$/",
+        message: "Numéro de téléphone invalide"
+    )]
+    private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -208,6 +218,30 @@ class Customer
     public function getDevis(): Collection
     {
         return $this->devis;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): self
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
     }
 
     /**

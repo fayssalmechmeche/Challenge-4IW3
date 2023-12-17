@@ -34,8 +34,14 @@ class Devis
     #[ORM\Column(nullable: true)]
     private ?int $totalDuePrice = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?string $subject = null;
+
     #[ORM\Column(type: "string", enumType: PaymentStatus::class, nullable: true)]
     private PaymentStatus $paymentStatus;
+
+    #[ORM\Column(type: Types::STRING, length: 20)]
+    private ?string $devisNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -45,9 +51,10 @@ class Devis
 
 
 
-    #[ORM\ManyToOne(inversedBy: 'devis')]
+    #[ORM\ManyToOne(inversedBy: 'devis', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
+
 
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProductItem::class, orphanRemoval: true)]
     private Collection $productItems;
@@ -57,6 +64,9 @@ class Devis
 
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisProduct::class,cascade: ['persist'], orphanRemoval: true)]
     private Collection $devisProducts;
+
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisFormula::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $devisFormulas;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
@@ -85,6 +95,7 @@ class Devis
         $this->createdAt = new \DateTime();
         $this->paymentStatus = PaymentStatus::Pending;
         $this->devisProducts = new ArrayCollection();
+        $this->devisFormulas = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -210,6 +221,18 @@ class Devis
         return $this;
     }
 
+    public function setDevisNumber(string $devisNumber): self
+    {
+        $this->devisNumber = $devisNumber;
+
+        return $this;
+    }
+
+    public function getDevisNumber(): ?string
+    {
+        return $this->devisNumber;
+    }
+
     public function addDevisProduct(DevisProduct $devisProduct): self
     {
         if (!$this->devisProducts->contains($devisProduct)) {
@@ -220,12 +243,50 @@ class Devis
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param string|null $subject
+     */
+    public function setSubject(?string $subject): void
+    {
+        $this->subject = $subject;
+    }
+
     public function removeDevisProduct(DevisProduct $devisProduct): self
     {
         if ($this->devisProducts->removeElement($devisProduct)) {
             // set the owning side to null (unless already changed)
             if ($devisProduct->getDevis() === $this) {
                 $devisProduct->setDevis(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addDevisFormula(DevisFormula $devisFormula): self
+    {
+        if (!$this->devisFormulas->contains($devisFormula)) {
+            $this->devisFormulas[] = $devisFormula;
+            $devisFormula->setDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevisFormula(DevisFormula $devisFormula): self
+    {
+        if ($this->devisFormulas->removeElement($devisFormula)) {
+            // set the owning side to null (unless already changed)
+            if ($devisFormula->getDevis() === $this) {
+                $devisFormula->setDevis(null);
             }
         }
 
@@ -254,6 +315,14 @@ class Devis
     }
 
     /**
+     * @return Collection<int, DevisFormula>
+     */
+    public function getDevisFormulas(): Collection
+    {
+        return $this->devisFormulas;
+    }
+
+    /**
      * @return Collection<int, Invoice>
      */
     public function getInvoices(): Collection
@@ -274,7 +343,6 @@ class Devis
     public function removeInvoice(Invoice $invoice): static
     {
         if ($this->invoices->removeElement($invoice)) {
-            // set the owning side to null (unless already changed)
             if ($invoice->getDevis() === $this) {
                 $invoice->setDevis(null);
             }

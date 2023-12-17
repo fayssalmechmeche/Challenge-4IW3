@@ -47,7 +47,6 @@ class FormulaController extends AbstractController
             $data[] = [
                 'id' => $formula->getId(),
                 'name' => $formula->getName(),
-                'image' => $formula->getPicture(),
                 'price' => $formula->getPrice(),
             ];
         }
@@ -76,7 +75,6 @@ class FormulaController extends AbstractController
         $data = [
             'id' => $formula->getId(),
             'name' => $formula->getName(),
-            'image' => $formula->getPicture(),
             'price' => $formula->getPrice(),
             'products' => $productsData
         ];
@@ -88,30 +86,17 @@ class FormulaController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $formula = new Formula();
-        $form = $this->createForm(FormulaType::class, $formula);
+        $user = $this->getUser();
+        $form = $this->createForm(FormulaType::class, $formula, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de l'image
-            $file = $form->get('picture')->getData();
-            if ($file) {
-                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
-
-                try {
-                    $file->move(
-                        $this->getParameter('formulas_images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // Gérer l'exception si nécessaire
-                }
-
-                $formula->setPicture($newFilename);
-            }
-
-            // Associez la formule à l'utilisateur connecté
-            $formula->setUser($this->getUser());
+            $formulaName = ucfirst($form->get('name')->getData());
+            $formula->setName($formulaName);
+            $user = $this->getUser();
+            $formula->setUser($user);
 
             $entityManager->persist($formula);
             $entityManager->flush();
@@ -127,6 +112,7 @@ class FormulaController extends AbstractController
     }
 
 
+
     #[Route('/{id}', name: 'app_formula_show', methods: ['GET'])]
     public function show(Formula $formula): Response
     {
@@ -138,10 +124,15 @@ class FormulaController extends AbstractController
     #[Route('/{id}/edit', name: 'app_formula_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Formula $formula, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(FormulaType::class, $formula);
+        $user = $this->getUser();
+        $form = $this->createForm(FormulaType::class, $formula, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formulaName = ucfirst($form->get('name')->getData());
+            $formula->setName($formulaName);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_formula_index', [], Response::HTTP_SEE_OTHER);
@@ -158,13 +149,6 @@ class FormulaController extends AbstractController
     public function delete(Request $request, Formula $formula, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete_formula', $request->request->get('_token'))) {
-            $imageName = $formula->getPicture();
-            if ($imageName) {
-                $imagePath = $this->getParameter('formulas_images_directory') . '/' . $imageName;
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-            }
             $entityManager->remove($formula);
             $entityManager->flush();
         }

@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
 class CustomerType extends AbstractType
 {
@@ -105,7 +108,35 @@ class CustomerType extends AbstractType
                 'label_attr' => ['class' => 'font-medium'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
-            ]);
+            ])
+            ->add('email', EmailType::class, [
+                'required' => false,
+                'label' => 'Adresse e-mail',
+                'constraints' => [
+                    new Email([
+                        'message' => 'Veuillez renseigner une adresse e-mail valide.',
+                    ]),
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner une adresse e-mail.',
+                    ])
+                ],
+            ])
+
+        ->add('phoneNumber', TextType::class, [
+            'required' => false,
+            'label' => 'Numéro de téléphone',
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Veuillez renseigner un numéro de téléphone.',
+                ]),
+                new Length([
+                    'min' => 10,
+                    'max' => 10,
+                    'minMessage' => 'Le numéro de téléphone doit comporter 10 chiffres.',
+                    'maxMessage' => 'Le numéro de téléphone doit comporter 10 chiffres.'
+                ])
+            ],
+        ]);
 
 
         // Ajouter un écouteur d'événement pour valider les données avant la soumission du formulaire

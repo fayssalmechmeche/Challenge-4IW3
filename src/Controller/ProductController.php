@@ -50,7 +50,6 @@ class ProductController extends AbstractController
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
-                'image' => $product->getImage(),
                 'productCategory' => $product->getProductCategory(),
             ];
         }
@@ -67,24 +66,8 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de l'image
-            $file = $form->get('image')->getData();
-            if ($file) {
-                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
-
-                try {
-                    $file->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-
-                }
-
-                $product->setImage($newFilename);
-            }
-
+            $productName = ucfirst($form->get('name')->getData());
+            $product->setName($productName);
             $product->setUser($this->getUser());
             $entityManager->persist($product);
             $entityManager->flush();
@@ -114,32 +97,6 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('image')->getData();
-            if ($file) {
-                // Supprimez l'ancienne image si elle existe
-                $oldImage = $product->getImage();
-                if ($oldImage) {
-                    $oldImagePath = $this->getParameter('images_directory') . '/' . $oldImage;
-                    if (file_exists($oldImagePath)) {
-                        unlink($oldImagePath);
-                    }
-                }
-
-                // Traitez la nouvelle image
-                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
-
-                try {
-                    $file->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // Gérer l'exception si quelque chose se passe mal
-                }
-
-                $product->setImage($newFilename);
-            }
 
             $entityManager->flush();
 

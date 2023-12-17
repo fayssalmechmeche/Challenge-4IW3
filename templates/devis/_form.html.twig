@@ -9,16 +9,25 @@
     {{ form_widget(form.totalDuePrice) }}
     {{ form_widget(form.customer) }}
 
-<h3>Séléctionner vos produits</h3>
+<h3>Sélectionner vos produits</h3>
 <div id="devisProducts" data-prototype="{{ form_widget(form.devisProducts.vars.prototype)|e('html_attr') }}" data-index="{{ form.devisProducts|length }}">
     {% for devisProduct in form.devisProducts %}
         <div class="devisProductItem">
             {{ form_row(devisProduct) }}
+            Prix: <span class="productPriceDisplay" id="productPrice_{{ loop.index }}"></span>
             <button type="button" class="remove_product_button">Supprimer le produit</button>
         </div>
     {% endfor %}
+    {% for devisFormula in form.devisFormulas %}
+        <div class="devisFormulaItem">
+            {{ form_row(devisFormula) }}
+            Prix: <span class="formulaPriceDisplay" id="formulaPrice_{{ loop.index }}"></span>
+            <button type="button" class="remove_formula_button">Supprimer la formule</button>
+        </div>
+    {% endfor %}
+
 </div>
-<button type="button" id="add_product_button">Ajouter un produit</button>
+<button type="button" id="add_formula_button">Ajouter une formule</button>
 
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

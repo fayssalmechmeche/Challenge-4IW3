@@ -77,6 +77,8 @@ class CustomerController extends AbstractController
             'streetNumber' => $customer->getStreetNumber(),
             'city' => $customer->getCity(),
             'postalCode' => $customer->getPostalCode(),
+            'email' => $customer->getEmail(),
+            'phone' => $customer->getPhoneNumber(),
             'devisCounts' => $devisCounts,
             'totalDevisCount' => $totalDevisCount
         ]);
@@ -90,7 +92,8 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Associer le client à l'utilisateur connecté
+            $this->extracted($customer);
+
             $customer->setUser($this->getUser());
 
             $entityManager->persist($customer);
@@ -108,9 +111,6 @@ class CustomerController extends AbstractController
         ]);
     }
 
-
-
-
     #[Route('/{id}', name: 'app_customer_show', methods: ['GET'])]
     public function show(Customer $customer): Response
     {
@@ -126,6 +126,7 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->extracted($customer);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
@@ -153,6 +154,29 @@ class CustomerController extends AbstractController
         }
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function capitalizeFirstLetter(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return ucfirst(strtolower($value));
+    }
+
+    /**
+     * @param Customer $customer
+     * @return void
+     */
+    public function extracted(Customer $customer): void
+    {
+        $customer->setName($this->capitalizeFirstLetter($customer->getName()));
+        $customer->setLastName($this->capitalizeFirstLetter($customer->getLastName()));
+        $customer->setNameSociety($this->capitalizeFirstLetter($customer->getNameSociety()));
+        $customer->setStreetName($this->capitalizeFirstLetter($customer->getStreetName()));
+        $customer->setCity($this->capitalizeFirstLetter($customer->getCity()));
+        $customer->setEmail(strtolower($customer->getEmail()));
     }
 
 
