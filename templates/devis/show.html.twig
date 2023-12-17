@@ -1,46 +1,159 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Devis{% endblock %}
+{% block title %}Nouveau Devis{% endblock %}
 
-{% block body %}
-    <h1>Devis</h1>
+{% block body  %}
+    <h1>Créer un nouveau Devis</h1>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>TotalPrice</th>
-            <td>{{ devi.totalPrice|number_format(2, ',', ' ') }} €</td>
-        </tr>
-        <tr>
-            <th>TotalDuePrice</th>
-            <td>{{ devi.totalDuePrice|number_format(2, ',', ' ') }} €</td>
-        </tr>
-        <tr>
-            <th>PaymentStatus</th>
-            <td>{{ devi.paymentStatus.value }}</td>
-        </tr>
-        <tr>
-            <th>CreatedAt</th>
-            <td>{{ devi.createdAt ? devi.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        </tbody>
-    </table>
 
-    <h2>Produits</h2>
-    <ul>
-        {% for product in devi.devisProducts %}
-            <li>{{ product.product.name }} - Quantité: {{ product.quantity }} - Prix unitaire: {{ product.product.price|number_format(2, ',', ' ') }} € - Total: {{ (product.product.price * product.quantity)|number_format(2, ',', ' ') }} €</li>
-        {% endfor %}
-    </ul>
 
-    <h2>Formules</h2>
-    <ul>
-        {% for formula in devi.devisFormulas %}
-            <li>{{ formula.formula.name }} - Quantité: {{ formula.quantity }} - Prix unitaire: {{ formula.formula.price|number_format(2, ',', ' ') }} € - Total: {{ (formula.formula.price * formula.quantity)|number_format(2, ',', ' ') }} €</li>
-        {% endfor %}
-    </ul>
 
-    <a href="{{ path('app_devis_index') }}">Retour à la liste</a>
-    <a href="{{ path('app_devis_edit', {'id': devi.id}) }}">Modifier</a>
-    {{ include('devis/_delete_form.html.twig') }}
+
+
+
+
+
+
+
+    <a href="{{ path('app_devis_index') }}">Retour à la liste</a> }
+
+
+    <nav class="flex justify-between w-full items-center py-3 px-5 h-14 bg-[#353535] ">
+        <span class="material-symbols-outlined  transition-all duration-300 text-white cursor-pointer hover:text-red-500"> arrow_circle_left</span>
+        <button id="customSubmitButton" class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500">Valider le Devis</button>
+    </nav>
+    <div
+            class="Generator font-roboto w-A4w  bg-white my-5 mx-auto p-5 border border-solid border-gray-300 shadow-md"
+    >
+        <div class="top h-auto w-full flex justify-between items-start">
+            <div class="society w-1/2 flex justify-center items-start flex-col">
+                <div class="logoName">
+                    <img
+                            class="w-36 h-36 border border-solid border-gray-300"
+                            src="./0d4ae847-6828-4179-892b-35ca46596170.webp"
+                            alt="logo"
+                    />
+                </div>
+                <div class="society-info mt-15px p-5px">
+                    <h2 class="text-lg mb-3 font-semibold">Le nom de la société</h2>
+                    <p class="text-15px">Mail : {{ userEmail }}</p>
+                </div>
+            </div>
+
+            <div class="top-r w-1/2">
+                <div
+                        class="devis w-full bg-the-grey-2 p-15px border border-solid border-gray-300 rounded-10px shadow-md flex justify-between items-start flex-col"
+                >
+                    <h1 class="text-2xl font-semibold">Devis</h1>
+                    <div class="devis-info">
+                        <p class="text-15px leading-none my-1">Numéro de devis:</p>
+                        <p class="text-15px leading-none my-1">Date:</p>
+                        <p class="text-15px leading-none my-1">
+                            Validité du devis: 3 Mois
+                        </p>
+                    </div>
+                </div>
+                <div class="client mt-3 px-5px">
+                    <h2 class="text-lg font-semibold">Information Client</h2>
+                    <div class="client-info mt-2" id="client-info">
+                        <div class="client-info mt-2">
+                            {% if devi.customer.nameSociety is not empty %}
+                                <p class="text-15px">Société: {{ devi.customer.nameSociety }}</p>
+                            {% else %}
+                                <p class="text-15px">Nom: {{ devi.customer.name }} {{ devi.customer.lastName }}</p>
+                            {% endif %}
+                            <p class="text-15px">Adresse: {{ devi.customer.streetNumber }} {{ devi.customer.streetName }}</p>
+                            <p class="text-15px">Code Postal: {{ devi.customer.postalCode }}</p>
+                            <p class="text-15px">Ville: {{ devi.customer.city }}</p>
+                            <p class="text-15px">Téléphone: {{ devi.customer.phoneNumber }}</p>
+                            <p class="text-15px">Mail: {{ devi.customer.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+                class="table-container w-full mt-7 flex justify-start items-center flex-col"
+        >
+            <div
+                    class="objet w-full flex justify-start items-center self-center mb-5 ml-5px"
+            >
+                <h2 class="text-lg font-semibold">Objet:</h2>
+                <p id="commande-title" class="ml-1 text-lg">
+                    Prise en charge des repas d'un marriage
+                </p>
+            </div>
+
+            <div id="devisProductsData" data-products="{{ products|json_encode }}">
+            </div>
+            <div id="devisFormulasData" data-formulas="{{ formulas|json_encode }}">
+            </div>
+
+            <div id="wrapper" class="h-56" ></div>
+            <div class="mid w-full h-auto flex justify-between items-start">
+                <div
+                        class="condition mt-12 flex justify-start items-start flex-col w-70%"
+                >
+                    <h2 class="text-lg font-semibold">Conditions de paiement:</h2>
+                    <p class="mt-5 text-lg">
+                        Paiement d'un acompte de 30% du prix total TTC à la commande 70% à
+                        la livraison
+                    </p>
+                </div>
+                <div
+                        class="total w-35% flex justify-start items-end mt-12 mr-5px flex-col"
+                >
+                    <div
+                            class="total-sub-container flex justify-start items-center m-0"
+                    >
+                        <h3 class="text-base font-semibold">Total HT:</h3>
+                        <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                            <p class="text-lg text-right">5000 €</p>
+                        </div>
+                    </div>
+                    <div
+                            class="total-sub-container flex justify-start items-center m-0"
+                    >
+                        <h3 class="text-base font-semibold">TVA (20%):</h3>
+                        <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                            <p class="text-lg text-right">1000 €</p>
+                        </div>
+                    </div>
+                    <div
+                            class="total-sub-container flex justify-start items-center m-0"
+                    >
+                        <h3 class="text-base font-semibold">Total TTC:</h3>
+                        <div class="total-tab alt ml-5px p-4 w-40 bg-light-dark">
+                            <p class="text-lg text-right text-white">6000 €</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+                class="signature mt-12 mr-5px ml-auto pt-3 pl-3 w-52 h-28 border border-solid border-gray-300 bg-the-grey-2"
+        >
+            <p>Signature:</p>
+        </div>
+        <div class="bottom w-full flex justify-start items-start flex-col">
+            <div class="divider w-full h-2px rounded-2xl bg-the-grey-2 my-5"></div>
+            <div class="bottom-info w-full flex justify-center items-center">
+                <p class="text-sm my-2 text-the-grey">SARL Fourchette</p>
+                <p class="text-sm my-2 text-the-grey">Capital de 1000 €</p>
+                <p class="text-sm my-2 text-the-grey">RCS:12345</p>
+                <p class="text-sm my-2 text-the-grey">Code APE: AZERTY12345</p>
+                <p class="text-sm my-2 text-the-grey">N° TVA: FR3353215643668909</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/devisShow.js') }}" type="module"></script>
+
 {% endblock %}

@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url: '/product/api',
             then: data => data.map(product => [
                 product.name,
-                product.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
-                gridjs.html(product.image ? `<img src='/images/products/${product.image}' alt='Image' style='height: 50px;' />` : 'Aucune image'),
+                (product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
                 product.productCategory,
                 gridjs.html(`
                     <a href='/product/${product.id}/edit' class='btn btn-primary btn-sm'>Modifier</a>
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         columns: [
             'Nom',
             'Prix',
-            'Photo',
             'Catégorie',
             'Actions'
         ],

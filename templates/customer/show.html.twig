@@ -24,6 +24,14 @@
                 <td>{{ customer.address }}</td>
             </tr>
             <tr>
+                <th>Email</th>
+                <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>{{ customer.phoneNumber }}</td>
+            </tr>
+            <tr>
                 <th>CreatedAt</th>
                 <td>{{ customer.createdAt ? customer.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>

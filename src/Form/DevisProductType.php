@@ -21,22 +21,25 @@ class DevisProductType extends AbstractType
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
-                'label' => 'Produit',
+                'label' => false,
+                'attr' => ['hidden' => true],
+                'choice_attr' => function($product, $key, $value) {
+                    return ['data-price' => 'test'];
+                },
                 'query_builder' => function (ProductRepository $pr) use ($user) {
                     return $pr->createQueryBuilder('p')
                         ->where('p.user = :user')
                         ->setParameter('user', $user);
                 },
+
             ])
             ->add('quantity', IntegerType::class, [
-                'attr' => ['min' => 0],
-                'label' => 'Quantité'
-            ])
-            ->add('displayedPrice', TextType::class, [
-                'mapped' => false, // ce champ n'est pas mappé à l'entité
-                'disabled' => true, // désactivé pour l'édition
-                'label' => 'Prix affiché'
+
+                'label' => false,
+                'attr' => ['hidden' => true, 'min' => 0],
             ]);
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

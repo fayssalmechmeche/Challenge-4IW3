@@ -25,17 +25,13 @@ class DevisFormulaType extends AbstractType
                         ->where('f.user = :user')
                         ->setParameter('user', $user);
                 },
+                'attr' => ['hidden' => true],
                 'choice_label' => 'name',
-                'label' => 'Formule'
+                'label' => false,
             ])
             ->add('quantity', IntegerType::class, [
-                'attr' => ['min' => 1],
-                'label' => 'Quantité'
-            ])
-            ->add('displayedPrice', TextType::class, [
-                'mapped' => false,
-                'disabled' => true,
-                'label' => 'Prix affiché'
+                'attr' => ['min' => 1,'hidden' => true],
+                'label' => false
             ]);
     }
 

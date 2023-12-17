@@ -11,9 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 
 class ProductType extends AbstractType
 {
@@ -24,22 +22,12 @@ class ProductType extends AbstractType
                 'label' => 'Nom du produit',
                 'attr' => ['class' => 'custom_id'],
             ])
-            ->add('price', IntegerType::class, [
+            ->add('price', MoneyType::class, [
                 'label' => 'Prix du produit',
-            ])
-            ->add('image', FileType::class, [
-                'label' => 'Photo du produit',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new Image([
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/svg+xml'
-                        ],
-                        'mimeTypesMessage' => 'Veuillez insérer votre photo dans un des formats autorisé (jpg, jpeg, png, svg)',
-                    ]),
+                'currency' => 'EUR',
+                'divisor' => 100,
+                'attr' => [
+                    'placeholder' => '12.39 pour 12€39',
                 ],
             ])
             ->add('productCategory', ChoiceType::class, [
@@ -49,7 +37,6 @@ class ProductType extends AbstractType
                     'Dessert' => 'dessert',
                 ],
             ])
-
         ;
     }
 

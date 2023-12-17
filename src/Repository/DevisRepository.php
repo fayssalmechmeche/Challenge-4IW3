@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Devis;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,22 @@ class DevisRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Devis::class);
+    }
+
+    public function findLastDevisNumberForUser(\App\Entity\User $user): ?string
+    {
+
+        $lastDevis = $this->createQueryBuilder('d')
+            ->where('d.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('d.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (!$lastDevis) {
+            return "wouf";
+        }
+        return $lastDevis ? $lastDevis->getDevisNumber() : null;
     }
 
 //    /**

@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url: '/formula/api',
             then: data => data.map(formula => [
                 formula.name,
-                gridjs.html(formula.image ? `<img src='/images/formulas/${formula.image}' alt='Image' style='height: 50px;' />` : 'Aucune image'),
-                formula.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
+                (formula.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
                 gridjs.html(`
                     <button onclick='openFormulaEditModal(${formula.id})' class='btn btn-primary btn-sm'>Modifier</button>
                     <button class='btn btn-info btn-sm' onclick='openFormulaModal(${formula.id})'>Consulter</button>
@@ -19,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         columns: [
             'Nom',
-            'Photo',
             'Prix',
             'Actions'
         ],

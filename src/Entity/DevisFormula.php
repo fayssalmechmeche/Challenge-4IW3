@@ -63,4 +63,14 @@ class DevisFormula
         $this->devis = $devis;
         return $this;
     }
+
+    public function getFormulaName(): ?string
+    {
+        return $this->formula?->getName();
+    }
+    public function getFormulaPrice(): ?float
+    {
+        return $this->formula?->getPrice();
+    }
+
 }

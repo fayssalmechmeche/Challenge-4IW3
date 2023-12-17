@@ -34,8 +34,14 @@ class Devis
     #[ORM\Column(nullable: true)]
     private ?int $totalDuePrice = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?string $subject = null;
+
     #[ORM\Column(type: "string", enumType: PaymentStatus::class, nullable: true)]
     private PaymentStatus $paymentStatus;
+
+    #[ORM\Column(type: Types::STRING, length: 20)]
+    private ?string $devisNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -45,9 +51,10 @@ class Devis
 
 
 
-    #[ORM\ManyToOne(inversedBy: 'devis')]
+    #[ORM\ManyToOne(inversedBy: 'devis', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
+
 
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProductItem::class, orphanRemoval: true)]
     private Collection $productItems;
@@ -214,6 +221,18 @@ class Devis
         return $this;
     }
 
+    public function setDevisNumber(string $devisNumber): self
+    {
+        $this->devisNumber = $devisNumber;
+
+        return $this;
+    }
+
+    public function getDevisNumber(): ?string
+    {
+        return $this->devisNumber;
+    }
+
     public function addDevisProduct(DevisProduct $devisProduct): self
     {
         if (!$this->devisProducts->contains($devisProduct)) {
@@ -222,6 +241,22 @@ class Devis
         }
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param string|null $subject
+     */
+    public function setSubject(?string $subject): void
+    {
+        $this->subject = $subject;
     }
 
     public function removeDevisProduct(DevisProduct $devisProduct): self
@@ -308,7 +343,6 @@ class Devis
     public function removeInvoice(Invoice $invoice): static
     {
         if ($this->invoices->removeElement($invoice)) {
-            // set the owning side to null (unless already changed)
             if ($invoice->getDevis() === $this) {
                 $invoice->setDevis(null);
             }

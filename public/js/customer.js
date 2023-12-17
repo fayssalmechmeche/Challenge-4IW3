@@ -1,15 +1,13 @@
 function initializeFormFields() {
     const switchClientType = document.getElementById('switchClientType');
-    if (!switchClientType) return; // Sortir si l'élément switchClientType n'est pas trouvé
-
     const customerName = document.getElementById('customer_name');
     const customerLastName = document.getElementById('customer_lastName');
     const customerNameSociety = document.getElementById('customer_nameSociety');
+    const formContainer = document.getElementById('customerFormContainer');
 
-    if (!customerName || !customerLastName || !customerNameSociety) {
-        return;
-    }
+    if (!switchClientType || !customerName || !customerLastName || !customerNameSociety || !formContainer) return;
 
+    const isSociety = formContainer.getAttribute('data-is-society') === 'true';
     const customerNameLabel = customerName.previousElementSibling;
     const customerLastNameLabel = customerLastName.previousElementSibling;
     const customerNameSocietyLabel = customerNameSociety.previousElementSibling;
@@ -31,13 +29,13 @@ function initializeFormFields() {
             customerNameLabel.style.display = '';
             customerLastName.style.display = '';
             customerLastNameLabel.style.display = '';
-
             customerNameSociety.value = '';
         }
     }
 
+    switchClientType.checked = isSociety;
+    updateFieldsVisibility();
     switchClientType.addEventListener('change', updateFieldsVisibility);
-    updateFieldsVisibility(); // Initialiser l'état des champs
 }
 
 document.addEventListener('DOMContentLoaded', initializeFormFields);
@@ -57,7 +55,8 @@ function openCustomerModal(customerId) {
 
             customerDetails += `<p>Ville: ${data.city}</p>`;
             customerDetails += `<p>Adresse: ${data.streetNumber} ${data.streetName}, ${data.postalCode}</p>`;
-
+            customerDetails += `<p>Email: ${data.email}</p>`;
+            customerDetails += `<p>Téléphone: ${data.phone}</p>`;
             customerDetails += `<p>Devis en attente: ${data.devisCounts.pending}</p>`;
             customerDetails += `<p>Devis payés: ${data.devisCounts.paid}</p>`;
             customerDetails += `<p>Devis partiellement payés: ${data.devisCounts.partial}</p>`;
@@ -65,7 +64,6 @@ function openCustomerModal(customerId) {
             customerDetails += `<p>Total de devis: ${data.totalDevisCount}</p>`;
 
             modalBody.innerHTML = customerDetails;
-
             $('#customerDetailsModal').modal('show');
         })
         .catch(error => console.error('Erreur lors de la récupération des données:', error));
