@@ -69,6 +69,9 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_login');
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+
+            $this->addFlash('verify_email_error', $form->getErrors(true));
         }
 
         return $this->render('registration/register.html.twig', [
