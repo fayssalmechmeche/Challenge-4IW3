@@ -20,9 +20,9 @@
         {% endfor %}
         {% set usersNotVerified = users|length - usersVerified %}
 
-        {% include "admin/component/cardNbrCompany.html.twig" with  {"title" :"Nombres utilisateurs","data": users|length,'add':true }%}
-        {% include "admin/component/cardNbrCompany.html.twig" with  {"title" :"Utilisateurs vérifiés","data": usersVerified,'add':false }%}
-        {% include "admin/component/cardNbrCompany.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": usersNotVerified,'add':false }%}
+        {% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre utilisateurs","data": users|length,'add':true }%}
+        {% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs vérifiés","data": usersVerified,'add':false }%}
+        {% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": usersNotVerified,'add':false }%}
       </section>
 
       <section id="InfosUser" class="h-full w-full">
