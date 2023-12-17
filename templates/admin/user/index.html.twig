@@ -7,13 +7,22 @@
   <main
       class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4"
     >
-      <h1 class="mb-6 text-5xl">Dashboard Utilisateur</h1>
+      <h1 class="mb-6 text-5xl text-center">Dashboard Utilisateur</h1>
       <section
         id="InfoCards"
-        class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4"
+        class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 max-lg:flex-col max-lg:items-center"
       >
-        {% include "admin/component/cardNbrCompany.html.twig" %}
-        {% include "admin/component/cardTotalCa.html.twig" %}
+        {% set usersVerified = 0 %}
+        {% for user in users %}
+          {% if user.isVerified == true %}
+            {% set usersVerified = usersVerified + 1 %}
+          {% endif %}
+        {% endfor %}
+        {% set usersNotVerified = users|length - usersVerified %}
+
+        {% include "admin/component/cardNbrCompany.html.twig" with  {"title" :"Nombres utilisateurs","data": users|length,'add':true }%}
+        {% include "admin/component/cardNbrCompany.html.twig" with  {"title" :"Utilisateurs vérifiés","data": usersVerified,'add':false }%}
+        {% include "admin/component/cardNbrCompany.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": usersNotVerified,'add':false }%}
       </section>
 
       <section id="InfosUser" class="h-full w-full">

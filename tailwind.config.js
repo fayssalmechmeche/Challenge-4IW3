@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: "jit",
   content: ["**/**.html.twig"],
   theme: {
     extend: {
@@ -10,12 +11,19 @@ module.exports = {
         "light-dark": "#353535",
         "devis-bg": "#adadad",
         "landing-bg": "#FDB833",
+        "button-blue": "#0252C5",
+        "button-blue-hover": "#023c8d",
+        "nav-bg": "#FBFCFC",
+        "nav-menu": "#000D31",
+        "nav-btn": "#3A57E8",
+        "card-grey": "#8A92A6",
+        "progress-bar-1": "#3A57E8",
+        "progress-bar-2": "#08B1BA",
       },
       spacing: {
         "90-vh": "90vh",
         "80-vh": "80vh",
         "95%": "95%",
-        "48%": "48%",
         "2px": "2px",
         "15%": "15%",
         A4w: "794px",
@@ -25,6 +33,13 @@ module.exports = {
         "35%": "35%",
         "50px": "50px",
         "70%": "70%",
+        "closed-nav": "48px",
+        "open-nav": "257px",
+      },
+      width: {
+        "content-space-open": "calc(100% - 257px)",
+        "content-space-closed": "calc(100% - 48px)",
+        "grid-dashboard-space": "calc(100% - 410px)",
       },
       borderRadius: {
         "10px": "10px",

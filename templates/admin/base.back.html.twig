@@ -20,33 +20,23 @@
   </head>
   <body class="bg-slate-200">
     <div
-      class="mega-container flex h-auto w-[99vw] flex-nowrap items-start justify-around"
+      class="mega-container m-0 flex h-auto w-[98vw] flex-nowrap items-start justify-start overflow-hidden p-0"
     >
       <!-- hidden element used to reserve place of the navbar that are fixed -->
-      <div class="ml-8 h-90-vh w-1/5"></div>
+      <div class="navbar-hidden-space w-open-nav h-screen"></div>
       <!-- Navbar -->
       <div
-        class="vertical-nav fixed left-2 top-8 ml-8 flex h-90-vh w-1/5 flex-col items-start justify-start rounded-2xl bg-white shadow-md"
+        class="vertical-nav w-open-nav fixed left-0 top-0 flex h-screen flex-col items-start justify-start rounded-br-2xl rounded-tr-2xl bg-white shadow-md"
       >
         <!-- Head -->
-        <div
-          class="head relative flex w-full flex-col items-start justify-start p-7"
-        >
+        <div class="relative flex h-20 w-full items-center justify-center">
+          <img class="nav-logo" src="assets\images\Main Logo.svg" alt="logo" />
+          <!-- Toggle of navbar -->
           <span
-            class="material-symbols-outlined absolute right-5 cursor-pointer rounded-full p-1 text-gray-500 transition duration-300 ease-in-out hover:bg-black hover:text-white"
+            class="material-symbols-outlined navbar-toggle bg-nav-btn rotate-180 cursor-pointer rounded-full p-1 text-white transition duration-300 ease-in-out"
           >
-            arrow_back
+            arrow_forward
           </span>
-          <img
-            id="user-image"
-            class="mb-4 h-14 w-14 rounded-full object-cover"
-            src="/src/pexels-photo-2130795.jpeg"
-            alt="user-image"
-          />
-          <div class="flex h-full w-3/4 flex-col items-start justify-center">
-            <h2 class="text-2xl font-semibold leading-none">John Doe</h2>
-            <p class="text-the-grey">Freelance</p>
-          </div>
         </div>
         <!-- Divider -->
         <div
@@ -55,35 +45,35 @@
         <!-- end divider -->
         <!-- Body -->
         <div
-          class="body flex h-full w-full flex-col items-center justify-start"
+          class="nav-body flex h-full w-full flex-col items-center justify-start"
         >
           <!-- Navbar item -->
           <div
-            class="group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out hover:bg-black"
+            class="nav-link bg-nav-btn hover:bg-nav-btn group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out"
           >
             <span
-              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="material-symbols-outlined nav-icon mx-4 text-white transition duration-300 ease-in-out group-hover:text-white"
             >
               home
             </span>
             <p
-              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="nav-text font-semibold text-white transition duration-300 ease-in-out group-hover:text-white"
             >
-              Tableau de bord
+              Dashboard
             </p>
           </div>
           <!-- end item -->
           <!-- Navbar item -->
           <div
-            class="group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out hover:bg-black"
+            class="nav-link hover:bg-nav-btn group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out"
           >
             <span
-              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="material-symbols-outlined nav-icon mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
             >
               description
             </span>
             <p
-              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="nav-text font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
             >
               Description
             </p>
@@ -91,15 +81,15 @@
           <!-- end item -->
           <!-- Navbar item -->
           <div
-            class="group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out hover:bg-black"
+            class="nav-link hover:bg-nav-btn group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out"
           >
             <span
-              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="material-symbols-outlined nav-icon mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
             >
               payments
             </span>
             <p
-              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="nav-text font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
             >
               Facture
             </p>
@@ -107,15 +97,15 @@
           <!-- end item -->
           <!-- logout -->
           <div
-            class="group mb-2 mt-auto flex h-12 w-95% cursor-pointer items-center justify-start justify-self-end rounded-10px transition duration-300 ease-in-out hover:bg-black"
+            class="hover:bg-nav-btn group mb-5 mt-auto flex h-12 w-95% cursor-pointer items-center justify-start justify-self-end rounded-10px transition duration-300 ease-in-out"
           >
             <span
-              class="material-symbols-outlined mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="material-symbols-outlined nav-icon mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
             >
               power_settings_new
             </span>
             <p
-              class="font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
+              class="nav-text font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white"
             >
               Logout
             </p>
@@ -123,12 +113,13 @@
         </div>
       </div>
       <div
-        class="site-content my-8 flex h-auto min-h-90vh w-3/4 items-center justify-center rounded-2xl bg-transparent py-4"
+        class="site-content w-content-space-open mx-0 my-8 h-auto min-h-90vh rounded-2xl pl-10"
       >
         {% block body %}{% endblock %}
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+    <script src="{{ asset('js/navbar.js') }}"></script>
     {% block script_js %}{% endblock %}
   </body>
 </html>
