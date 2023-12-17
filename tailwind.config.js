@@ -3,7 +3,7 @@ module.exports = {
   mode: "jit",
   content: ["**/**.html.twig"],
   safelist: [
-      "flex",
+    "flex",
     "rotate-45",
     "translate-y-3.5",
     "absolute",
@@ -20,7 +20,19 @@ module.exports = {
     "top-[-1000px]",
     "duration-300",
     "ease",
-    "bg-green-400", "top-1/2", "translate-x-full", 'bg-orange-400', 'hover:bg-orange-600'
+    "bg-green-400",
+    "top-1/2",
+    "translate-x-full",
+    "bg-orange-400",
+    "hover:bg-orange-600",
+    'w-open-nav',
+    'rotate-180',
+    'w-closed-nav',
+    'w-content-space-open',
+    'w-content-space-closed',
+    'mx-auto',
+    'bg-nav-btn',
+    "text-gray-500"
   ],
   theme: {
     extend: {
@@ -46,8 +58,8 @@ module.exports = {
         "95%": "95%",
         "2px": "2px",
         "15%": "15%",
-        "A4w": "794px",
-        "A4h": "1123px",
+        A4w: "794px",
+        A4h: "1123px",
         "5px": "5px",
         "15px": "15px",
         "35%": "35%",
