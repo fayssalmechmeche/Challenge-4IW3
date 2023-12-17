@@ -3,6 +3,7 @@ module.exports = {
   mode: "jit",
   content: ["**/**.html.twig"],
   safelist: [
+      "flex",
     "rotate-45",
     "translate-y-3.5",
     "absolute",
