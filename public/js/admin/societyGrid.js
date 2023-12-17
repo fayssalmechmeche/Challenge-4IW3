@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
           society.email,
           gridjs.html(`
           <div class="flex">
-            <button onclick="openSocietyShowModal(${society.id})">👁‍🗨</button>
+            <a href="/admin/society/show/${society.id}">👁‍🗨</a>
             <button onclick="openSocietyEditModal(${society.id})">📝</button>
             <a href="/admin/society/delete/${society.id}/${society.token}">❌</a>
           </div>`),

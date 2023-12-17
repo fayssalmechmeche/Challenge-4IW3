@@ -3,7 +3,7 @@
 {# {% block title %}Création d'une Société{% endblock %} #}
 
 	{% block body %}
-		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold"> Visualisation d'une Société
+		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold"> Visualisation d'un utilisateur
 	</h1>
 
 	<div
@@ -23,10 +23,14 @@
 		</p>
 		<label class="mb-1 block">Roles</label>
 		<p class="mb-3 bg-white w-full rounded-sm p-2">
+
 			{% for role in user.roles %}
-				{{role == "ROLE_ACCOUNTANT" ? "Comptable,": "Utilisateur,"}}
-				{% if loop.last %}
-					{{role == "ROLE_ACCOUNTANT" ? "Comptable": "Utilisateur"}}
+				{% if role == "ROLE_SOCIETY" %}
+					Traiteur,
+				{% elseif role == "ROLE_ACCOUNTANT" %}
+					Comptable,
+				{% else %}
+					Utilisateur
 				{% endif %}
 			{% endfor %}
 		</p>
