@@ -107,7 +107,6 @@ class CustomerController extends AbstractController
         return $this->render('customer/new.html.twig', [
             'customer' => $customer,
             'form' => $form->createView(),
-            'form_action' => $this->generateUrl('app_customer_new')
         ]);
     }
 

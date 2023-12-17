@@ -1,25 +1,44 @@
 {% extends 'base_caterer.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Product index
+{% endblock %}
 
 {% block content %}
-    <h1>Product index</h1>
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Product index</h1>
+		<button onclick="openProductCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Créer un Nouveau Client</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="product-table"></div>
+	</div>
 
-    <!-- Conteneur pour le tableau Grid.js -->
-    <div id="product-table"></div>
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
+
+	<!-- Modal pour la création d'un nouveau Produit -->
+	{% set dynamicContent %}
+	<div>
+		<p>Contenu construit directement dans Twig.</p>
+	</div>
+	{% endset %}
+
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'newModalProduitId',
+        'modal_content_id': 'newModalProduitContentId',
+        'content': dynamicContent
+    } %}
+
+
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        var csrfToken = '{{ csrf_token('delete_product') }}';
-    </script>
-    <script src="{{ asset('js/productGrid.js') }}"></script>
+	{{ parent() }}
+	<script>
+		var csrfToken = '{{ csrf_token('delete_product') }}';
+	</script>
+	<script src="{{ asset('js/productGrid.js') }}"></script>
+    <script src="{{ asset('js/produit.js') }}"></script>
 {% endblock %}
