@@ -7,15 +7,15 @@ document.addEventListener("DOMContentLoaded", function () {
           customer.nameSociety || customer.name + " " + customer.lastName,
           customer.nameSociety ? "Société" : "Client Particulier",
           gridjs.html(`
-          <div class="w-auto mx-auto flex justify-center items-center flex-wrap">
+          <div class="w-auto mx-auto flex justify-center items-center gap-1 flex-wrap">
           <button
             onclick="openCustomerEditModal(${customer.id})"
-            class="text-white font-medium bg-orange-400 hover:bg-orange-600 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+            class="text-white mx-2 font-medium bg-orange-400 hover:bg-orange-600 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
           >
             Modifier
           </button>
           <button
-            class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+            class="text-white mx-2 font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
             onclick="openCustomerModal(${customer.id})"
           >
             Consulter
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <input type="hidden" name="_token" value="${csrfToken}" />
             <button
               type="submit"
-              class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+              class="text-white font-medium mx-2 bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
             >
               Supprimer
             </button>

@@ -25,14 +25,15 @@ module.exports = {
     "translate-x-full",
     "bg-orange-400",
     "hover:bg-orange-600",
-    'w-open-nav',
-    'rotate-180',
-    'w-closed-nav',
-    'w-content-space-open',
-    'w-content-space-closed',
-    'mx-auto',
-    'bg-nav-btn',
-    "text-gray-500"
+    "w-open-nav",
+    "rotate-180",
+    "w-closed-nav",
+    "w-content-space-open",
+    "w-content-space-closed",
+    "mx-auto",
+    "bg-nav-btn",
+    "text-gray-500",
+    "gap-1 ",
   ],
   theme: {
     extend: {
@@ -51,6 +52,7 @@ module.exports = {
         "card-grey": "#8A92A6",
         "progress-bar-1": "#3A57E8",
         "progress-bar-2": "#08B1BA",
+        "caterer": "#EFF1F6",
       },
       spacing: {
         "90-vh": "90vh",
