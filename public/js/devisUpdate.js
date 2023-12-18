@@ -95,10 +95,10 @@ function addDevisItem(type) {
 
             // Utilisez l'index approprié en fonction du type
             if(type === 'product') {
-                addHiddenFieldsForGridItem(itemId, quantity, type, productIndex);
+                addHiddenFieldsForGridItem(itemId, quantity, type, productIndex,pricePerUnit);
                 productIndex++;
             } else if(type === 'formula') {
-                addHiddenFieldsForGridItem(itemId, quantity, type, formulaIndex);
+                addHiddenFieldsForGridItem(itemId, quantity, type, formulaIndex,pricePerUnit);
                 formulaIndex++;
             }
 
@@ -113,15 +113,16 @@ function addDevisItem(type) {
     updateTotalPrice();
 }
 
-function addHiddenFieldsForGridItem(itemId, quantity, type, index) {
+function addHiddenFieldsForGridItem(itemId, quantity, type, index,pricePerUnit) {
     const hiddenFieldsContainer = document.getElementById('hiddenFieldsContainer');
     if (type === 'product') {
         addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][product]`, itemId, itemId);
         addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][quantity]`, quantity);
-        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, price);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, pricePerUnit);
     } else if (type === 'formula') {
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][formula]`, itemId, itemId);
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][quantity]`, quantity);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, pricePerUnit);
 
     }
 }
@@ -299,7 +300,14 @@ function initDevisGrid(existingDevisItems) {
                 name: 'Supprimer',
                 formatter: (_, row) => html(`<button type="button" onclick="removeDevisItemFromGrid('${row.cells[2].data}')">Supprimer</button>`)
             },
-            'Prix Total'
+            {
+                name: 'Prix',
+                formatter: (_, row) => {
+                    console.log("Valeur de la cellule de prix :", row.cells[3].data);
+                    let price = row.cells[3] ? parseFloat(row.cells[3].data) : 0;
+                    return price ? `${price.toFixed(2)} €` : 'N/A';
+                }
+            }
         ],
         data: initialData
     });

@@ -114,7 +114,7 @@ function addDevisItem(type) {
         let quantity = parseInt(quantityElement.value);
         let pricePerUnitString = selectElement.options[selectElement.selectedIndex].getAttribute('data-price');
         let pricePerUnit = parseFloat(pricePerUnitString);
-        let totalPrice = quantity * pricePerUnit; // Calcul du prix total
+        let totalPrice = (quantity * pricePerUnit) / 100; // Calcul du prix total
 
         console.log("Prix par unité", pricePerUnit);
         console.log("Quantité", quantity);
