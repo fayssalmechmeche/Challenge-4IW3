@@ -1,0 +1,72 @@
+<!-- hidden element used to reserve place of the navbar that are fixed -->
+<div class="navbar-hidden-space w-open-nav h-screen"></div>
+<!-- Navbar -->
+<div
+	class="vertical-nav bg-white w-open-nav h-screen rounded-tr-2xl rounded-br-2xl flex flex-col justify-start items-start fixed top-0 left-0 shadow-md">
+	<!-- Head -->
+	<div class="w-full flex justify-center items-center relative h-20">
+		<img
+		class="nav-logo" src="{{ asset('images/navbar/Main Logo.svg') }}" alt="logo"/>
+		<!-- Toggle of navbar -->
+		<span class="material-symbols-outlined navbar-toggle rotate-180 transition ease-in-out duration-300 text-white bg-nav-btn cursor-pointer rounded-full p-1">
+			arrow_forward
+		</span>
+	</div>
+	<!-- Divider -->
+	<div class="devider w-95% h-2px bg-the-grey opacity-50 my-2 mx-auto"></div>
+	<!-- end divider -->
+	<!-- Body -->
+	<div
+		class="nav-body w-full h-full flex flex-col justify-start items-center">
+		<!-- Navbar item -->
+		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'admin_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }}  h-12 rounded-10px flex justify-start items-center">
+			<a href="{{ path('admin_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'admin_index' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+
+				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
+					home
+				</span>
+				<p class="nav-text font-semibold transition ease-in-out duration-300">
+					Tableau de bord
+				</p>
+			</a>
+		</div>
+		<!-- end item -->
+		<!-- Navbar item -->
+		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'admin_user_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+			<a href="{{ path('admin_user_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'admin_user_index' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
+					person
+				</span>
+				<p class="nav-text font-semibold transition ease-in-out duration-300">
+					Utilisateurs
+				</p>
+			</a>
+		</div>
+		<!-- end item -->
+		<!-- Navbar item -->
+		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'admin_society_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+			<a href="{{ path('admin_society_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'admin_society_index' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
+					cookie
+				</span>
+				<p class="nav-text font-semibold transition ease-in-out duration-300">
+					Sociétés
+				</p>
+			</a>
+		</div>
+		<!-- end item -->
+
+		<!-- logout -->
+		<div class="group mt-auto mb-5 w-95% transition ease-in-out duration-300 cursor-pointer hover:bg-nav-btn h-12 rounded-10px flex justify-start items-center justify-self-end">
+			<a href="{{ path('app_logout') }}" class="flex items-center w-full h-full text-gray-500 hover:text-white">
+
+				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 text-gray-500 group-hover:text-white mx-4">
+					power_settings_new
+				</span>
+				<p class="nav-text font-semibold transition ease-in-out duration-300 text-gray-500 group-hover:text-white">
+					Logout
+				</p>
+			</a>
+		</div>
+	</div>
+</div>

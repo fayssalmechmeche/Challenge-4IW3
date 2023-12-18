@@ -18,73 +18,18 @@
 		{% endblock %}
 	</head>
 	<body class="bg-slate-200">
-		<div
-			class="mega-container m-0 flex h-auto w-[98vw] flex-nowrap items-start justify-start overflow-hidden p-0">
-			<!-- hidden element used to reserve place of the navbar that are fixed -->
-			<div class="navbar-hidden-space w-open-nav h-screen"></div>
-			<!-- Navbar -->
-			<div
-				class="vertical-nav w-open-nav fixed left-0 top-0 flex h-screen flex-col items-start justify-start rounded-br-2xl rounded-tr-2xl bg-white shadow-md">
-				<!-- Head -->
-				<div class="relative flex h-20 w-full items-center justify-center">
-					<img
-					class="nav-logo" src="assets\images\Main Logo.svg" alt="logo"/>
-					<!-- Toggle of navbar -->
-					<span class="material-symbols-outlined navbar-toggle bg-nav-btn rotate-180 cursor-pointer rounded-full p-1 text-white transition duration-300 ease-in-out">
-						arrow_forward
-					</span>
-				</div>
-				<!-- Divider -->
-				<div class="devider mx-auto my-2 h-2px w-95% bg-the-grey opacity-50"></div>
-				<!-- end divider -->
-				<!-- Body -->
-				<div
-					class="nav-body flex h-full w-full flex-col items-center justify-start">
-					<!-- Navbar item -->
-					<div class="nav-link bg-nav-btn hover:bg-nav-btn group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out">
-						<span class="material-symbols-outlined nav-icon mx-4 text-white transition duration-300 ease-in-out group-hover:text-white">
-							home
-						</span>
-						<p class="nav-text font-semibold text-white transition duration-300 ease-in-out group-hover:text-white">
-							<a href="{{ path('admin_index') }}">Tableau de bord</a>
-						</p>
-					</div>
-					<!-- end item -->
-					<!-- Navbar item -->
-					<div class="nav-link hover:bg-nav-btn group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out">
-						<span class="material-symbols-outlined nav-icon mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white">
-							description
-						</span>
-						<p class="nav-text font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white">
 
-							<a href="{{ path('admin_user_index') }}">Utilisateurs</a>
-						</p>
-					</div>
-					<!-- end item -->
-					<!-- Navbar item -->
-
-					<div class="nav-link hover:bg-nav-btn group flex h-12 w-95% cursor-pointer items-center justify-start rounded-10px transition duration-300 ease-in-out">
-
-						<span class="material-symbols-outlined nav-icon mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white">
-							payments
-						</span>
-						<p class="nav-text font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white">
-							<a href="{{ path('admin_society_index') }}">Sociétés</a>
-						</p>
-					</a>
-				</p>
-			</div>
-			<!-- end item -->
-			<!-- logout -->
-			<div class="hover:bg-nav-btn group mb-5 mt-auto flex h-12 w-95% cursor-pointer items-center justify-start justify-self-end rounded-10px transition duration-300 ease-in-out">
-				<span class="material-symbols-outlined nav-icon mx-4 text-gray-500 transition duration-300 ease-in-out group-hover:text-white">
-					power_settings_new
-				</span>
-				<p class="nav-text font-semibold text-gray-500 transition duration-300 ease-in-out group-hover:text-white">
-					<a href="{{ path('app_logout') }}">Déconnexion</a>
-				</p>
+		<div class="mega-container h-auto w-[98vw] flex flex-nowrap justify-start items-start m-0 p-0 overflow-hidden">
+			{% include 'admin/navbar_back.html.twig' %}
+			<div class="site-content pl-10 my-8 mx-0 min-h-90vh w-content-space-open h-auto rounded-2xl">
+				{% block body %}
+					{# Ce bloc sera remplacé par le contenu spécifique de chaque page #}
+				{% endblock %}
 			</div>
 		</div>
+		<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+		<script src="{{ asset('js/navbar.js') }}"></script>
+		{% block script_js %}{% endblock %}
+
 	</body>
-</html></div><div class="site-content w-content-space-open mx-0 my-8 h-auto min-h-90vh rounded-2xl pl-10"> {% block body %}{% endblock %}
-</div></div><script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script><script src="{{ asset('js/navbar.js') }}"></script>{% block script_js %}{% endblock %}</body></html>
+</html>
