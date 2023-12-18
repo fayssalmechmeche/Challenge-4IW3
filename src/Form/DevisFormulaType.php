@@ -32,6 +32,10 @@ class DevisFormulaType extends AbstractType
             ->add('quantity', IntegerType::class, [
                 'attr' => ['min' => 1,'hidden' => true],
                 'label' => false
+            ])
+        ->add('price', TextType::class, [
+                'attr' => ['hidden' => true],
+                'label' => false
             ]);
     }
 

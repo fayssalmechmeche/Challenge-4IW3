@@ -118,36 +118,47 @@ function addHiddenFieldsForGridItem(itemId, quantity, type, index) {
     if (type === 'product') {
         addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][product]`, itemId, itemId);
         addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][quantity]`, quantity);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, price);
     } else if (type === 'formula') {
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][formula]`, itemId, itemId);
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][quantity]`, quantity);
+
     }
 }
 
 window.updateDevisItemQuantity = function (inputElement) {
     const rowId = inputElement.getAttribute('data-id');
     const newQuantity = parseInt(inputElement.value);
-    const rowData = devisGrid.config.data.find(row => row[2] === rowId);
 
+    // Trouvez la ligne dans la grille où l'ID correspond
+    const rowIndex = devisGrid.config.data.findIndex(row => row.cells[2] && row.cells[2].data == rowId);
+    const rowData = devisGrid.config.data[rowIndex];
+
+
+    console.log("Données de la ligne", rowData);
     if (rowData) {
         // Mise à jour de la quantité dans la grille
-        rowData[1] = newQuantity;
+        rowData.cells[1].data = newQuantity;
+        console.log("Nouvelle quantité", newQuantity);
 
         // Mise à jour de la quantité dans les champs cachés
-        const hiddenQuantityInput = document.querySelector(`input[name="devis[devisProducts][${rowId}][quantity]"]`);
+        const hiddenQuantityInput = document.querySelector(`input[name="devis[devisProducts][${rowIndex}][quantity]"]`);
+        console.log("Champ caché", hiddenQuantityInput);
         if (hiddenQuantityInput) {
             hiddenQuantityInput.value = newQuantity;
         }
 
-        // Recalcul du prix total
-        const pricePerUnit = parseFloat(rowData[4]);
+        // Recalcul du prix total, si nécessaire
+        const pricePerUnit = rowData.cells[3] ? parseFloat(rowData.cells[3].data) : 0;
         const newTotalPrice = newQuantity * pricePerUnit;
-        rowData[3] = newTotalPrice; // Mise à jour du prix total
+        rowData.cells[3].data = newTotalPrice.toFixed(2); // Mise à jour du prix total
 
-        devisGrid.forceRender();
+        devisGrid.updateConfig({ data: devisGrid.config.data }).forceRender();
         updateTotalPrice();
     }
 };
+
+
 
 window.removeDevisItemFromGrid = function (itemId) {
     console.log('removeDevisItemFromGrid called with itemId:', itemId);

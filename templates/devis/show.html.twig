@@ -16,6 +16,8 @@
 
 
     <a href="{{ path('app_devis_index') }}">Retour à la liste</a> }
+    <a href="{{ path('app_devis_download', {'id': devi.id}) }}" class="btn btn-primary">Télécharger le devis</a>
+
 
 
     <nav class="flex justify-between w-full items-center py-3 px-5 h-14 bg-[#353535] ">
@@ -46,8 +48,8 @@
                 >
                     <h1 class="text-2xl font-semibold">Devis</h1>
                     <div class="devis-info">
-                        <p class="text-15px leading-none my-1">Numéro de devis:</p>
-                        <p class="text-15px leading-none my-1">Date:</p>
+                        <p class="text-15px leading-none my-1">Numéro de devis: {{ devi.devisNumber }}</p>
+                        <p class="text-15px leading-none my-1">Date: {{ devi.createdAt|date('Y-m-d') }}</p>
                         <p class="text-15px leading-none my-1">
                             Validité du devis: 3 Mois
                         </p>
@@ -108,15 +110,15 @@
                     >
                         <h3 class="text-base font-semibold">Total HT:</h3>
                         <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
-                            <p class="text-lg text-right">5000 €</p>
+                            <p class="text-lg text-right">{{ devi.totalPrice }} € </p>
                         </div>
                     </div>
                     <div
                             class="total-sub-container flex justify-start items-center m-0"
                     >
-                        <h3 class="text-base font-semibold">TVA (20%):</h3>
+                        <h3 class="text-base font-semibold">Taxe:</h3>
                         <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
-                            <p class="text-lg text-right">1000 €</p>
+                            <p class="text-lg text-right">{{ devi.taxe }} %</p>
                         </div>
                     </div>
                     <div
@@ -124,7 +126,7 @@
                     >
                         <h3 class="text-base font-semibold">Total TTC:</h3>
                         <div class="total-tab alt ml-5px p-4 w-40 bg-light-dark">
-                            <p class="text-lg text-right text-white">6000 €</p>
+                            <p class="text-lg text-right text-white">{{ devi.totalDuePrice}} € </p>
                         </div>
                     </div>
                 </div>

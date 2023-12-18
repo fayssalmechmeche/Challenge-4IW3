@@ -63,10 +63,12 @@ function handleCustomerSelectChange() {
     if (customerSelect) {
         customerSelect.addEventListener('change', function() {
             const customerId = this.value;
+            console.log("Customer ID sélectionné:", customerId);
             fetchCustomerInfo(customerId, clientInfoDiv);
         });
     }
 }
+console.log("wouf");
 
 function fetchCustomerInfo(customerId, clientInfoDiv) {
     if (customerId) {
@@ -130,15 +132,16 @@ function addDevisItem(type) {
 
             // Utilisez l'index approprié en fonction du type
             if(type === 'product') {
-                addHiddenFieldsForGridItem(itemId, quantity, type, productIndex);
+                addHiddenFieldsForGridItem(itemId, quantity, type, productIndex,pricePerUnit);
                 productIndex++;
             } else if(type === 'formula') {
-                addHiddenFieldsForGridItem(itemId, quantity, type, formulaIndex);
+                addHiddenFieldsForGridItem(itemId, quantity, type, formulaIndex,pricePerUnit);
                 formulaIndex++;
             }
 
             selectElement.selectedIndex = 0;
             quantityElement.value = '';
+
         } else {
             alert("Cet élément a déjà été ajouté.");
         }
@@ -148,16 +151,23 @@ function addDevisItem(type) {
     updateTotalPrice();
 }
 
-function addHiddenFieldsForGridItem(itemId, quantity, type, index) {
+function addHiddenFieldsForGridItem(itemId, quantity, type, index,pricePerUnit) {
     const hiddenFieldsContainer = document.getElementById('hiddenFieldsContainer');
     if (type === 'product') {
         addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][product]`, itemId, itemId);
         addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][quantity]`, quantity);
+        // Dans addHiddenFieldsForGridItem ou une fonction similaire
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, pricePerUnit.toFixed(2));
+
     } else if (type === 'formula') {
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][formula]`, itemId, itemId);
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][quantity]`, quantity);
+        // Dans addHiddenFieldsForGridItem ou une fonction similaire
+        addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][price]`, pricePerUnit.toFixed(2));
+
     }
 }
+console.log("done");
 
 
     window.updateDevisItemQuantity = function (inputElement) {
@@ -166,6 +176,7 @@ function addHiddenFieldsForGridItem(itemId, quantity, type, index) {
         const rowData = devisGrid.config.data.find(row => row[2] === rowId);
 
         if (rowData) {
+            const hiddenQuantityInput = document.querySelector(`input[name="devis[devisProducts][${rowId}][quantity]"]`);
             const pricePerUnit = parseFloat(rowData[4]); // Assurez-vous que le prix unitaire est stocké dans rowData[4]
             const newTotalPrice = newQuantity * pricePerUnit;
             rowData[1] = newQuantity; // Mise à jour de la quantité
@@ -175,34 +186,45 @@ function addHiddenFieldsForGridItem(itemId, quantity, type, index) {
         }
     };
 
-    window.removeDevisItemFromGrid = function (itemId) {
-        // Mise à jour de la grille pour supprimer l'élément
-        devisGrid.updateConfig({
-            data: devisGrid.config.data.filter(row => row[2] !== itemId)
-        }).forceRender();
+window.removeDevisItemFromGrid = function (itemId) {
+    // Mise à jour de la grille pour supprimer l'élément
+    devisGrid.updateConfig({
+        data: devisGrid.config.data.filter(row => row[2] !== itemId)
+    }).forceRender();
 
-        // Suppression des éléments correspondants du conteneur de champs cachés
-        const hiddenFieldsContainer = document.getElementById('hiddenFieldsContainer');
-        const inputs = hiddenFieldsContainer.querySelectorAll('input');
+    // Suppression des éléments correspondants du conteneur de champs cachés
+    const hiddenFieldsContainer = document.getElementById('hiddenFieldsContainer');
+    const inputs = hiddenFieldsContainer.querySelectorAll('input');
 
-        inputs.forEach(input => {
-            // Supposons que le 'itemId' est contenu dans la valeur de l'input
-            if (input.value === itemId) {
-                hiddenFieldsContainer.removeChild(input);
-                // Supprimer également l'input de la quantité associé
-                const quantityInput = hiddenFieldsContainer.querySelector(`input[name="${input.name.replace('[product]', '[quantity]').replace('[formula]', '[quantity]')}"]`);
-                if (quantityInput) {
-                    hiddenFieldsContainer.removeChild(quantityInput);
-                }
+    inputs.forEach(input => {
+        // Vérifier si l'input correspond à l'itemId et supprimer les éléments associés
+        if (input.value === itemId) {
+            // Supprimer l'input de produit/formule
+            hiddenFieldsContainer.removeChild(input);
+
+            // Supprimer l'input de la quantité associée
+            const quantityInputName = input.name.replace('[product]', '[quantity]').replace('[formula]', '[quantity]');
+            const quantityInput = hiddenFieldsContainer.querySelector(`input[name="${quantityInputName}"]`);
+            if (quantityInput) {
+                hiddenFieldsContainer.removeChild(quantityInput);
             }
-        });
 
-        // Mise à jour du prix total
-        updateTotalPrice();
-    };
+            // Supprimer l'input du prix associé
+            const priceInputName = input.name.replace('[product]', '[price]').replace('[formula]', '[price]');
+            const priceInput = hiddenFieldsContainer.querySelector(`input[name="${priceInputName}"]`);
+            if (priceInput) {
+                hiddenFieldsContainer.removeChild(priceInput);
+            }
+        }
+    });
+
+    // Mise à jour du prix total
+    updateTotalPrice();
+};
 
 
-    function handleCollectionItems(collectionId, addButtonId, itemClass, updatePriceFunction) {
+
+function handleCollectionItems(collectionId, addButtonId, itemClass, updatePriceFunction) {
         const collectionHolder = document.getElementById(collectionId);
         if (!collectionHolder) {
             console.error("Element non trouvé:", collectionId);

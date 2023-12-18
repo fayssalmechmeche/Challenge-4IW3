@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\DevisProduct;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Knp\Snappy\Pdf;
 
 
 #[Route('/devis')]
@@ -85,14 +86,14 @@ class DevisController extends AbstractController
     {
         $devis = new Devis();
         $user = $this->getUser();
-        $devis->setUser($this->getUser());
+
+        $devis->setUser($user);
         $lastDevisNumber = $devisRepository->findLastDevisNumberForUser($user);
         $newDevisNumber = $this->generateNewDevisNumber($lastDevisNumber);
 
         $userEmail = $user ? $user->getEmail() : '';
         $products = $productRepository->findBy(['user' => $user]);
         $formulas = $formulaRepository->findBy(['user' => $user]);
-
 
         $form = $this->createForm(DevisType::class, $devis, [
             'user' => $user,
@@ -101,20 +102,19 @@ class DevisController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $devis->setDevisNumber($newDevisNumber);
             $devisProductsJson = $request->request->get('devisProductsJson');
             if ($devisProductsJson) {
                 $devisProductsData = json_decode($devisProductsJson, true);
 
-                // Traiter chaque produit dans les données décodées
                 foreach ($devisProductsData as $productData) {
                     $product = $productRepository->find($productData['product']);
                     if ($product) {
                         $devisProduct = new DevisProduct();
                         $devisProduct->setProduct($product);
                         $devisProduct->setQuantity($productData['quantity']);
-                        $devis->addDevisProduct($devisProduct); // Supposant que vous avez une méthode addDevisProduct
+                        $devisProduct->setPrice($product->getPrice()); // Définir le prix
+                        $devis->addDevisProduct($devisProduct);
                     }
                 }
             }
@@ -134,6 +134,7 @@ class DevisController extends AbstractController
     }
 
 
+
     #[Route('/{id}/show', name: 'app_devis_show', methods: ['GET'])]
     public function show(Devis $devi): Response
     {
@@ -151,6 +152,7 @@ class DevisController extends AbstractController
                 'id' => $devisProduct->getId(),
                 'name' => $product ? $product->getName() : '',
                 'quantity' => $devisProduct->getQuantity(),
+                'price' => $devisProduct->getPrice(),
             ];
         }
 
@@ -165,8 +167,10 @@ class DevisController extends AbstractController
                 'id' => $devisFormula->getId(),
                 'name' => $formula ? $formula->getName() : '',
                 'quantity' => $devisFormula->getQuantity(),
+                'price' => $devisFormula->getPrice(),
             ];
         }
+
 
         return $this->render('devis/show.html.twig', [
             'devi' => $devi,
@@ -289,5 +293,58 @@ class DevisController extends AbstractController
 
         return sprintf("%s-%s-%04d", $year, $month, $sequentialNumber);
     }
+
+    #[Route('/{id}/download', name: 'app_devis_download', methods: ['GET'])]
+    public function download(Devis $devi, Pdf $snappy): Response
+    {
+        $user = $this->getUser();
+        $userEmail = $user ? $user->getEmail() : '';
+
+        // Traitement des produits
+        $productsCollection = $devi->getDevisProducts();
+        $productsArray = [];
+        foreach ($productsCollection as $devisProduct) {
+            $product = $devisProduct->getProduct();
+            $productsArray[] = [
+                'id' => $devisProduct->getId(),
+                'name' => $product ? $product->getName() : '',
+                'quantity' => $devisProduct->getQuantity(),
+                'price' => $devisProduct->getPrice(),
+            ];
+        }
+
+        // Traitement des formules
+        $formulasCollection = $devi->getDevisFormulas();
+        $formulasArray = [];
+        foreach ($formulasCollection as $devisFormula) {
+            $formula = $devisFormula->getFormula();
+            $formulasArray[] = [
+                'id' => $devisFormula->getId(),
+                'name' => $formula ? $formula->getName() : '',
+                'quantity' => $devisFormula->getQuantity(),
+                'price' => $devisFormula->getPrice(),
+            ];
+        }
+
+        $html = $this->renderView('devis/show.html.twig', [
+            'devi' => $devi,
+            'userEmail' => $userEmail,
+            'products' => $productsArray,
+            'formulas' => $formulasArray
+            // Ajoutez ici toute autre variable nécessaire pour le rendu du template
+        ]);
+
+        $filename = 'devis-' . $devi->getId() . '.pdf';
+
+        return new Response(
+            $snappy->getOutputFromHtml($html),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+            ]
+        );
+    }
+
 
 }
