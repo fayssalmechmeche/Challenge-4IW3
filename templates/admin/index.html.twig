@@ -6,7 +6,7 @@
 {% block body %}
 
 	<main class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4">
-		<h1 class="mb-6 flex flex-wrap text-4xl text-center overflow-y-auto">Tableau de bord</h1>
+		<h1 class="mb-6 flex flex-wrap text-4xl text-center">Tableau de bord</h1>
 		<section id="InfoCards" class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 flex-wrap">
 
 			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre de utilisateurs","data": users|length,'add':false }%}

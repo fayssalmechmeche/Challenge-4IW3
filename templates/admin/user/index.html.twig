@@ -6,8 +6,8 @@
 {% block body %}
 
 	<main class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4">
-		<h1 class="mb-6 flex flex-wrap text-4xl text-center overflow-y-auto">Dashboard Utilisateur</h1>
-		<section id="InfoCards" class="mb-4 flex flex-wrap h-1/6 w-full justify-around max-sm:h-1/4 max-lg:flex-col max-lg:items-center">
+		<h1 class="mb-6 flex flex-wrap text-4xl text-center">Dashboard Utilisateur</h1>
+		<section id="InfoCards" class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 flex-wrap">
 			{% set usersVerified = 0 %}
 			{% for user in users %}
 				{% if user.isVerified == true %}
