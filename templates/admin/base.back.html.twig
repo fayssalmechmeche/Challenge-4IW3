@@ -8,7 +8,9 @@
 		</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<link rel="stylesheet" href="{{ asset('css/mermaid.css') }}"/>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
@@ -27,9 +29,34 @@
 				{% endblock %}
 			</div>
 		</div>
-		<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
-		<script src="{{ asset('js/navbar.js') }}"></script>
-		{% block script_js %}{% endblock %}
+
+
+		<div id="alerts" data-alert="{{ app.session.flashBag.all()|json_encode()}} "></div>
+
+
+		{% block script_js %}
+
+			<script src="{{ asset('js/addFlash.js') }}"></script>
+			<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+			<script src="{{ asset('js/navbar.js') }}"></script>
+			<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+			<script>
+
+
+				console.log(JSON.parse(document.getElementById('alerts').getAttribute('data-alert')))
+if (document.getElementById('alerts').dataset.alert != '[]') {
+
+let alerts = JSON.parse(document.getElementById('alerts').dataset.alert)
+for (const type in alerts) {
+
+alerts[type].forEach(message => {
+addFlash(type, message)
+});
+}
+}
+			</script>
+		{% endblock %}
+
 
 	</body>
 </html>

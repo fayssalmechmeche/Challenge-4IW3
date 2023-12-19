@@ -25,6 +25,7 @@ class AdminUserController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(): Response
     {
+        $this->addFlash('success', 'Bonjour');
         return $this->render('admin/user/index.html.twig', [
             'users' => $users = $this->entityManagerInterface->getRepository(User::class)->findAll(),
         ]);
@@ -95,6 +96,7 @@ class AdminUserController extends AbstractController
                 return $this->redirectToRoute('admin_user_index');
             }
 
+            $this->addFlash('success', 'Un utilisateur a été crée');
 
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();

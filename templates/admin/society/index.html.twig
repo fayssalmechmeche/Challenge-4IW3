@@ -21,6 +21,8 @@
 {% endblock %}
 
 {% block script_js %}
+	{{ parent() }}
+	<script src="{{ asset('js/addFlash.js') }}"></script>
 	<script src="{{ asset('js/admin/societyGrid.js') }}"></script>
 	<script src="{{ asset('js/admin/society.js') }}"></script>
 {% endblock %}
