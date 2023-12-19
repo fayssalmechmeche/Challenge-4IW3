@@ -57,6 +57,19 @@ class ProductController extends AbstractController
         return $this->json($data);
     }
 
+    #[Route('/api/{id}', name: 'api_product_details', methods: ['GET'])]
+    public function apiProductDetails(Product $product): Response
+    {
+
+
+        return $this->json([
+            'name' => $product->getName(),
+            'price' => $product->getPrice(),
+            'productCategory' => $product->getProductCategory(),
+
+        ]);
+    }
+
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -129,6 +142,8 @@ class ProductController extends AbstractController
 
             $entityManager->remove($product);
             $entityManager->flush();
+        }else{
+            dd("wouf");
         }
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -1,4 +1,0 @@
-<form class="flex justify-center mt-3" method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm(' Etes vous sur de vouloir supprimer ce produit ?');">
-	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-	<button class="text-white font-medium  bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-3 py-2">Supprimer ce produit</button>
-</form>

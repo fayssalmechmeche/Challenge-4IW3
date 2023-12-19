@@ -47,7 +47,6 @@ class CustomerController extends AbstractController
         return $this->json($data);
     }
 
-
     #[Route('/api/{id}', name: 'api_customer_details', methods: ['GET'])]
     public function apiCustomerDetails(Customer $customer): Response
     {
@@ -151,6 +150,8 @@ class CustomerController extends AbstractController
 
             $entityManager->remove($customer);
             $entityManager->flush();
+        }else{
+            dd("wouf");
         }
 
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);

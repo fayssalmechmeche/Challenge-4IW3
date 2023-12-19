@@ -27,7 +27,7 @@ function openProductEditModal(productId) {
 }
 
 function openProductModal(productId) {
-  fetch(`/product/${productId}`)
+  fetch(`/product/api/${productId}`)
     .then((response) => response.json())
     .then((data) => {
       const modalBody = document.querySelector("#productDetailsModalContainer");

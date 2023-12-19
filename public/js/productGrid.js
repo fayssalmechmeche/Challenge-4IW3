@@ -39,9 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </button>
           </form>
         </div>
-
-
-
                     <a href='/product/${product.id}/edit' class='btn btn-primary btn-sm'>Modifier</a>
                     <form action='/product/${product.id}' method='POST' onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer ce produit ?");'>
                         <input type='hidden' name='_method' value='DELETE'>
