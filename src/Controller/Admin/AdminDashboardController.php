@@ -16,7 +16,6 @@ class AdminDashboardController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(UserRepository $userRepository, SocietyRepository $societyRepository, DevisRepository $devisRepository): Response
     {
-        $this->addFlash('success', 'Index');
         return $this->render('admin/index.html.twig', [
             'users' => $userRepository->findAll(),
             'societies' => $societyRepository->findAll(),

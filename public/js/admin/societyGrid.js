@@ -32,6 +32,22 @@ document.addEventListener("DOMContentLoaded", function () {
       limit: 5,
     },
     sort: true,
+    language: {
+      search: {
+        placeholder: 'Rechercher...'
+      },
+      noRecordsFound: 'Aucun résultat',
+      loading: 'Chargement...',
+      error: 'Une erreur est survenue',
+      pagination: {
+        previous: 'Précédent',
+        next: 'Suivant',
+        showing: 'Affichage',
+        results: () => 'Résultats',
+        of: 'de',
+        to: 'à'
+      }
+    },
     // style: {
     //   td: {
     //     "max-width": "1000px",
