@@ -31,6 +31,20 @@
         'content': dynamicContent
     } %}
 
+	<!-- Modal pour la modification d'un client -->
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'productEditModal',
+        'modal_content_id': 'productEditModalContent',
+        'content': dynamicContent
+    } %}
+
+	<!-- Modal pour les détails du client -->
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'productDetailsModal',
+        'modal_content_id': 'productDetailsModalContainer',
+        'content': dynamicContent
+    } %}
+
 
 {% endblock %}
 
