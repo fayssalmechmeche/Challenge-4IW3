@@ -3,7 +3,7 @@ import { Grid, html } from "https://unpkg.com/gridjs?module";
 let devisGrid;
 let productIndex;
 let formulaIndex;
-
+console.log("A l'huile");
 document.addEventListener('DOMContentLoaded', () => {
     // Sélectionner tous les éléments qui commencent par 'devis_devisProducts_' et 'devis_devisFormulas_'
     const productElements = document.querySelectorAll('[id^="devis_devisProducts_"]');
@@ -75,7 +75,7 @@ function addDevisItem(type) {
         let quantity = parseInt(quantityElement.value);
         let pricePerUnitString = selectElement.options[selectElement.selectedIndex].getAttribute('data-price');
         let pricePerUnit = parseFloat(pricePerUnitString);
-        let totalPrice = quantity * pricePerUnit; // Calcul du prix total
+        let totalPrice = (quantity * pricePerUnit) / 100; // Calcul du prix total
 
         const dataExists = devisGrid.config.data.some(row => row[0] === itemName || row[2] === itemId);
 
@@ -86,19 +86,19 @@ function addDevisItem(type) {
 
 
         if (!dataExists) {
-            console.log('Adding new item to grid:', {itemName, quantity, itemId, totalPrice, pricePerUnit});
-            const newRow = [itemName, quantity, itemId, totalPrice, pricePerUnit]; // Utilisation du prix total
+            let index = type === 'product' ? productIndex : formulaIndex;
+            console.log('Adding new item to grid:', {itemName, quantity, itemId, totalPrice, pricePerUnit,type, index});
+            const newRow = [itemName, quantity, itemId, totalPrice, pricePerUnit,type,index]; // Utilisation du prix total
             console.log("Nouvelle ligne ajoutée :", newRow);
             devisGrid.updateConfig({
                 data: devisGrid.config.data.concat([newRow])
             }).forceRender();
 
-            // Utilisez l'index approprié en fonction du type
-            if(type === 'product') {
-                addHiddenFieldsForGridItem(itemId, quantity, type, productIndex,pricePerUnit);
+            addHiddenFieldsForGridItem(itemId, quantity, type, index, pricePerUnit);
+
+            if (type === 'product') {
                 productIndex++;
-            } else if(type === 'formula') {
-                addHiddenFieldsForGridItem(itemId, quantity, type, formulaIndex,pricePerUnit);
+            } else if (type === 'formula') {
                 formulaIndex++;
             }
 
@@ -113,53 +113,72 @@ function addDevisItem(type) {
     updateTotalPrice();
 }
 
-function addHiddenFieldsForGridItem(itemId, quantity, type, index,pricePerUnit) {
+function addHiddenFieldsForGridItem(itemId, quantity, type, index, pricePerUnit) {
     const hiddenFieldsContainer = document.getElementById('hiddenFieldsContainer');
-    if (type === 'product') {
-        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][product]`, itemId, itemId);
-        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][quantity]`, quantity);
-        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, pricePerUnit);
-    } else if (type === 'formula') {
-        addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][formula]`, itemId, itemId);
-        addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][quantity]`, quantity);
-        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, pricePerUnit);
+    const productId = `${type}-${index}-product`;
+    const quantityId = `${type}-${index}-quantity`;
+    const priceId = `${type}-${index}-price`;
 
+    // Vérifiez que pricePerUnit est un nombre et, sinon, définissez-le sur 0
+    pricePerUnit = (typeof pricePerUnit === 'number') ? pricePerUnit : 0;
+
+    if (type === 'product') {
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][product]`, itemId,itemId, productId);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][quantity]`, quantity,quantity, quantityId);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisProducts][${index}][price]`, pricePerUnit.toFixed(2),pricePerUnit.toFixed(2), priceId);
+    } else if (type === 'formula') {
+        addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][formula]`, itemId,itemId, productId);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][quantity]`, quantity,quantity, quantityId);
+        addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][price]`, pricePerUnit.toFixed(2),pricePerUnit.toFixed(2), priceId);
     }
 }
+console.log("done");
 
 window.updateDevisItemQuantity = function (inputElement) {
     const rowId = inputElement.getAttribute('data-id');
+    console.log("ID de la ligne:", rowId);
     const newQuantity = parseInt(inputElement.value);
+    console.log("Nouvelle quantité:", newQuantity);
 
     // Trouvez la ligne dans la grille où l'ID correspond
-    const rowIndex = devisGrid.config.data.findIndex(row => row.cells[2] && row.cells[2].data == rowId);
-    const rowData = devisGrid.config.data[rowIndex];
+    const rowIndex = devisGrid.config.data.findIndex(row => row[2] === rowId);
+    console.log("Index de la ligne dans la grille:", rowIndex);
 
+    if (rowIndex > -1) {
+        const rowData = devisGrid.config.data[rowIndex];
+        console.log("Données de la ligne:", rowData);
 
-    console.log("Données de la ligne", rowData);
-    if (rowData) {
         // Mise à jour de la quantité dans la grille
-        rowData.cells[1].data = newQuantity;
-        console.log("Nouvelle quantité", newQuantity);
+        rowData[1] = newQuantity;
 
-        // Mise à jour de la quantité dans les champs cachés
-        const hiddenQuantityInput = document.querySelector(`input[name="devis[devisProducts][${rowIndex}][quantity]"]`);
-        console.log("Champ caché", hiddenQuantityInput);
+        // Type de l'élément (produit ou formule)
+        const itemType = rowData[5];
+        const itemIndex = rowData[6];
+        const quantityId = `${itemType}-${itemIndex}-quantity`;
+        // Utilisez l'attribut 'data-id' du row pour identifier le champ caché de la quantité
+        const hiddenQuantityInput = document.getElementById(quantityId);
+        console.log("quantityId:", quantityId);
+        console.log("Champ caché sélectionné pour la quantité:", hiddenQuantityInput);
+
         if (hiddenQuantityInput) {
             hiddenQuantityInput.value = newQuantity;
+            console.log("Mise à jour effectuée pour la quantité.");
+        } else {
+            console.log("Aucun champ caché trouvé avec l'ID:", `${itemType}-${rowId}-quantity`);
         }
 
         // Recalcul du prix total, si nécessaire
-        const pricePerUnit = rowData.cells[3] ? parseFloat(rowData.cells[3].data) : 0;
-        const newTotalPrice = newQuantity * pricePerUnit;
-        rowData.cells[3].data = newTotalPrice.toFixed(2); // Mise à jour du prix total
+        const pricePerUnit = parseFloat(rowData[4]);
+        const newTotalPrice = (newQuantity * pricePerUnit) / 100;
+        rowData[3] = newTotalPrice.toFixed(2);
+        console.log("Nouveau prix total:", newTotalPrice.toFixed(2));
 
         devisGrid.updateConfig({ data: devisGrid.config.data }).forceRender();
         updateTotalPrice();
+    } else {
+        console.log("Aucune ligne trouvée dans la grille avec l'ID:", rowId);
     }
 };
-
-
 
 window.removeDevisItemFromGrid = function (itemId) {
     console.log('removeDevisItemFromGrid called with itemId:', itemId);
@@ -227,11 +246,12 @@ function handleCollectionItems(collectionId, addButtonId, itemClass, updatePrice
     }
 }
 
-function addHiddenInput(container, name, value, dataId = null) {
+function addHiddenInput(container, name, value, dataId = null,uniqueId) {
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = name;
     input.value = value;
+    input.id = uniqueId;
     if (dataId !== null) {
         input.setAttribute('data-id', dataId);
     }
@@ -278,7 +298,7 @@ function handleDevisFormSubmit(event) {
 function initDevisGrid(existingDevisItems) {
     console.log("initDevisGrid called");
     let initialData = [];
-    console.log(existingDevisItems);
+    console.log("existing devis item" ,existingDevisItems.products);
 
     // Traitement des produits et formules existants
     if (existingDevisItems.products) {
@@ -328,7 +348,7 @@ function formatRow(item, type) {
         item.name,
         item.quantity,
         item.id, // Le bouton de suppression sera géré par le formatter de la colonne
-        (item.quantity * item.price).toFixed(2)
+        (item.quantity * item.price).toFixed(2) /100
     ];
 }
 

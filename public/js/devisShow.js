@@ -31,12 +31,20 @@ function loadDevisData() {
 }
 
 function initDevisGridWithData(products, formulas) {
-    const productRows = products.map(product => [product.name, product.quantity,product.price, 'product']);
-    const formulaRows = formulas.map(formula => [formula.name, formula.quantity,product.price, 'formula']);
+    const productRows = products.map(product => [
+        product.name,
+        product.quantity,
+        (product.price * product.quantity / 100).toFixed(2) + ' €',
+        'product'
+    ]);
+    const formulaRows = formulas.map(formula => [
+        formula.name,
+        formula.quantity,
+        (formula.price * formula.quantity / 100).toFixed(2) + ' €',
+        'formula'
+    ]);
     const gridData = productRows.concat(formulaRows);
     console.log(gridData);
 
     devisGrid.updateConfig({ data: gridData }).forceRender();
 }
-
-// Ajoutez ici d'autres fonctions spécifiques à la page d'affichage du devis, si nécessaire
