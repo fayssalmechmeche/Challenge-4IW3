@@ -22,7 +22,8 @@
 			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs vérifiés","data": usersVerified,'add':false }%}
 			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": usersNotVerified,'add':false }%}
 		</section>
-		<h1 class="mb-6 flex flex-wrap text-sm md:text-4xl text-center overflow-hidden">Les utilisateurs de la société
+		<h1 class="mb-6 flex flex-wrap text-sm md:text-4xl text-center overflow-hidden">Les utilisateurs de
+			{{society.name}}
 		</h1>
 		<section id="InfosUser" class="h-full w-full">
 			<div id="tabUserGridJs" class="h-full w-full" data-id="{{society.id}}"></div>
