@@ -25,7 +25,7 @@
 		<h1 class="mb-6 flex flex-wrap text-sm md:text-4xl text-center overflow-hidden">Les utilisateurs de la société
 		</h1>
 		<section id="InfosUser" class="h-full w-full">
-			<div id="tabUserGridJs" class="h-full w-full"></div>
+			<div id="tabUserGridJs" class="h-full w-full" data-id="{{society.id}}"></div>
 		</section>
 		{% include "admin/component/modal.html.twig" %}
 
@@ -33,6 +33,6 @@
 {% endblock %}
 
 {% block script_js %}
-	<script src="{{ asset('js/admin/userGrid.js') }}"></script>
+	<script src="{{ asset('js/admin/societyUserGrid.js') }}"></script>
 	<script src="{{ asset('js/admin/user.js') }}"></script>
 {% endblock %}

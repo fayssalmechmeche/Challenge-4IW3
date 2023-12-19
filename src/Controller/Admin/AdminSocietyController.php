@@ -49,6 +49,8 @@ class AdminSocietyController extends AbstractController
         return $this->json($data);
     }
 
+
+
     #[Route('/new', name: 'new')]
     public function new(Request $request)
     {

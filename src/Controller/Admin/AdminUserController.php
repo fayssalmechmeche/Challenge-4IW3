@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Society;
 use App\Entity\User;
 use App\Form\Admin\AdminUserType;
 use App\Repository\DevisRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +35,29 @@ class AdminUserController extends AbstractController
     {
         $userRepository = $entityManager->getRepository(User::class);
         $users = $userRepository->findAll();
+        $data = [];
+        foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                continue;
+            }
+            $data[] = [
+                'id' => $user->getId(),
+                'name' => $user->getName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+                'status' => $user->isVerified(),
+                'society' => $user->getSociety()->getName(),
+                'token' => $tokenManager->getToken('delete-users' . $user->getId())->getValue(),
+            ];
+        }
+        return $this->json($data);
+    }
+
+    #[Route('/api/{id}', name: 'api_user_society_index', methods: ['GET'])]
+    public function apiSocietyShow(UserRepository $userRepository, CsrfTokenManagerInterface $tokenManager, Society $society): Response
+    {
+        $users = $userRepository->findBy(['society' => $society]);
         $data = [];
         foreach ($users as $user) {
             if (in_array('ROLE_ADMIN', $user->getRoles())) {

@@ -26,7 +26,6 @@ class AdminUserType extends AbstractType
             ->add('society', EntityType::class, [
                 'class' => Society::class,
                 'choice_label' => 'name',
-                'mapped' => false,
                 'required' => true,
             ])
             ->add('name')
