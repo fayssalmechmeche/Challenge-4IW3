@@ -6,8 +6,10 @@ use App\Repository\SocietyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SocietyRepository::class)]
+#[UniqueEntity('email')]
 class Society
 {
     #[ORM\Id]
@@ -16,18 +18,34 @@ class Society
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 5)]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 12, max: 50)]
+    #[Assert\Regex(
+        pattern: '/^(?:(?:\+|00)33|0)\d{9}$/',
+        message: "Votre numéro de téléphone n'est pas valide",
+    )]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
+    // #[Assert\Email(
+    //     message: "Cet email {{ value }} n'est pas valide.",
+    // )]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex(
+        pattern: '/^(?:\d{3}\s){3}\d{5}$|^\d{14}$/',
+        message: "Votre numéro de siret n'est pas valide, vérifiez qu'il contient 14 chiffres",
+    )]
     private ?string $siret = null;
 
     #[ORM\OneToMany(mappedBy: 'society', targetEntity: User::class)]
