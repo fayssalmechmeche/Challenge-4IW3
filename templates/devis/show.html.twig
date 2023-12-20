@@ -5,16 +5,6 @@
 {% block body  %}
     <h1>Créer un nouveau Devis</h1>
 
-
-
-
-
-
-
-
-
-
-
     <a href="{{ path('app_devis_index') }}">Retour à la liste</a> }
     <a href="{{ path('app_devis_download', {'id': devi.id}) }}" class="btn btn-primary">Télécharger le devis</a>
 
@@ -150,12 +140,5 @@
     </div>
 
 
-
-
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/devisShow.js') }}" type="module"></script>
-
-{% endblock %}

@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\DevisProduct;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Knp\Snappy\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 #[Route('/devis')]
@@ -294,57 +295,64 @@ class DevisController extends AbstractController
         return sprintf("%s-%s-%04d", $year, $month, $sequentialNumber);
     }
 
+
     #[Route('/{id}/download', name: 'app_devis_download', methods: ['GET'])]
-    public function download(Devis $devi, Pdf $snappy): Response
+    public function download(Devis $devi, ProductRepository $productRepository,FormulaRepository $formulaRepository ): Response
     {
         $user = $this->getUser();
         $userEmail = $user ? $user->getEmail() : '';
+        $clientId = $devi->getCustomer()?->getId();
 
-        // Traitement des produits
-        $productsCollection = $devi->getDevisProducts();
-        $productsArray = [];
-        foreach ($productsCollection as $devisProduct) {
-            $product = $devisProduct->getProduct();
-            $productsArray[] = [
-                'id' => $devisProduct->getId(),
-                'name' => $product ? $product->getName() : '',
+        $devisProductsArray = [];
+        foreach ($devi->getDevisProducts() as $devisProduct) {
+            $devisProductsArray[] = [
+                'id' => $devisProduct->getProduct()->getId(),
+                'name' => $devisProduct->getProduct()->getName(),
                 'quantity' => $devisProduct->getQuantity(),
-                'price' => $devisProduct->getPrice(),
+                'price' => $devisProduct->getProduct()->getPrice(),
             ];
         }
 
-        // Traitement des formules
-        $formulasCollection = $devi->getDevisFormulas();
-        $formulasArray = [];
-        foreach ($formulasCollection as $devisFormula) {
-            $formula = $devisFormula->getFormula();
-            $formulasArray[] = [
-                'id' => $devisFormula->getId(),
-                'name' => $formula ? $formula->getName() : '',
+        $devisFormulasArray = [];
+        foreach ($devi->getDevisFormulas() as $devisFormula) {
+            $devisFormulasArray[] = [
+                'id' => $devisFormula->getFormula()->getId(),
+                'name' => $devisFormula->getFormula()->getName(),
                 'quantity' => $devisFormula->getQuantity(),
-                'price' => $devisFormula->getPrice(),
+                'price' => $devisFormula->getFormula()->getPrice(),
             ];
         }
+        $products = $productRepository->findBy(['user' => $user]);
+        $formulas = $formulaRepository->findBy(['user' => $user]);
+
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
 
         $html = $this->renderView('devis/show.html.twig', [
             'devi' => $devi,
             'userEmail' => $userEmail,
-            'products' => $productsArray,
-            'formulas' => $formulasArray
-            // Ajoutez ici toute autre variable nécessaire pour le rendu du template
+               'clientId' => $clientId,
+            'devisProducts' => $devisProductsArray,
+            'devisFormulas' => $devisFormulasArray,
+            'products' => $products,
+            'formulas' => $formulas
         ]);
 
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $pdfOutput = $dompdf->output();
+        $response = new Response($pdfOutput);
+        $response->headers->set('Content-Type', 'application/pdf');
         $filename = 'devis-' . $devi->getId() . '.pdf';
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
-        return new Response(
-            $snappy->getOutputFromHtml($html),
-            200,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"'
-            ]
-        );
+        return $response;
     }
-
 
 }
