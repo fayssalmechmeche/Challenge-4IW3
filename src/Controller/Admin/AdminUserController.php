@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use const App\Entity\ROLE_ADMIN;
+
 #[Route('/admin/user', name: 'admin_user_')]
 class AdminUserController extends AbstractController
 {
@@ -37,7 +39,7 @@ class AdminUserController extends AbstractController
         $users = $userRepository->findAll();
         $data = [];
         foreach ($users as $user) {
-            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            if (in_array(ROLE_ADMIN, $user->getRoles())) {
                 continue;
             }
             $data[] = [
@@ -60,7 +62,7 @@ class AdminUserController extends AbstractController
         $users = $userRepository->findBy(['society' => $society]);
         $data = [];
         foreach ($users as $user) {
-            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            if (in_array(ROLE_ADMIN, $user->getRoles())) {
                 continue;
             }
             $data[] = [
@@ -90,7 +92,7 @@ class AdminUserController extends AbstractController
             $user->setSociety($form->get('society') ? $form->get('society')->getData() : $this->getUser()->getSociety());
             $user->setIsVerified(false);
             $request->get("roles");
-            if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
+            if (in_array(ROLE_ADMIN, $form->get('roles')->getData())) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
                 return $this->redirectToRoute('admin_user_index');
             }
@@ -99,6 +101,13 @@ class AdminUserController extends AbstractController
 
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
+            return $this->redirectToRoute('admin_user_index');
+        } elseif ($form->isSubmitted() && $form->isValid() == false) {
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getMessage();
+            }
+            $this->addFlash('danger', $errors);
             return $this->redirectToRoute('admin_user_index');
         }
         return $this->render('admin/user/new.html.twig', [
@@ -121,7 +130,7 @@ class AdminUserController extends AbstractController
         $form = $this->createForm(AdminUserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (in_array('ROLE_ADMIN', $form->get('roles')->getData())) {
+            if (in_array(ROLE_ADMIN, $form->get('roles')->getData())) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
                 return $this->redirectToRoute('admin_user_index');
             }

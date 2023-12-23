@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Society;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -16,6 +18,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+
+use const App\Entity\ROLE_ACOUNTANT;
+use const App\Entity\ROLE_ADMIN;
+use const App\Entity\ROLE_SOCIETY;
 
 class RegistrationController extends AbstractController
 {
@@ -26,9 +32,46 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
+    #[Route('/check/email', name: 'check_email')]
+    public function check(UserRepository $userRepository, Request $request)
+    {
+
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'code' => 403,
+                'success' => false,
+                'message' => "La requête n'est pas une requête ajax"
+            ));
+        }
+
+        if ($userRepository->findOneBy(['email' => $request->request->get('email')])) {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => false,
+                'message' => "L'utilisateur existe déja"
+            ));
+        } else {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "Aucun utilisateur existe"
+            ));
+        }
+    }
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()) {
+            switch ($this->getUser()->getRoles()) {
+                case in_array(ROLE_ADMIN, $this->getUser()->getRoles()):
+                    return $this->redirectToRoute('admin_index');
+                case in_array(ROLE_ACOUNTANT, $this->getUser()->getRoles()):
+                    return $this->redirectToRoute('home_index');
+                default:
+                    return $this->redirectToRoute('home_index');
+            }
+        }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -49,7 +92,7 @@ class RegistrationController extends AbstractController
             );
 
             $user->setIsVerified(true);
-            $user->setRoles(['ROLE_SOCIETY']);
+            $user->setRoles([ROLE_SOCIETY]);
             $user->setCreatedAt(new \DateTime());
             $user->setSociety($society);
             $entityManager->persist($society);

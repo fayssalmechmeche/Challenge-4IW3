@@ -29,21 +29,21 @@
 
 				{{ form_label(registrationForm.name,'Prénom',{'label_attr':{'class':'font-bold text-start pt-8'}}) }}
 				{{ form_widget(registrationForm.name,{'attr':{'class':'w-80  border border-black border-solid rounded-md'}}) }}
-				<div class="text-red-500">{{ form_errors(registrationForm.name,{'attr' :{'class' :'text-red'}}) }}</div>
+				<div id="userName" class="text-red-500">{{ form_errors(registrationForm.name,{'attr' :{'id':'','class' :'text-red'}}) }}</div>
 
 
 				{{ form_label(registrationForm.lastName,'Nom de famille',{'label_attr':{'class':'font-bold text-start pt-8'}}) }}
 				{{ form_widget(registrationForm.lastName,{'attr':{'class':'w-80  border border-black border-solid rounded-md'}}) }}
-				<div class="text-red-500">{{ form_errors(registrationForm.lastName) }}</div>
+				<div id="userLastName" class="text-red-500 border-red-500">{{ form_errors(registrationForm.lastName,{'attr' :{'id':'','class' :'text-red'}}) }}</div>
 
 				{{ form_label(registrationForm.email,'E-mail',{'label_attr':{'class':'font-bold text-start pt-8'}}) }}
 				{{ form_widget(registrationForm.email,{'attr':{'class':'w-80  border border-black border-solid rounded-md'}}) }}
-				<div class="text-red-500">{{ form_errors(registrationForm.email) }}</div>
+				<div id="userEmail" class="text-red-500">{{ form_errors(registrationForm.email,{'attr' :{'id':'','class' :'text-red'}}) }}</div>
 
 
 				{{ form_label(registrationForm.plainPassword,'Mot de passe',{'label_attr':{'class':'font-bold text-start pt-8'}}) }}
 				{{ form_widget(registrationForm.plainPassword,{'attr':{'class':'w-80  border border-black border-solid rounded-md'}}) }}
-				<div class="text-red-500">{{ form_errors(registrationForm.plainPassword) }}</div>
+				<div id="userPassword" class="text-red-500">{{ form_errors(registrationForm.plainPassword,{'attr' :{'id':'','class' :'text-red'}}) }}</div>
 
 
 				<button type="button" id="btn-steps" class="bg-[#3347FD] rounded-3xl my-8 mx-auto py-2 px-4 text-white text-xl font-sans font-light">Suivant</button>
@@ -78,7 +78,7 @@
 					{{ form_label(registrationForm.agreeTerms,"Accepter les conditions d'utilisation",{'label_attr' : {'class':'mb-0 mr-2 text-xs text-start'}}) }}
 					{{ form_widget(registrationForm.agreeTerms,{'attr':{'class':''}}) }}
 				</div>
-				<button type="submit" id="btn-steps" class="bg-[#3347FD] rounded-3xl my-8 mx-auto py-2 px-4 text-white text-xl font-sans font-light">S'inscrire</button>
+				<button type="submit" id="" class="bg-[#3347FD] rounded-3xl my-8 mx-auto py-2 px-4 text-white text-xl font-sans font-light">S'inscrire</button>
 
 			</div>
 			<a href="{{ path('app_login') }}" class="bg-[#3347FD] rounded-3xl mx-auto py-2 px-4 text-white text-xl font-sans font-light  md:hidden">Se connecter</a>
@@ -90,49 +90,7 @@
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
-	<script>
-		form = document.getElementById('registration_form');
-btn = document.getElementById('btn-steps');
-btn.addEventListener('click', function () {
-var name = document.getElementById('registration_form_name').value;
-var lastName = document.getElementById('registration_form_lastName').value;
-var email = document.getElementById('registration_form_email').value;
-var password = document.getElementById('registration_form_plainPassword').value;
+	<script src="{{ asset('js/register.js') }}"></script>
 
-if (name === '' || lastName === '' || email === '' || password === '') {
-alert('Veuillez remplir tous les champs avant de passer à l\'étape suivante.');
-return;
-}
-divSecond = document.getElementById('second-step');
-divSecond.classList.remove('hidden');
-divSecond.classList.add('flex');
-divSecond.classList.add('flex-col');
-btnBack = document.createElement('button');
-btnBack.setAttribute('type', 'button');
-btnBack.setAttribute('id', 'btn-steps-back');
-btnBack.setAttribute('onClick', 'back();');
-btnBack.classList.add('bg-[#3347FD]', 'rounded-3xl', 'mx-auto', 'py-2', 'px-4', 'text-white', 'text-xl', 'font-sans', 'font-light');
-btnBack.innerHTML = 'Retour en arrière';
-form.insertBefore(btnBack, form.firstChild);
-
-document.getElementById('first-step').classList.add('hidden');
-
-h1 = document.getElementById('count-steps');
-h1.innerHTML = 'Etape 2/2';
-
-btnBack.addEventListener('click', function () {
-divSecond = document.getElementById('second-step');
-divSecond.classList.add('hidden');
-divSecond.classList.remove('flex');
-divSecond.classList.remove('flex-col');
-
-document.getElementById('first-step').classList.remove('hidden');
-
-h1 = document.getElementById('count-steps');
-h1.innerHTML = 'Etape 1/2';
-btnBack.parentNode.removeChild(btnBack);
-});
-});
-	</script>
 
 {% endblock %}

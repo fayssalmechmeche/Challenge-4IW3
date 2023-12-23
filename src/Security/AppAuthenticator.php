@@ -16,6 +16,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+use const App\Entity\ROLE_ACOUNTANT;
+use const App\Entity\ROLE_ADMIN;
+
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
@@ -51,9 +54,9 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         // For example:
 
         switch ($token->getUser()->getRoles()) {
-            case in_array('ROLE_ADMIN', $token->getUser()->getRoles()):
+            case in_array(ROLE_ADMIN, $token->getUser()->getRoles()):
                 return new RedirectResponse($this->urlGenerator->generate('admin_index'));
-            case in_array('ROLE_ACCOUNTANT', $token->getUser()->getRoles()):
+            case in_array(ROLE_ACOUNTANT, $token->getUser()->getRoles()):
                 return new RedirectResponse($this->urlGenerator->generate('home_index'));
             default:
                 return new RedirectResponse($this->urlGenerator->generate('home_index'));

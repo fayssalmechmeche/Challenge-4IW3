@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use const App\Entity\ROLE_ACOUNTANT;
+use const App\Entity\ROLE_SOCIETY;
+
 class AdminUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -20,8 +23,8 @@ class AdminUserType extends AbstractType
             ->add('roles', ChoiceType::class, [
                 "multiple" => true,
                 "choices" => [
-                    'Entreprise' => 'ROLE_SOCIETY',
-                    'Comptable' => 'ROLE_ACCOUNTANT',
+                    'Entreprise' => ROLE_SOCIETY,
+                    'Comptable' => ROLE_ACOUNTANT,
                 ]
             ])
             ->add('society', EntityType::class, [

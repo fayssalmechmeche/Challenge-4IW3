@@ -12,6 +12,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Customer;
 
+const ROLE_ACOUNTANT = 'ROLE_ACOUNTANT';
+const ROLE_SOCIETY = 'ROLE_SOCIETY';
+const ROLE_HEAD = 'ROLE_HEAD';
+const ROLE_ADMIN = 'ROLE_ADMIN';
+const ROLE_USER = 'ROLE_USER';
+
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cette adresse e-mail')]

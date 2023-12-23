@@ -27,7 +27,7 @@ const addFlash = (type, message) => {
 
     Toastify({
         text: message,
-        duration: 10000,
+        duration: 3000,
         newWindow: true,
         close: true,
         escapeMarkup: false,
