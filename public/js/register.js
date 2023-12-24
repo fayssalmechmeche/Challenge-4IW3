@@ -8,11 +8,16 @@ btn.addEventListener('click', async function () {
     var name = document.getElementById('registration_form_name');
     var lastName = document.getElementById('registration_form_lastName');
     var email = document.getElementById('registration_form_email');
-    var password = document.getElementById('registration_form_plainPassword');
+    var password = document.getElementById('registration_form_plainPassword_first');
+    var passwordConfirm = document.getElementById('registration_form_plainPassword_second');
+
+
     var nameError = document.getElementById('userName');
     var lastNameError = document.getElementById('userLastName');
     var emailError = document.getElementById('userEmail');
     var passwordError = document.getElementById('userPassword');
+    var passwordConfirmError = document.getElementById('userPasswordConfirm');
+
 
 
 
@@ -33,6 +38,7 @@ btn.addEventListener('click', async function () {
     isValid = validateInput(name, nameError, 'Le prénom est requis') && isValid;
     isValid = validateInput(lastName, lastNameError, 'Le nom est requis') && isValid;
     isValid = validateInput(password, passwordError, 'Le mot de passe est requis') && isValid;
+    isValid = validateInput(passwordConfirm, passwordConfirmError, 'La confirmation mot de passe est requis') && isValid;
 
     if (email.value === '') {
         email.classList.replace('border-black', 'border-red-500');

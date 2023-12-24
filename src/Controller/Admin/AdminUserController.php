@@ -2,19 +2,20 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Society;
 use App\Entity\User;
+use App\Entity\Society;
+use const App\Entity\ROLE_ADMIN;
 use App\Form\Admin\AdminUserType;
-use App\Repository\DevisRepository;
 use App\Repository\UserRepository;
+use App\Repository\DevisRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-use const App\Entity\ROLE_ADMIN;
 
 #[Route('/admin/user', name: 'admin_user_')]
 class AdminUserController extends AbstractController
@@ -81,35 +82,65 @@ class AdminUserController extends AbstractController
 
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request)
+    public function new(Request $request, UserRepository $userRepository)
     {
-        $user = new User();
-        $form = $this->createForm(AdminUserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($request->isXmlHttpRequest()) {
+            // if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
+            // }
+            $content = $request->getContent();
+
+            $data = json_decode($content, true);
+
+
+            $user = new User();
+            $name = $data['admin_user[name]'] ?? null;
+            $lastName = $data['admin_user[lastName]'] ?? null;
+            $email = $data['admin_user[email]'] ?? null;
+            $society = $data['admin_user[society]'] ?? null;
+            $roles = $data['admin_user[roles][]'] ?? [];
+
+            $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
+
+
+            $user->setEmail($email);
+            $user->setName($name);
+            $user->setLastName($lastName);
             $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
             $user->setCreatedAt(new \DateTime());
-            $user->setSociety($form->get('society') ? $form->get('society')->getData() : $this->getUser()->getSociety());
+            $user->setSociety($society ?? $this->getUser()->getSociety());
             $user->setIsVerified(false);
-            $request->get("roles");
-            if (in_array(ROLE_ADMIN, $form->get('roles')->getData())) {
+
+            if ($userRepository->findOneBy(['email' => $email])) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Le e-mail est déja pris"
+                ));
+            }
+
+            if (ROLE_ADMIN === $roles) {
                 $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
-                return $this->redirectToRoute('admin_user_index');
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Vous ne pouvez pas vous attribuer le rôle administrateur"
+                ));
             }
 
             $this->addFlash('success', 'Un utilisateur a été crée');
 
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
-            return $this->redirectToRoute('admin_user_index');
-        } elseif ($form->isSubmitted() && $form->isValid() == false) {
-            $errors = [];
-            foreach ($form->getErrors(true) as $error) {
-                $errors[] = $error->getMessage();
-            }
-            $this->addFlash('danger', $errors);
-            return $this->redirectToRoute('admin_user_index');
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => false,
+                'message' => "L'utilisateur a bien été crée"
+            ));
         }
+        $user = new User();
+        $form = $this->createForm(AdminUserType::class, $user);
+        $form->handleRequest($request);
+
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
         ]);

@@ -55,6 +55,33 @@ addFlash(type, message)
 }
 }
 			</script>
+			<script>
+				console.log('new')
+
+console.log('new');
+
+function sendPost() { // Récupérer les données du formulaire
+let form = document.getElementById('formNewUser');
+let formData = new FormData(form);
+let data = {};
+formData.forEach(function (value, key) {
+data[key] = value;
+});
+console.log(data);
+fetch('/admin/user/new', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Requested-With': 'XMLHttpRequest'
+},
+body: JSON.stringify(data)
+}).then(response => response.json()).then(responseData => {
+console.log(responseData);
+}).catch(error => {
+console.error('Erreur:', error);
+});
+}
+			</script>
 		{% endblock %}
 
 
