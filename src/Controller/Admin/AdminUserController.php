@@ -114,12 +114,11 @@ class AdminUserController extends AbstractController
                 return new JsonResponse(array(
                     'code' => 200,
                     'success' => false,
-                    'message' => "Le e-mail est déja pris"
+                    'message' => "L'e-mail est déja pris"
                 ));
             }
 
             if (ROLE_ADMIN === $roles) {
-                $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
                 return new JsonResponse(array(
                     'code' => 200,
                     'success' => false,
@@ -127,13 +126,11 @@ class AdminUserController extends AbstractController
                 ));
             }
 
-            $this->addFlash('success', 'Un utilisateur a été crée');
-
             $this->entityManagerInterface->persist($user);
             $this->entityManagerInterface->flush();
             return new JsonResponse(array(
                 'code' => 200,
-                'success' => false,
+                'success' => true,
                 'message' => "L'utilisateur a bien été crée"
             ));
         }

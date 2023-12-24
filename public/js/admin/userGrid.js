@@ -1,5 +1,6 @@
+let gridUser = null
 document.addEventListener("DOMContentLoaded", function () {
-  new gridjs.Grid({
+  gridUser = new gridjs.Grid({
     columns: [
       {
         name: "Prénom",
@@ -51,3 +52,11 @@ document.addEventListener("DOMContentLoaded", function () {
     sort: true,
   }).render(document.getElementById("tabUserGridJs"));
 });
+
+function loadGridUser() {
+
+  gridUser.updateConfig({
+
+  }).forceRender();
+
+}
