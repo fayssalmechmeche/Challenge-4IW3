@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
-use const App\Entity\ROLE_ACOUNTANT;
+use const App\Entity\ROLE_ACCOUNTANT;
 use const App\Entity\ROLE_ADMIN;
 use const App\Entity\ROLE_SOCIETY;
 
@@ -66,7 +66,7 @@ class RegistrationController extends AbstractController
             switch ($this->getUser()->getRoles()) {
                 case in_array(ROLE_ADMIN, $this->getUser()->getRoles()):
                     return $this->redirectToRoute('admin_index');
-                case in_array(ROLE_ACOUNTANT, $this->getUser()->getRoles()):
+                case in_array(ROLE_ACCOUNTANT, $this->getUser()->getRoles()):
                     return $this->redirectToRoute('home_index');
                 default:
                     return $this->redirectToRoute('home_index');
