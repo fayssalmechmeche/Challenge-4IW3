@@ -106,6 +106,13 @@ class AdminUserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
             $data = json_decode($content, true);
+            if (!$this->isCsrfTokenValid("admin_user", $data['admin_user[_token]'])) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Token invalid"
+                ));
+            }
             $user = new User();
             $this->_setDataUser($user, $data);
             return new JsonResponse(array(
@@ -136,6 +143,13 @@ class AdminUserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
             $data = json_decode($content, true);
+            if (!$this->isCsrfTokenValid("admin_user", $data['admin_user[_token]'])) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Token invalid"
+                ));
+            }
             $this->_setDataUser($user, $data);
             return new JsonResponse(array(
                 'code' => 200,
@@ -152,7 +166,6 @@ class AdminUserController extends AbstractController
     #[Route('/delete/{id}/{token}', name: 'delete')]
     public function delete(User $user, string $token): Response
     {
-        dump($token);
         if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
             $this->entityManagerInterface->remove($user);
             $this->entityManagerInterface->flush();

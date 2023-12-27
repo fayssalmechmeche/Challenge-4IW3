@@ -92,22 +92,26 @@ function addNewUser() {
   });
 }
 function deleteUser(id, token) {
-  console.log('Deleting user');
-  fetch('/admin/user/delete/' + id + '/' + token, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  }).then(response => response.json()).then(responseData => {
 
-    addFlash(responseData.success ? 'success' : 'danger', responseData.message);
-    refreshCardUser();
 
-    loadGridUser();
-  }).catch(error => {
-    console.error('Erreur:', error);
-  });
+
+  if (confirm('Voulez-vous vraiment supprimer cette utlisateur ?')) {
+    fetch('/admin/user/delete/' + id + '/' + token, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }).then(response => response.json()).then(responseData => {
+
+      addFlash(responseData.success ? 'success' : 'danger', responseData.message);
+      refreshCardUser();
+
+      loadGridUser();
+    }).catch(error => {
+      console.error('Erreur:', error);
+    });
+  }
 
 }
 function editUser(id) {

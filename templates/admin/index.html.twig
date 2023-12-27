@@ -9,7 +9,7 @@
 		<h1 class="mb-6 flex flex-wrap text-4xl text-center">Tableau de bord</h1>
 		<section id="InfoCards" class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 flex-wrap">
 
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre de utilisateurs","data": users|length,'add':false }%}
+			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre de utilisateurs","data": users|length,'add':false ,'id':'cardNumberLength' }%}
 			{% include "admin/component/cardSociety.html.twig" with  {"title" :"Nombre de sociétés","data": societies|length,'add':false }%}
 			{% include "admin/component/cardSociety.html.twig" with  {"title" :"Nombre de devis","data": devis|length,'add':false }%}
 
