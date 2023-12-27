@@ -20,13 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
           user.name,
           user.lastName,
           user.roles.includes('ROLE_ACCOUNTANT') ? 'Comptable' : (
-            user.roles.includes('ROLE_USER') ? 'Utilisateur' : user.roles.join(', ')
+            user.roles.includes('ROLE_USER') ? 'Utilisateur' : (
+              user.roles.includes('ROLE_SOCIETY') ? 'Entreprise' : user.roles.join(', ')
+            )
           ),
           user.status ? "Validé" : "Invalidé",
           gridjs.html(`
           <div class="flex">
-            <button onclick="openUserShowModal(${user.id})">👁‍🗨</button>
-            <button onclick="openUserEditModal(${user.id})">📝</button>
+            <button class="pr-2" onclick="openUserShowModal(${user.id})">👁‍🗨</button>
+            <button class="pr-2" onclick="openUserEditModal(${user.id})">📝</button>
             <a href="/admin/user/delete/${user.id}/${user.token}">❌</a>
           </div>`),
         ]),

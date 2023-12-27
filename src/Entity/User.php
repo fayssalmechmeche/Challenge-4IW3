@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Customer;
 
-const ROLE_ACOUNTANT = 'ROLE_ACOUNTANT';
+const ROLE_ACCOUNTANT = 'ROLE_ACCOUNTANT';
 const ROLE_SOCIETY = 'ROLE_SOCIETY';
 const ROLE_HEAD = 'ROLE_HEAD';
 const ROLE_ADMIN = 'ROLE_ADMIN';

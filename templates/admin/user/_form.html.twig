@@ -21,7 +21,7 @@
 {{ form_errors(form.roles) }}
 
 <div class="flex justify-center">
-	<button type="button" onclick="sendPost()" class="cursor-pointer rounded-xl bg-indigo-600 px-6 py-2 text-white transition-all hover:bg-indigo-500">
+	<button type="button" onclick="{{ actionId ? 'editUser(' ~ user.id ~ ')' : 'addNewUser()' }}" class="cursor-pointer rounded-xl bg-indigo-600 px-6 py-2 text-white transition-all hover:bg-indigo-500">
 		{% if actionId is not null %}
 			Éditer
 		{% else %}

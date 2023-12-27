@@ -26,10 +26,26 @@ class AdminUserController extends AbstractController
     }
 
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(true);
+        $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(false);
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    'countUsers' => $usersNotVerified + $usersVerified,
+                    'countUsersVerified' => $usersVerified,
+                    'countUsersNotVerified' => $usersNotVerified
+
+                ]
+            ));
+        }
         return $this->render('admin/user/index.html.twig', [
-            'users' => $users = $this->entityManagerInterface->getRepository(User::class)->findAll(),
+            'countUsers' => $usersNotVerified + $usersVerified,
+            'countUsersVerified' => $usersVerified,
+            'countUsersNotVerified' => $usersNotVerified
         ]);
     }
 
@@ -82,62 +98,22 @@ class AdminUserController extends AbstractController
 
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, UserRepository $userRepository)
+    public function new(Request $request)
     {
+        $user = new User();
+        $form = $this->createForm(AdminUserType::class, $user);
+        $form->handleRequest($request);
         if ($request->isXmlHttpRequest()) {
-            // if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
-            // }
             $content = $request->getContent();
-
             $data = json_decode($content, true);
-
-
             $user = new User();
-            $name = $data['admin_user[name]'] ?? null;
-            $lastName = $data['admin_user[lastName]'] ?? null;
-            $email = $data['admin_user[email]'] ?? null;
-            $society = $data['admin_user[society]'] ?? null;
-            $roles = $data['admin_user[roles][]'] ?? [];
-
-            $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
-
-
-            $user->setEmail($email);
-            $user->setName($name);
-            $user->setLastName($lastName);
-            $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
-            $user->setCreatedAt(new \DateTime());
-            $user->setSociety($society ?? $this->getUser()->getSociety());
-            $user->setIsVerified(false);
-
-            if ($userRepository->findOneBy(['email' => $email])) {
-                return new JsonResponse(array(
-                    'code' => 200,
-                    'success' => false,
-                    'message' => "L'e-mail est déja pris"
-                ));
-            }
-
-            if (ROLE_ADMIN === $roles) {
-                return new JsonResponse(array(
-                    'code' => 200,
-                    'success' => false,
-                    'message' => "Vous ne pouvez pas vous attribuer le rôle administrateur"
-                ));
-            }
-
-            $this->entityManagerInterface->persist($user);
-            $this->entityManagerInterface->flush();
+            $this->_setDataUser($user, $data);
             return new JsonResponse(array(
                 'code' => 200,
                 'success' => true,
                 'message' => "L'utilisateur a bien été crée"
             ));
         }
-        $user = new User();
-        $form = $this->createForm(AdminUserType::class, $user);
-        $form->handleRequest($request);
-
         return $this->render('admin/user/new.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -157,14 +133,15 @@ class AdminUserController extends AbstractController
     {
         $form = $this->createForm(AdminUserType::class, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            if (in_array(ROLE_ADMIN, $form->get('roles')->getData())) {
-                $this->addFlash('danger', 'Vous ne pouvez pas attribuer le rôle administrateur');
-                return $this->redirectToRoute('admin_user_index');
-            }
-            $this->entityManagerInterface->flush();
-            $this->addFlash('success', 'Utilisateur modifié avec succès');
-            return $this->redirectToRoute('admin_user_index');
+        if ($request->isXmlHttpRequest()) {
+            $content = $request->getContent();
+            $data = json_decode($content, true);
+            $this->_setDataUser($user, $data);
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "Utilisateur modifié avec succès"
+            ));
         }
         return $this->render('admin/user/edit.html.twig', [
             'form' => $form->createView(),
@@ -175,13 +152,68 @@ class AdminUserController extends AbstractController
     #[Route('/delete/{id}/{token}', name: 'delete')]
     public function delete(User $user, string $token): Response
     {
+        dump($token);
         if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
             $this->entityManagerInterface->remove($user);
             $this->entityManagerInterface->flush();
-            $this->addFlash('success', 'Utilisateur supprimé avec succès');
-            return $this->redirectToRoute('admin_user_index');
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "Utilisateur a été supprimé avec succès"
+            ));
         }
-        $this->addFlash('danger', 'Erreur lors de la suppression');
-        return $this->redirectToRoute('admin_user_index');
+        return new JsonResponse(array(
+            'code' => 200,
+            'success' => false,
+            'message' => "Token invalide"
+        ));
+    }
+
+    public function _setDataUser($user, $data)
+    {
+        $name = $data['admin_user[name]'] ?? null;
+        $lastName = $data['admin_user[lastName]'] ?? null;
+        $email = $data['admin_user[email]'] ?? null;
+        $society = $data['admin_user[society]'] ?? null;
+        $roles = $data['admin_user[roles][]'] ?? [];
+
+        $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
+        if (!$society) {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => false,
+                'message' => "La societé n'existe pas"
+            ));
+        }
+
+
+        $user->setEmail($email);
+        $user->setName($name);
+        $user->setLastName($lastName);
+        $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
+        $user->setCreatedAt(new \DateTime());
+        $user->setSociety($society ?? $this->getUser()->getSociety());
+        $user->setRoles([$roles]);
+        $user->setIsVerified(false);
+
+        $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($isUserExist && $isUserExist->getId() != $user->getId()) {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => false,
+                'message' => "L'e-mail est déja pris"
+            ));
+        }
+
+        if (ROLE_ADMIN === $roles) {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => false,
+                'message' => "Vous ne pouvez pas vous attribuer le rôle administrateur"
+            ));
+        }
+
+        $this->entityManagerInterface->persist($user);
+        $this->entityManagerInterface->flush();
     }
 }

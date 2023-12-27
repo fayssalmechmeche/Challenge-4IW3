@@ -2,10 +2,7 @@ let gridUser = null
 document.addEventListener("DOMContentLoaded", function () {
   gridUser = new gridjs.Grid({
     columns: [
-      {
-        name: "Prénom",
-        formatter: (cell) => gridjs.html(`<b>${cell}</b>`),
-      },
+      "Prénom",
       "Nom",
       "Rôles",
       "Status",
@@ -14,22 +11,24 @@ document.addEventListener("DOMContentLoaded", function () {
     server: {
       url: "/admin/user/api",
       then: (data) =>
-        data.map((user) => [
-          user.name,
-          user.lastName,
-          user.roles.includes('ROLE_ACCOUNTANT') ? 'Comptable' : (
-            user.roles.includes('ROLE_USER') ? 'Utilisateur' : user.roles.join(', ')
-          ),
-          user.status ? "Validé" : "Invalidé",
-          gridjs.html(`
-          <div class="flex">
-            <button onclick="openUserShowModal(${user.id})">👁‍🗨</button>
-            <button onclick="openUserEditModal(${user.id})">📝</button>
-            <a href="/admin/user/delete/${user.id}/${user.token}">❌</a>
-          </div>`),
-        ]),
+        data.map((user) => {
+          return [
+            user.name,
+            user.lastName,
+            user.roles.includes('ROLE_ACCOUNTANT') ? 'Comptable' : user.roles.includes('ROLE_SOCIETY') ? 'Entreprise' : 'Utilisateur',
+            user.status ? "Validé" : "Invalidé",
+            gridjs.html(`
+            <div class="flex">
+              <button class="pr-3" onclick="openUserShowModal(${user.id})">👁‍🗨</button>
+              <button class="pr-3" onclick="openUserEditModal(${user.id})">📝</button>
+              <button onclick="deleteUser(${user.id},'${user.token}')" >❌</button>
+            </div>`),
+          ];
+        }),
     },
-    search: true,
+    // href="/admin/user/delete/${user.id}/${user.token}"
+
+    // search: true,
     pagination: {
       limit: 5,
     },
@@ -54,9 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadGridUser() {
-
   gridUser.updateConfig({
-
+    // search: true,
+    pagination: {
+      limit: 5,
+    },
   }).forceRender();
-
 }
