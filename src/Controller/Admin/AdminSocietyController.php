@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -23,10 +24,19 @@ class AdminSocietyController extends AbstractController
     }
 
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'data' => [
+                    'countSocieties' => count($this->entityManagerInterface->getRepository(Society::class)->findAll())
+                ]
+            ));
+        }
         return $this->render('admin/society/index.html.twig', [
-            'societies' => $societies = $this->entityManagerInterface->getRepository(Society::class)->findAll(),
+            'societies' => $this->entityManagerInterface->getRepository(Society::class)->findAll(),
         ]);
     }
 
@@ -57,11 +67,23 @@ class AdminSocietyController extends AbstractController
         $society = new Society();
         $form = $this->createForm(SocietyType::class, $society);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManagerInterface->persist($society);
-            $this->entityManagerInterface->flush();
-            $this->addFlash('success', 'Société créée avec succès');
-            return $this->redirectToRoute('admin_society_index');
+        if ($request->isXmlHttpRequest()) {
+            $content = $request->getContent();
+            $data = json_decode($content, true);
+
+            if (!$this->isCsrfTokenValid("society", $data['society[_token]'])) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Token invalid"
+                ));
+            }
+            $this->_setDataSociety($society, $data);
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "La société a bien été crée"
+            ));
         }
         return $this->render('admin/society/new.html.twig', [
             'society' => $society,
@@ -82,10 +104,23 @@ class AdminSocietyController extends AbstractController
     {
         $form = $this->createForm(SocietyType::class, $society);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManagerInterface->flush();
-            $this->addFlash('success', 'Société modifiée avec succès');
-            return $this->redirectToRoute('admin_society_index');
+        if ($request->isXmlHttpRequest()) {
+            $content = $request->getContent();
+            $data = json_decode($content, true);
+
+            if (!$this->isCsrfTokenValid("society", $data['society[_token]'])) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Token invalid"
+                ));
+            }
+            $this->_setDataSociety($society, $data);
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "La société a bien été modifié"
+            ));
         }
         return $this->render('admin/society/edit.html.twig', [
             'society' => $society,
@@ -96,15 +131,49 @@ class AdminSocietyController extends AbstractController
     #[Route('/delete/{id}/{token}', name: 'delete')]
     public function delete(Society $society, string $token): Response
     {
+        if ($this->isCsrfTokenValid('delete-society' . $society->getId(), $token)) {
 
-
-        if (!$this->isCsrfTokenValid('delete-society' . $society->getId(), $token)) {
-            $this->addFlash('error', 'Token invalide');
-            return $this->redirectToRoute('admin_society_index');
+            if ($society == $this->getUser()->getSociety()) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Vous ne pouvez pas supprimer votre société"
+                ));
+            }
+            $users = $society->getUsers();
+            foreach ($users as $user) {
+                $this->entityManagerInterface->remove($user);
+            }
+            $this->entityManagerInterface->remove($society);
+            $this->entityManagerInterface->flush();
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "La société a été supprimé avec succès"
+            ));
         }
-        $this->entityManagerInterface->remove($society);
+        return new JsonResponse(array(
+            'code' => 200,
+            'success' => false,
+            'message' => "Token invalide"
+        ));
+    }
+
+    public function _setDataSociety(Society $society, $data)
+    {
+        $name = $data['society[name]'];
+        $addess = $data['society[address]'];
+        $phone = $data['society[phone]'];
+        $email = $data['society[email]'];
+        $siret = $data['society[siret]'];
+
+        $society->setName($name);
+        $society->setAddress($addess);
+        $society->setPhone($phone);
+        $society->setEmail($email);
+        $society->setSiret($siret);
+
+        $this->entityManagerInterface->persist($society);
         $this->entityManagerInterface->flush();
-        $this->addFlash('success', 'Société supprimée avec succès');
-        return $this->redirectToRoute('admin_society_index');
     }
 }

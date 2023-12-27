@@ -8,7 +8,7 @@
 	<main class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4">
 		<h1 class="mb-6 flex flex-wrap text-4xl text-center">Dashboard Société</h1>
 		<section id="InfoCards" class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 flex-wrap">
-			{% include "admin/component/cardSociety.html.twig" with  {"title" :"Nombre sociétés","data": societies|length,'add':true }%}
+			{% include "admin/component/cardSociety.html.twig" with  {"title" :"Nombre sociétés","data": societies|length,'add':true,'id':'cardSocietiesLength' }%}
 
 		</section>
 

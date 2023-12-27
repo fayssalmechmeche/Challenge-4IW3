@@ -1,5 +1,6 @@
+let gridSociety = null
 document.addEventListener("DOMContentLoaded", function () {
-  new gridjs.Grid({
+  gridSociety = new gridjs.Grid({
     columns: [
       {
         name: "Nom de société",
@@ -23,11 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="flex">
             <a href="/admin/society/show/${society.id}">👁‍🗨</a>
             <button onclick="openSocietyEditModal(${society.id})">📝</button>
-            <a href="/admin/society/delete/${society.id}/${society.token}">❌</a>
+            <button onclick="deleteSociety(${society.id},'${society.token}')">❌</button>
           </div>`),
         ]),
     },
-    search: true,
+    // search: true,
     pagination: {
       limit: 5,
     },
@@ -60,3 +61,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // },
   }).render(document.getElementById("tabSocietyGridJs"));
 });
+
+function loadGridSociety() {
+  gridSociety.updateConfig({
+    // search: true,
+    pagination: {
+      limit: 5,
+    },
+  }).forceRender();
+}

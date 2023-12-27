@@ -113,7 +113,6 @@ class AdminUserController extends AbstractController
                     'message' => "Token invalid"
                 ));
             }
-            $user = new User();
             $this->_setDataUser($user, $data);
             return new JsonResponse(array(
                 'code' => 200,
@@ -182,7 +181,7 @@ class AdminUserController extends AbstractController
         ));
     }
 
-    public function _setDataUser($user, $data)
+    public function _setDataUser(User $user, $data)
     {
         $name = $data['admin_user[name]'] ?? null;
         $lastName = $data['admin_user[lastName]'] ?? null;

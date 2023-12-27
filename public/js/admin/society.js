@@ -68,3 +68,105 @@ function displayModal(isVisibleBoolean) {
     }, 200);
   }
 }
+
+/// AJAX request SOCIETY //// 
+
+function addNewSociety() {
+  let form = document.getElementById('formNewSociety');
+  let formData = new FormData(form);
+  let data = {};
+  formData.forEach(function (value, key) {
+    data[key] = value;
+  });
+
+  fetch('/admin/society/new', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify(data)
+  }).then(response => response.json()).then(responseData => {
+
+    addFlash(responseData.success ? 'success' : 'danger', responseData.message);
+    refreshCardSociety();
+
+    loadGridSociety();
+  }).catch(error => {
+    console.error('Erreur:', error);
+  });
+}
+
+function editSociety(id) {
+  let form = document.getElementById('formEditSociety');
+  let formData = new FormData(form);
+  let data = {};
+  formData.forEach(function (value, key) {
+    data[key] = value;
+  });
+
+  fetch('/admin/society/edit/' + id, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify(data)
+  }).then(response => response.json()).then(responseData => {
+
+    addFlash(responseData.success ? 'success' : 'danger', responseData.message);
+    refreshCardSociety();
+
+    loadGridSociety();
+  }).catch(error => {
+    console.error('Erreur:', error);
+  });
+}
+
+
+function deleteSociety(id, token) {
+  if (confirm('Voulez-vous vraiment supprimer cette société ? Ceci effacera les utilisateurs de la société.')) {
+    fetch('/admin/society/delete/' + id + '/' + token, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }).then(response => response.json()).then(responseData => {
+
+      addFlash(responseData.success ? 'success' : 'danger', responseData.message);
+      refreshCardSociety();
+
+      loadGridSociety();
+    }).catch(error => {
+      console.error('Erreur:', error);
+    });
+  }
+
+}
+
+
+function refreshCardSociety() {
+  let cardCountSocieties = document.getElementById('cardSocietiesLength');
+  fetch('/admin/society', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+  })
+    .then(response => {
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des sociétés');
+      }
+      return response.json();
+    })
+    .then(data => {
+      cardCountSocieties.innerHTML = data.data.countSocieties
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+    });
+
+}
