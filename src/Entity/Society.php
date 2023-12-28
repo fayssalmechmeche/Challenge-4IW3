@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: SocietyRepository::class)]
 #[UniqueEntity('email')]
@@ -28,7 +29,7 @@ class Society
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(min: 12, max: 50)]
+    #[Assert\Length(min: 10, max: 12)]
     #[Assert\Regex(
         pattern: '/^(?:(?:\+|00)33|0)\d{9}$/',
         message: "Votre numéro de téléphone n'est pas valide",
@@ -36,12 +37,13 @@ class Society
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
-    // #[Assert\Email(
-    //     message: "Cet email {{ value }} n'est pas valide.",
-    // )]
+    #[Assert\Email(
+        message: "Cet email {{ value }} n'est pas valide.",
+    )]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 14, max: 17)]
     #[Assert\Regex(
         pattern: '/^(?:\d{3}\s){3}\d{5}$|^\d{14}$/',
         message: "Votre numéro de siret n'est pas valide, vérifiez qu'il contient 14 chiffres",
