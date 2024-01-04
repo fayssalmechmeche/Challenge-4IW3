@@ -194,6 +194,7 @@ window.updateDevisItemQuantity = function (inputElement) {
         // Type de l'élément (produit ou formule) et son index spécifique
         const itemType = rowData[5];
         const itemIndex = rowData[6];
+        console.log("rowData", rowData);
         const quantityId = `${itemType}-${itemIndex}-quantity`;
         console.log("ID construit pour la quantité:", quantityId);
 

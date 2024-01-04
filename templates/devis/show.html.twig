@@ -142,3 +142,8 @@
 
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/devisShow.js') }}" type="module"></script>
+
+{% endblock %}
