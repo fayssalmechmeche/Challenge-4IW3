@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -21,9 +22,6 @@ class Product
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\Column(type: "string")]
-    private ?string $productCategory = null;
-
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Society $society = null;
@@ -37,6 +35,10 @@ class Product
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     /**
      * @return User|null
@@ -85,18 +87,6 @@ class Product
     public function setPrice(int $price): static
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getProductCategory(): ?string
-    {
-        return $this->productCategory;
-    }
-
-    public function setProductCategory(?string $productCategory): self
-    {
-        $this->productCategory = $productCategory;
 
         return $this;
     }
@@ -169,6 +159,18 @@ class Product
                 $devisProduct->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

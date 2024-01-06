@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
             then: data => data.map(product => [
                 product.name,
                 (product.price / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }),
-                product.productCategory,
+                product.category,
                 gridjs.html(`
                     <a href='/product/${product.id}/edit' class='btn btn-primary btn-sm'>Modifier</a>
                     <form action='/product/${product.id}' method='POST' onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer ce produit ?");'>

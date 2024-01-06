@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
@@ -46,11 +47,12 @@ class ProductController extends AbstractController
 
         $data = [];
         foreach ($products as $product) {
+            $categoryName = $product->getCategory() ? $product->getCategory()->getName() : null;
             $data[] = [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
-                'productCategory' => $product->getProductCategory(),
+                'category' => $categoryName,
             ];
         }
 
@@ -61,6 +63,11 @@ class ProductController extends AbstractController
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (count($entityManager->getRepository(Category::class)->findAll()) == 0) {
+            // dd($entityManager->getRepository(Category::class)->findAll());
+            $this->addFlash('error', 'Vous devez créer au moins une catégorie');
+                return $this->redirectToRoute('app_product_index');
+        };
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);

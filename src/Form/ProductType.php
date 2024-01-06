@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Society;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -30,12 +31,10 @@ class ProductType extends AbstractType
                     'placeholder' => '12.39 pour 12€39',
                 ],
             ])
-            ->add('productCategory', ChoiceType::class, [
-                'choices' => [
-                    'Entrée' => 'entrée',
-                    'Plat' => 'plat',
-                    'Dessert' => 'dessert',
-                ],
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'required' => true
             ])
         ;
     }
