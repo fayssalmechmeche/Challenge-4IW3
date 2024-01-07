@@ -49,8 +49,6 @@ class Devis
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-
-
     #[ORM\ManyToOne(inversedBy: 'devis', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
