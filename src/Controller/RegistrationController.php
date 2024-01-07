@@ -2,26 +2,28 @@
 
 namespace App\Controller;
 
-use App\Entity\Society;
 use App\Entity\User;
+use App\Entity\Society;
+use App\Security\EmailVerifier;
+use App\Service\MailjetService;
+use const App\Entity\ROLE_ADMIN;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
+use const App\Entity\ROLE_SOCIETY;
+use Symfony\Component\Mime\Address;
+use const App\Entity\ROLE_ACCOUNTANT;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
-use const App\Entity\ROLE_ACCOUNTANT;
-use const App\Entity\ROLE_ADMIN;
-use const App\Entity\ROLE_SOCIETY;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -60,7 +62,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, MailjetService $mailjet): Response
     {
         if ($this->getUser()) {
             switch ($this->getUser()->getRoles()) {
@@ -77,6 +79,8 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $token = uniqid();
+
             $society = new Society();
             $society->setName($form->get('societyForm')->get('name')->getData());
             $society->setAddress($form->get('societyForm')->get('address')->getData());
@@ -91,26 +95,21 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setIsVerified(true);
+            $user->setIsVerified(false);
             $user->setRoles([ROLE_SOCIETY]);
             $user->setCreatedAt(new \DateTime());
             $user->setSociety($society);
+            $user->setToken($token);
             $entityManager->persist($society);
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            // $this->emailVerifier->sendEmailConfirmation(
-            //     'app_verify_email',
-            //     $user,
-            //     (new TemplatedEmail())
-            //         ->from(new Address('mailer@your-domain.com', 'Acme Mail Bot'))
-            //         ->to($user->getEmail())
-            //         ->subject('Please Confirm your Email')
-            //         ->htmlTemplate('registration/confirmation_email.html.twig')
-            // );
-            // do anything else you need here, like send an email
-
+            $link = $this->generateUrl('app_register_confirm', [
+                'id' => $user->getId(),
+                'token' => $token
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+            $mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_REGISTER, [
+                'confirmation_link' => $link
+            ]);
             return $this->redirectToRoute('app_login');
         } elseif ($form->isSubmitted() && !$form->isValid()) {
 
@@ -122,23 +121,19 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    #[Route('/register/{id}/{token}', name: 'app_register_confirm')]
+    public function confirm(User $user, String $token, EntityManagerInterface $entityManager)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($user->getToken() == $token) {
+            $user->setIsVerified(true);
+            $user->setToken(null);
 
-        // validate email confirmation link, sets User::isVerified=true and persists
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
-
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre compte a bien été activé');
+            return $this->redirectToRoute('app_login');
+        } else {
+            $this->addFlash('danger', 'Une erreur est survenue lors de l\'activation de votre compte');
             return $this->redirectToRoute('app_register');
         }
-
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
-
-        return $this->redirectToRoute('app_register');
     }
 }

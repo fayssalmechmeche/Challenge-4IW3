@@ -98,7 +98,7 @@ class AdminUserController extends AbstractController
 
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request)
+    public function new(Request $request,)
     {
         $user = new User();
         $form = $this->createForm(AdminUserType::class, $user);
@@ -111,6 +111,13 @@ class AdminUserController extends AbstractController
                     'code' => 200,
                     'success' => false,
                     'message' => "Token invalid"
+                ));
+            }
+            if ($this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $data['admin_user[email]']])) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "L'utilisateur existe déja"
                 ));
             }
             $this->_setDataUser($user, $data);
