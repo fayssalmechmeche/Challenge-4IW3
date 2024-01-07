@@ -22,6 +22,28 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    #[Route('/api', name: 'api_category_index', methods: ['GET'])]
+    public function apiIndex(CategoryRepository $categoryRepository): Response
+    {
+        $user = $this->getUser();
+
+        if ($user) {
+            $categories = $categoryRepository->findBy(['owner' => $user]);
+        } else {
+            $categories = [];
+        }
+
+        $data = [];
+        foreach ($categories as $category) {
+            $data[] = [
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -30,6 +52,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $categoryName = ucfirst($form->get('name')->getData());
+            $category->setName($categoryName);
+            $category->setOwner($this->getUser());
             $entityManager->persist($category);
             $entityManager->flush();
 
