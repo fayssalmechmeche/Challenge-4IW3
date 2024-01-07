@@ -37,6 +37,10 @@ class DevisProductType extends AbstractType
 
                 'label' => false,
                 'attr' => ['hidden' => true, 'min' => 0],
+            ])
+            ->add('price', TextType::class, [
+                'attr' => ['hidden' => true],
+                'label' => false
             ]);
 
 
