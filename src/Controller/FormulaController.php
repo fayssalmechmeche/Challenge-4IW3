@@ -4,16 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Formula;
 use App\Form\FormulaType;
+use App\Entity\ProductFormula;
+use App\Repository\FormulaRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use App\Repository\FormulaRepository;
-use App\Entity\ProductFormula;
 
 #[Route('/formula')]
+#[IsGranted('ROLE_SOCIETY')]
 class FormulaController extends AbstractController
 {
     #[Route('/', name: 'app_formula_index', methods: ['GET'])]
@@ -154,5 +156,4 @@ class FormulaController extends AbstractController
         }
         return $this->redirectToRoute('app_formula_index', [], Response::HTTP_SEE_OTHER);
     }
-
 }

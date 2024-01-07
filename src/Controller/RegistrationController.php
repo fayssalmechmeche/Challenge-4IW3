@@ -112,9 +112,6 @@ class RegistrationController extends AbstractController
             ]);
             $this->addFlash('success', "Nous vous avons envoyé une confirmation d'inscription par email");
             return $this->redirectToRoute('app_login');
-        } elseif ($form->isSubmitted() && !$form->isValid()) {
-
-            $this->addFlash('verify_email_error', $form->getErrors(true));
         }
 
         return $this->render('registration/register.html.twig', [

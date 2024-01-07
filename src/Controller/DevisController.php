@@ -4,20 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Devis;
 use App\Form\DevisType;
+use App\Entity\DevisProduct;
 use App\Repository\DevisRepository;
 use App\Repository\FormulaRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\DevisProduct;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 #[Route('/devis')]
+#[IsGranted('ROLE_SOCIETY')]
 class DevisController extends AbstractController
 {
     private CsrfTokenManagerInterface $csrfTokenManager;
@@ -216,7 +218,7 @@ class DevisController extends AbstractController
                 'id' => $devisProduct->getProduct()->getId(),
                 'name' => $devisProduct->getProduct()->getName(),
                 'quantity' => $devisProduct->getQuantity(),
-               'price' => $devisProduct->getProduct()->getPrice(),
+                'price' => $devisProduct->getProduct()->getPrice(),
                 // Ajoutez d'autres champs si nécessaire
             ];
         }
@@ -289,5 +291,4 @@ class DevisController extends AbstractController
 
         return sprintf("%s-%s-%04d", $year, $month, $sequentialNumber);
     }
-
 }

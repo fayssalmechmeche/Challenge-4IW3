@@ -31,7 +31,12 @@ class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les champs de mot de passe doivent correspondre.',
                 'required' => true,
-
+                'constraints' => [
+                    new Length([
+                        'min' => 8,
+                        'minMessage' => 'Le mot de passe doit avoir au moins {{ limit }} caractères.',
+                    ]),
+                ],
             ])
             ->add('societyForm', SocietyType::class, [
                 'mapped' => false,
