@@ -345,8 +345,15 @@ class DevisController extends AbstractController
                     <td>€' . htmlspecialchars($formula['price']) . '</td>
                   </tr>';
         }
+
+        //Infos user
         $user = $this->getUser();
         $userEmail = $user ? $user->getEmail() : '';
+        $userSociety = $user->getSociety()?->getName();
+        $userAdress = $user->getSociety()?->getAddress();
+        $userPhoneNumber = $user->getSociety()?->getPhone();
+
+
 
 //Infos client
         $customerSociety = $devi->getCustomer()?->getNameSociety();
@@ -643,10 +650,10 @@ nav button:hover {
           </div>
           <div class="society-info">
             <h2>Ma society Name</h2>
-            <p>Adresse</p>
-            <p>Code Postal</p>
-            <p>Ville</p>
-            <p>Téléphone</p>
+            <p>Adresse: ' . $userAdress . '</p>
+            <p>Code Postal: rajouter</p>
+            <p>Ville: rajouter</p>
+            <p>Téléphone: ' . $userPhoneNumber . '</p>
             <p>Mail : ' . $userEmail . '</p>
           </div>
         </div>
