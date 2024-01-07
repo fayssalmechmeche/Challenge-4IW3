@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class MailjetService
 {
     const TEMPLATE_REGISTER = 5538680;
+    const TEMPLATE_CONFIRM_REGISTER = 5538702;
 
     private $client;
     public function __construct(private ParameterBagInterface $parameterBag)

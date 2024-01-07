@@ -110,6 +110,7 @@ class RegistrationController extends AbstractController
             $mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_REGISTER, [
                 'confirmation_link' => $link
             ]);
+            $this->addFlash('success', "Nous vous avons envoyé une confirmation d'inscription par email");
             return $this->redirectToRoute('app_login');
         } elseif ($form->isSubmitted() && !$form->isValid()) {
 
@@ -122,13 +123,19 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/{id}/{token}', name: 'app_register_confirm')]
-    public function confirm(User $user, String $token, EntityManagerInterface $entityManager)
+    public function confirm(User $user, String $token, EntityManagerInterface $entityManager, MailjetService $mailjet)
     {
         if ($user->getToken() == $token) {
             $user->setIsVerified(true);
             $user->setToken(null);
 
             $entityManager->flush();
+            $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
+                'link' => $link,
+                'firstName' => $user->getName(),
+                'name' => $user->getLastName()
+            ]);
             $this->addFlash('success', 'Votre compte a bien été activé');
             return $this->redirectToRoute('app_login');
         } else {
