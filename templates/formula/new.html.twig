@@ -1,16 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Création d'une nouvelle formule{% endblock %}
+{% block title %}Création d'une nouvelle formule
+{% endblock %}
 
 {% block body %}
-    <h1>Créer une nouvelle formule</h1>
+	{% set modal_id = 'newModalId' %}
+	{% set modal_content_id = 'newModalModalContentId' %}
 
-    {{ include('formula/_form.html.twig') }}
+    <!-- Close Button -->
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('newModalId', 'newModalModalContentId')">
+		Fermer
+	</button>
 
-    <a href="{{ path('app_formula_index') }}">back to list</a>
+    <!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5">Créer une nouvelle formule</h2>
+
+	{{ include('formula/_form.html.twig') }}
+
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/formula.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('js/formula.js') }}"></script>
 {% endblock %}
-

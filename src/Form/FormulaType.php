@@ -25,12 +25,24 @@ class FormulaType extends AbstractType
         $user = $options['user'];
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom de la formule'
+                'label' => 'Nom de la formule',
+                'attr' => [
+                    
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                ],
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
             ])
             ->add('selectedProduct', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
                 'label' => 'Sélectionner un produit',
+                'attr' => [
+                    
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                ],
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'mapped' => false,
                 'query_builder' => function (ProductRepository $pr) use ($user) {
                     return $pr->createQueryBuilder('p')
@@ -57,18 +69,23 @@ class FormulaType extends AbstractType
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix de la formule',
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'currency' => 'EUR',
                 'divisor' => 100,
                 'attr' => [
                     'placeholder' => '12.39 pour 12€39',
                     'id' => 'formula_price',
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('adjustPrice', CheckboxType::class, [
                 'label'    => 'Ajuster le prix',
                 'required' => false,
                 'mapped'   => false,
-                'attr'     => ['class' => 'adjust-price-checkbox'],
+                'attr'     => ['class' => 'adjust-price-checkbox rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'],
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
             ]);
     }
 

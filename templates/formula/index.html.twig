@@ -1,93 +1,122 @@
 {% extends 'base_caterer.html.twig' %}
 
-{% block title %}Formula index{% endblock %}
+{% block title %}Formula index
+{% endblock %}
 
 {% block content %}
-    <h1>Formula index</h1>
 
-    <div id="formula-table"></div>
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Liste des Formules</h1>
+		<button onclick="openFormulaCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Créer un nouvelle formule</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="formula-table"></div>
+	</div>
 
-    <button onclick="openFormulaCreateModal()" class="btn btn-success">Créer un nouvelle formule</button>
 
-    <div class="modal fade" id="formulaCreateModal" tabindex="-1" role="dialog" aria-labelledby="formulaCreateModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formulaCreateModalLabel">Créer une nouvelle formule</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Le formulaire de création sera chargé ici -->
-                    <div>
-                        <select id="productSelect"><!-- Liste des produits --></select>
-                        <input type="number" id="productQuantity" placeholder="Quantité">
-                        <button id="addProductButton" class="btn btn-primary">Ajouter</button>
-                    </div>
-                    <div id="productGrid" class="gridjs-container"></div> <!-- Conteneur pour le tableau Grid.js -->
-                </div>
-            </div>
-        </div>
-    </div>
+	<button onclick="openFormulaCreateModal()" class="btn btn-success">Créer un nouvelle formule</button>
 
-    <div class="modal fade" id="openFormulaEditModal" tabindex="-1" role="dialog" aria-labelledby="formulaUpdateModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formulaCreateModalLabel">Modifier la formule</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Le formulaire de création sera chargé ici -->
-                    <div>
-                        <select id="productSelect"><!-- Liste des produits --></select>
-                        <input type="number" id="productQuantity" placeholder="Quantité">
-                        <button id="addProductButton" class="btn btn-primary">Ajouter</button>
-                    </div>
-                    <div id="productGridUpdate" class="gridjs-container"></div> <!-- Conteneur pour le tableau Grid.js -->
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="formulaCreateModal" tabindex="-1" role="dialog" aria-labelledby="formulaCreateModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="formulaCreateModalLabel">Créer une nouvelle formule</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div
+					class="modal-body">
+					<!-- Le formulaire de création sera chargé ici -->
+					<div>
+						<select id="productSelect"><!-- Liste des produits --></select>
+						<input type="number" id="productQuantity" placeholder="Quantité">
+						<button id="addProductButton" class="btn btn-primary">Ajouter</button>
+					</div>
+					<div id="productGrid" class="gridjs-container"></div>
+					<!-- Conteneur pour le tableau Grid.js -->
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <a href="{{ path('app_formula_new') }}">Create new</a>
-    <div class="modal fade" id="formulaDetailsModal" tabindex="-1" role="dialog" aria-labelledby="formulaDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formulaDetailsModalLabel">Détails de la formule</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Nom: <span id="formulaName"></span></p>
-                    <p>Prix: <span id="formulaPrice"></span></p>
-                    <div id="productsTable"></div> <!-- Conteneur pour le tableau Grid.js -->
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="openFormulaEditModal" tabindex="-1" role="dialog" aria-labelledby="formulaUpdateModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="formulaCreateModalLabel">Modifier la formule</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div
+					class="modal-body">
+					<!-- Le formulaire de création sera chargé ici -->
+					<div>
+						<select id="productSelect"><!-- Liste des produits --></select>
+						<input type="number" id="productQuantity" placeholder="Quantité">
+						<button id="addProductButton" class="btn btn-primary">Ajouter</button>
+					</div>
+					<div id="productGridUpdate" class="gridjs-container"></div>
+					<!-- Conteneur pour le tableau Grid.js -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<a href="{{ path('app_formula_new') }}">Create new</a>
+	<div class="modal fade" id="formulaDetailsModal" tabindex="-1" role="dialog" aria-labelledby="formulaDetailsModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="formulaDetailsModalLabel">Détails de la formule</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Nom:
+						<span id="formulaName"></span>
+					</p>
+					<p>Prix:
+						<span id="formulaPrice"></span>
+					</p>
+					<div id="productsTable"></div>
+					<!-- Conteneur pour le tableau Grid.js -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal pour la création d'un nouveau client -->
+	{% set dynamicContent %}
+	<div>
+		<p>Contenu construit directement dans Twig.</p>
+	</div>
+	{% endset %}
+
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'newModalId',
+        'modal_content_id': 'newModalModalContentId',
+        'content': dynamicContent
+    } %}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <style>
-        #formulaDetailsModal #productsTable, #formulaCreateModal #productGrid {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-    </style>
+	{{ parent() }}
+	<style>
+		#formulaDetailsModal #productsTable,
+		#formulaCreateModal #productGrid {
+			max-height: 400px;
+			overflow-y: auto;
+		}
+	</style>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        var csrfToken = '{{ csrf_token('delete_formula') }}';
-    </script>
-    <script src="{{ asset('js/formula.js') }}"></script>
-    <script src="{{ asset('js/formulaGrid.js') }}"></script>
+	{{ parent() }}
+	<script>
+		var csrfToken = '{{ csrf_token('delete_formula') }}';
+	</script>
+	<script src="{{ asset('js/formula.js') }}"></script>
+	<script src="{{ asset('js/formulaGrid.js') }}"></script>
 {% endblock %}

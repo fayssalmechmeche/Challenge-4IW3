@@ -224,7 +224,6 @@ function toggleSwitch() {
 function addClassToElement() {
   //Ce script est propre à ce formulaire : il rajoute une class à la div id customer qui ne peut être gérée dynamiquement depuis le form builder. #}
   let customerDiv = document.getElementById("customer");
-  console.log(customerDiv);
   if (customerDiv) {
     customerDiv.classList.add("flex", "flex-wrap", "gap-y-5", "gap-x-10");
   }
