@@ -81,11 +81,11 @@ function openFormulaCreateModal() {
             
             initializeFormElements(modalBody);
             initializeCheckbox(); // Initialiser la checkbox ici
+            if (!productGridInstance) {
+                       initializeProductGridCreate();
+            }
              toggleModal("newModalId", "newModalModalContentId");
 
-             if (!productGridInstance) {
-                        initializeProductGridCreate();
-             }
 
         
 
