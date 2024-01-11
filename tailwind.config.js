@@ -37,8 +37,9 @@ module.exports = {
     "shadow-form",
     "h-10",
     "flex-wrap",
-    'w-modal-width',
-    'max-h-modal-height'
+    "w-modal-width",
+    "max-h-modal-height",
+    "gap-2",
   ],
   theme: {
     extend: {
@@ -64,8 +65,8 @@ module.exports = {
         "95%": "95%",
         "2px": "2px",
         "15%": "15%",
-        'A4w': "794px",
-        'A4h': "1123px",
+        A4w: "794px",
+        A4h: "1123px",
         "5px": "5px",
         "15px": "15px",
         "35%": "35%",
@@ -75,7 +76,7 @@ module.exports = {
         "open-nav": "257px",
         "modal-width": "1031px",
         "modal-height": "90%",
-        'up': "-1000px",
+        up: "-1000px",
       },
       width: {
         "content-space-open": "calc(100% - 257px)",

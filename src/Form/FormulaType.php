@@ -38,8 +38,7 @@ class FormulaType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Sélectionner un produit',
                 'attr' => [
-
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form bg-white'
                 ],
                 'label_attr' => ['class' => 'font-medium'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
@@ -61,6 +60,11 @@ class FormulaType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
+                'attr' => [
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                ],
             ])
             ->add('productFormulasData', CollectionType::class, [
                 'entry_type' => HiddenType::class,

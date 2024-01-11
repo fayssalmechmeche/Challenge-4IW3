@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
           customer.nameSociety || customer.name + " " + customer.lastName,
           customer.nameSociety ? "Société" : "Client Particulier",
           gridjs.html(`
-          <div class="w-auto mx-auto flex justify-center items-center flex-wrap">
+          <div class="w-full mx-auto flex justify-center items-center flex-wrap gap-2">
           <button
             onclick="openCustomerEditModal(${customer.id})"
             class="text-white font-medium bg-orange-400 hover:bg-orange-600 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
