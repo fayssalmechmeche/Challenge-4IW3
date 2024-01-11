@@ -63,8 +63,7 @@ class ProductController extends AbstractController
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (count($entityManager->getRepository(Category::class)->findAll()) == 0) {
-            // dd($entityManager->getRepository(Category::class)->findAll());
+        if (empty($entityManager->getRepository(Category::class)->findBy(['owner' => $this->getUser()]))) {
             $this->addFlash('error', 'Vous devez créer au moins une catégorie');
                 return $this->redirectToRoute('app_product_index');
         };

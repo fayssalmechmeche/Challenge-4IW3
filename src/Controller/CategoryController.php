@@ -53,6 +53,12 @@ class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $categoryName = ucfirst($form->get('name')->getData());
+            $isCategoryExist = $entityManager->getRepository(Category::class)->findBy(['name' => $categoryName, 'owner' => $this->getUser()]);
+
+            if ($isCategoryExist) {
+                $this->addFlash('error', 'Cette catégorie existe déjà.');
+                return $this->redirectToRoute('app_category_new');
+            }
             $category->setName($categoryName);
             $category->setOwner($this->getUser());
             $entityManager->persist($category);
