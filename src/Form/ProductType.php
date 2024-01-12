@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Society;
+use App\Repository\CategoryRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,6 +19,7 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['user'];
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom du produit',
@@ -34,6 +36,11 @@ class ProductType extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
+                'query_builder' => function (CategoryRepository $cr) use ($user) {
+                    return $cr->createQueryBuilder('c')
+                        ->where('c.owner = :user')
+                        ->setParameter('user', $user);
+                },
                 'required' => true
             ])
         ;
@@ -43,6 +50,7 @@ class ProductType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
+            'user' => null,
         ]);
     }
 }
