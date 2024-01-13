@@ -89,7 +89,7 @@
 	<!-- graph + carte bleu-->
 	<div class=" my-9 px-5 w-full flex justify-between items-start flex-wrap">
 		<div class='w-full xl:w-grid-dashboard-space bg-white rounded-lg'>
-            <h2 class="text-3xl font-normal mb-3 px-4 mt-3">Dernieres activités</h2>
+			<h2 class="text-3xl font-normal mb-3 px-4 mt-3">Dernieres activités</h2>
 			<div
 				id="dashboard-grid" class="w-full h-full"><!-- tableau Grid.js here -->
 			</div>
@@ -127,7 +127,7 @@
 			<!-- SOLDE -->
 			<div class="w-full flex flex-col justify-start items-center h-48">
 				<h2 class="font-bold text-2xl mt-5">Solde:</h2>
-				<h3 class="text-3xl text-green-500 font-semibold mb-5">$4,050,12,300</h3>
+				<h3 class="text-3xl text-green-500 font-semibold mb-5">{{(balance ?? 0)|format_currency('EUR')}}</h3>
 				<button class=" px-10 text-xl transition ease-in-out duration-300 cursor-pointer text-white bg-nav-btn hover:bg-white hover:text-nav-btn hover:border hover:border-solid hover:border-nav-btn h-12 rounded-10px">En voir plus</button>
 			</div>
 		</div>

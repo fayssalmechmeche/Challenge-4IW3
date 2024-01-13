@@ -9,6 +9,9 @@ use App\Service\MailjetService;
 use const App\Entity\ROLE_ADMIN;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use App\Service\Stripe\StripeHelper;
+use App\Service\Stripe\StripeService;
+
 use const App\Entity\ROLE_SOCIETY;
 use Symfony\Component\Mime\Address;
 use const App\Entity\ROLE_ACCOUNTANT;
@@ -120,13 +123,14 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/{id}/{token}', name: 'app_register_confirm')]
-    public function confirm(User $user, String $token, EntityManagerInterface $entityManager, MailjetService $mailjet)
+    public function confirm(User $user, String $token, EntityManagerInterface $entityManager, MailjetService $mailjet, StripeService $stripeService)
     {
         if ($user->getToken() == $token) {
             $user->setIsVerified(true);
             $user->setToken(null);
 
             $entityManager->flush();
+            $stripeService->createCustomer($user->getSociety());
             $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
             $mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
                 'link' => $link,

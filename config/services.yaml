@@ -8,6 +8,7 @@ parameters:
     formulas_images_directory: "%kernel.project_dir%/public/images/formulas"
     mailjet_private: "%env(MAILJET_PRIVATE)%"
     mailjet_public: "%env(MAILJET_PUBLIC)%"
+    stripe_secret_key: "%env(STRIPE_SECRET)%"
 services:
     # default configuration for services in *this* file
     _defaults:

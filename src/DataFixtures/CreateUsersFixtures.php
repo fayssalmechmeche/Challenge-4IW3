@@ -6,6 +6,7 @@ use DateTime;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Society;
+use App\Service\Stripe\StripeService;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class CreateUsersFixtures extends Fixture
 {
     const PASSWORD = 'test';
-    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher, private StripeService $stripeService)
     {
     }
     public function load(ObjectManager $manager): void
@@ -27,7 +28,7 @@ class CreateUsersFixtures extends Fixture
             $society->setPhone($faker->phoneNumber());
             $society->setEmail('email' . $i . '@example.com');
             $society->setSiret('siret');
-
+            $this->stripeService->createCustomer($society);
             $manager->persist($society);
 
 
