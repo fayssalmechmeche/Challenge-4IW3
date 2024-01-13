@@ -58,6 +58,12 @@ module.exports = {
         "card-grey": "#8A92A6",
         "progress-bar-1": "#3A57E8",
         "progress-bar-2": "#08B1BA",
+        caterer: "#EFF1F6",
+        "grey-p": "#A1A0BD",
+        "light-red": "#D14F4F",
+        "bg-light-red": "#F5DCDC",
+        "light-green": "#4FD18B",
+        "bg-light-green": "#DCF5E8",
       },
       spacing: {
         "90-vh": "90vh",
@@ -77,14 +83,20 @@ module.exports = {
         "modal-width": "1031px",
         "modal-height": "90%",
         up: "-1000px",
+        "550px": "550px",
+        "500px": "500px",
+        "1150px": "1150px",
       },
       width: {
         "content-space-open": "calc(100% - 257px)",
         "content-space-closed": "calc(100% - 48px)",
         "grid-dashboard-space": "calc(100% - 410px)",
+        "ds-block": "1150px",
       },
       borderRadius: {
         "10px": "10px",
+        "btn-rounded": "47px",
+        "155px": "155px",
       },
       fontSize: {
         "15px": "15px",
