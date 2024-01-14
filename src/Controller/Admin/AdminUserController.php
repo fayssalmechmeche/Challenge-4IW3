@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\ResetPasswordRequest;
 use App\Entity\User;
 use App\Entity\Society;
 use const App\Entity\ROLE_ADMIN;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 
 #[Route('/admin/user', name: 'admin_user_')]
 class AdminUserController extends AbstractController
@@ -121,6 +123,9 @@ class AdminUserController extends AbstractController
                 ));
             }
             $this->_setDataUser($user, $data);
+            $response = $this->forward('App\Controller\ResetPasswordController::processSendingPasswordResetEmail', [
+                'emailFormData' => $data['admin_user[email]']
+            ]);
             return new JsonResponse(array(
                 'code' => 200,
                 'success' => true,
@@ -173,6 +178,14 @@ class AdminUserController extends AbstractController
     public function delete(User $user, string $token): Response
     {
         if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
+
+            $tokens = $this->entityManagerInterface->getRepository(ResetPasswordRequest::class)->findBy(['user' => $user]);
+            foreach ($tokens as $resetPasswordRequest) {
+                $this->entityManagerInterface->remove($resetPasswordRequest);
+            }
+
+            $this->entityManagerInterface->flush();
+
             $this->entityManagerInterface->remove($user);
             $this->entityManagerInterface->flush();
             return new JsonResponse(array(

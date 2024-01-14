@@ -15,7 +15,7 @@ class DashboardCatererController extends AbstractController
     public function index(StripeService $stripeService): Response
     {
         $customerID = $this->getUser()->getSociety()->getStripeId();
-        $stripeService->updateBalance($customerID, 100);
+
         return $this->render('dashboard_caterer/index.html.twig', [
             'controller_name' => 'DashboardCatererController',
             "balance" => $stripeService->getBalance($customerID)
