@@ -1,4 +1,4 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Sauvegarder votre produit') }}</button>
+{{ form_start(form, {'action': form_action, 'attr': {'class': 'w-full'}}) }}
+{{ form_widget(form) }}
+<button class="text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg px-3 py-2 mt-7 mb-1">{{ button_label|default('Sauvegarder votre produit') }}</button>
 {{ form_end(form) }}

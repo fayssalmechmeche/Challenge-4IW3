@@ -1,38 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
+{% block title %}Product
+{% endblock %}
 
 {% block body %}
-    <h1>Product</h1>
+	{% set modal_id = 'produitDetailsModal' %}
+	{% set modal_content_id = 'produitDetailsModalContentId' %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ product.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ product.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ product.description }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ product.price }}</td>
-            </tr>
-            <tr>
-                <th>ProductCategory</th>
-                <td>{{ product.productCategory }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('produitDetailsModal', 'produitDetailsModalContentId')">
+		Fermer
+	</button>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
 
-    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
+	<!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5">Détails du produit</h2>
 
-    {{ include('product/_delete_form.html.twig') }}
+	<div class="flex flex-wrap gap-y-5 gap-x-10">
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-bold">Nom du produit</p>
+			<p id="formulaName" class="text-xl">{{ product.name }}</p>
+		</div>
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-bold">Prix du produit</p>
+			<p id="formulaPrice" class="text-xl">{{ (product.price / 100)|number_format(2, '.', '') }}
+				€</p>
+		</div>
+	</div>
+
+	<div class="flex mt-7 justify-start items-center">
+		<button onclick="editFromShow({{ product.id }})" class="text-white font-medium bg-orange-400 hover:bg-orange-600 transition-all duration-300 ease-out rounded-lg  px-3 py-2 mr-3">
+			Modifier
+		</button>
+		{{ include('product/_delete_form.html.twig') }}
+	</div>
+
 {% endblock %}

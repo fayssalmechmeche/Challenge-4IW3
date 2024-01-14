@@ -1,9 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau produit{% endblock %}
+{% block title %}Nouveau produit
+{% endblock %}
+
 
 {% block body %}
-    <h1>Création d'un nouveau produit</h1>
-    {{ include('product/_form.html.twig') }}
-    <a href="{{ path('app_product_index') }}">Revenir sur ma liste des produits</a>
+	{% set modal_id = 'newProductModalId' %}
+	{% set modal_content_id = 'newProductModalContentId' %}
+
+
+	<!-- Close Button -->
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('newProductModalId', 'newProductModalContentId')">
+		Fermer
+	</button>
+
+	<!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5">Créer un Nouveau Produit</h2>
+
+	{{ include('product/_form.html.twig') }}
 {% endblock %}

@@ -1,13 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modification d'un produit{% endblock %}
+{% block title %}Modification d'un produit
+{% endblock %}
 
 {% block body %}
-    <h1>Modifier votre produit</h1>
+	{% set modal_id = 'productEditModal' %}
+	{% set modal_content_id = 'productEditModalContent' %}
 
-    {{ include('product/_form.html.twig', {'button_label': 'Mettre à jour ce produit'}) }}
 
-    <a href="{{ path('app_product_index') }}">Revenir sur ma liste des produits</a>
+	<!-- Close Button -->
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('productEditModal', 'productEditModalContent')">
+		Fermer
+	</button>
 
-    {{ include('product/_delete_form.html.twig') }}
+	<!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5">Modifier un Produit</h2>
+
+	{{ include('product/_form.html.twig', {'button_label': 'Mettre à jour ce produit'}) }}
+
+	{{ include('product/_delete_form.html.twig') }}
 {% endblock %}

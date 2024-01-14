@@ -27,33 +27,6 @@ function addRemoveButton(divElement) {
 
 function openFormulaModal(formulaId) {
   fetch(`/formula/api/${formulaId}`)
-    // .then((response) => response.json())
-    // .then((data) => {
-    //   document.getElementById("formulaName").textContent = data.name;
-    //   // Diviser par 100 pour convertir de centimes en euros et ajouter le symbole €
-    //   document.getElementById("formulaPrice").textContent =
-    //     (data.price / 100).toFixed(2) + " €";
-
-    //   if (currentGridInstance) {
-    //     currentGridInstance.destroy();
-    //   }
-
-    //   currentGridInstance = new gridjs.Grid({
-    //     columns: ["Nom", "Quantité"],
-    //     data: data.products.map((product) => [product.name, product.quantity]),
-    //     search: true,
-    //     pagination: true,
-    //     sort: true,
-    //     language: {
-    //       search: {
-    //         placeholder: "🔍 Rechercher...",
-    //       },
-    //     },
-    //   });
-
-    //   currentGridInstance.render(document.getElementById("productsTable"));
-    //   $("#formulaDetailsModal").modal("show");
-    // })
     .then((response) => response.text()) // Recevoir du HTML au lieu de JSON
     .then((html) => {
       const modalContent = document.getElementById(
