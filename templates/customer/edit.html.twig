@@ -15,8 +15,9 @@
 
 	<div class="form-group flex items-center">
 		<label for="switchClientType" class="mr-2 font-medium">Type de Client :</label>
+		<input type="hidden" id="ClientTypeHidden" value="{{ customer.nameSociety}}">
 		<div
-			class="inline-flex items-center cursor-pointer" onclick="toggleSwitch()">
+			class="inline-flex items-center cursor-pointer" onclick="toggleSwitch()" id="switchToClick">
 			<!-- Switch -->
 			<span class="relative">
 				<span id="switchBackground" class="block w-10 h-6 bg-gray-200 rounded-full shadow-inner"></span>
@@ -28,7 +29,6 @@
 			<label for="switchClientType" class="ml-3 text-sm font-medium text-gray-900">Société</label>
 		</div>
 	</div>
-
 	{{ include('customer/_form.html.twig',
      {'button_label': 'Mettre à jour'}) }}
 	{{ include('customer/_delete_form.html.twig') }}
