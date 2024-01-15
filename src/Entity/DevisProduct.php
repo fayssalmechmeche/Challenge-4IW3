@@ -21,6 +21,9 @@ class DevisProduct
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
+    #[ORM\Column(type: 'float')]
+    private ?float $price = null;
+
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -49,6 +52,18 @@ class DevisProduct
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

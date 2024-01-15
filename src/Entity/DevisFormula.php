@@ -22,6 +22,9 @@ class DevisFormula
     #[ORM\JoinColumn(nullable: false)]
     private ?Devis $devis = null;
 
+    #[ORM\Column(type: 'float')]
+    private ?float $price = null;
+
     // Getter and setter for id
     public function getId(): ?int
     {
@@ -72,5 +75,18 @@ class DevisFormula
     {
         return $this->formula?->getPrice();
     }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
 
 }

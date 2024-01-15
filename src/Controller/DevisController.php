@@ -4,20 +4,24 @@ namespace App\Controller;
 
 use App\Entity\Devis;
 use App\Form\DevisType;
+use App\Entity\DevisProduct;
 use App\Repository\DevisRepository;
 use App\Repository\FormulaRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\DevisProduct;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 #[Route('/devis')]
+#[IsGranted('ROLE_SOCIETY')]
 class DevisController extends AbstractController
 {
     private CsrfTokenManagerInterface $csrfTokenManager;
@@ -85,14 +89,14 @@ class DevisController extends AbstractController
     {
         $devis = new Devis();
         $user = $this->getUser();
-        $devis->setUser($this->getUser());
+
+        $devis->setUser($user);
         $lastDevisNumber = $devisRepository->findLastDevisNumberForUser($user);
         $newDevisNumber = $this->generateNewDevisNumber($lastDevisNumber);
 
         $userEmail = $user ? $user->getEmail() : '';
         $products = $productRepository->findBy(['user' => $user]);
         $formulas = $formulaRepository->findBy(['user' => $user]);
-
 
         $form = $this->createForm(DevisType::class, $devis, [
             'user' => $user,
@@ -101,20 +105,19 @@ class DevisController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $devis->setDevisNumber($newDevisNumber);
             $devisProductsJson = $request->request->get('devisProductsJson');
             if ($devisProductsJson) {
                 $devisProductsData = json_decode($devisProductsJson, true);
 
-                // Traiter chaque produit dans les données décodées
                 foreach ($devisProductsData as $productData) {
                     $product = $productRepository->find($productData['product']);
                     if ($product) {
                         $devisProduct = new DevisProduct();
                         $devisProduct->setProduct($product);
                         $devisProduct->setQuantity($productData['quantity']);
-                        $devis->addDevisProduct($devisProduct); // Supposant que vous avez une méthode addDevisProduct
+                        $devisProduct->setPrice($product->getPrice()); // Définir le prix
+                        $devis->addDevisProduct($devisProduct);
                     }
                 }
             }
@@ -134,6 +137,7 @@ class DevisController extends AbstractController
     }
 
 
+
     #[Route('/{id}/show', name: 'app_devis_show', methods: ['GET'])]
     public function show(Devis $devi): Response
     {
@@ -151,6 +155,7 @@ class DevisController extends AbstractController
                 'id' => $devisProduct->getId(),
                 'name' => $product ? $product->getName() : '',
                 'quantity' => $devisProduct->getQuantity(),
+                'price' => $devisProduct->getPrice(),
             ];
         }
 
@@ -165,8 +170,10 @@ class DevisController extends AbstractController
                 'id' => $devisFormula->getId(),
                 'name' => $formula ? $formula->getName() : '',
                 'quantity' => $devisFormula->getQuantity(),
+                'price' => $devisFormula->getPrice(),
             ];
         }
+
 
         return $this->render('devis/show.html.twig', [
             'devi' => $devi,
@@ -216,7 +223,7 @@ class DevisController extends AbstractController
                 'id' => $devisProduct->getProduct()->getId(),
                 'name' => $devisProduct->getProduct()->getName(),
                 'quantity' => $devisProduct->getQuantity(),
-               'price' => $devisProduct->getProduct()->getPrice(),
+                'price' => $devisProduct->getProduct()->getPrice(),
                 // Ajoutez d'autres champs si nécessaire
             ];
         }
@@ -289,5 +296,464 @@ class DevisController extends AbstractController
 
         return sprintf("%s-%s-%04d", $year, $month, $sequentialNumber);
     }
+
+    #[Route('/{id}/download', name: 'app_devis_download', methods: ['GET'])]
+    public function download(Devis $devi): Response
+    {
+        $productsCollection = $devi->getDevisProducts();
+        $productsCollection->initialize();
+
+        $productsArray = [];
+        foreach ($productsCollection as $devisProduct) {
+            $product = $devisProduct->getProduct();
+            $productsArray[] = [
+                'id' => $devisProduct->getId(),
+                'name' => $product ? $product->getName() : '',
+                'quantity' => $devisProduct->getQuantity(),
+                'price' => $devisProduct->getPrice(),
+            ];
+        }
+
+        $formulasCollection = $devi->getDevisFormulas();
+        $formulasCollection->initialize();
+
+        $formulasArray = [];
+        foreach ($formulasCollection as $devisFormula) {
+            $formula = $devisFormula->getFormula();
+            $formulasArray[] = [
+                'id' => $devisFormula->getId(),
+                'name' => $formula ? $formula->getName() : '',
+                'quantity' => $devisFormula->getQuantity(),
+                'price' => $devisFormula->getPrice(),
+            ];
+        }
+        $tableRows = '';
+
+
+        foreach ($productsArray as $product) {
+            $tableRows .= '<tr>
+                    <td>' . htmlspecialchars($product['name']) . '</td>
+                    <td>' . htmlspecialchars($product['quantity']) . '</td>
+                    <td>€' . htmlspecialchars($product['price']) . '</td>
+                  </tr>';
+        }
+
+        foreach ($formulasArray as $formula) {
+            $tableRows .= '<tr>
+                    <td>' . htmlspecialchars($formula['name']) . '</td>
+                    <td>' . htmlspecialchars($formula['quantity']) . '</td>
+                    <td>€' . htmlspecialchars($formula['price']) . '</td>
+                  </tr>';
+        }
+
+        //Infos user
+        $user = $this->getUser();
+        $userEmail = $user ? $user->getEmail() : '';
+        $userSociety = $user->getSociety()?->getName();
+        $userAdress = $user->getSociety()?->getAddress();
+        $userPhoneNumber = $user->getSociety()?->getPhone();
+
+
+
+//Infos client
+        $customerSociety = $devi->getCustomer()?->getNameSociety();
+        if ($customerSociety === null) {
+            $customerName = $devi->getCustomer()?->getName();
+            $customerLastName = $devi->getCustomer()?->getLastName();
+            $customerInfo = 'Client: ' . $customerName . ' ' . $customerLastName;
+        } else {
+            $customerInfo = 'Société: ' . $customerSociety;
+        }
+        $customerStreetName = $devi->getCustomer()?->getStreetName();
+        $customerStreetNumber = $devi->getCustomer()?->getStreetNumber();
+        $customerAddress = $customerStreetNumber . ' ' . $customerStreetName;
+        $customerPostalCode = $devi->getCustomer()?->getPostalCode();
+        $customerCity = $devi->getCustomer()?->getCity();
+        $customerPhoneNumber = $devi->getCustomer()?->getPhoneNumber();
+        $customerEmail = $devi->getCustomer()?->getEmail();
+
+//Infos prix devis
+
+        $devisTotalPrice = $devi->getTotalPrice();
+        $devisTotalDuePrice = $devi->getTotalDuePrice();
+        $devisNumber = $devi->getDevisNumber();
+
+
+
+        $devisDate = $devi->getCreatedAt()->format('d/m/Y');
+
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+
+
+        $html = '
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  background-color: #adadad;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 50px;
+  background-color: #353535;
+}
+nav .material-symbols-outlined {
+  color: white;
+  cursor: pointer;
+  font-size: 30px;
+  transition: all 0.3s ease-in-out;
+}
+nav .material-symbols-outlined:hover {
+  color: red;
+}
+nav button {
+  background-color: rgb(44, 192, 34);
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  font-size: 15px;
+  font-weight: bold;
+}
+nav button:hover {
+  background-color: rgb(68, 254, 55);
+}
+
+.Generator {
+  width: 794px;
+  height: 1123px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.Generator .top {
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.Generator .top .society {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.Generator .top .society img {
+  width: 150px;
+  height: 150px;
+  border: 1px solid #ddd;
+}
+.Generator .top .society .society-info {
+  margin-top: 15px;
+  padding: 5px;
+}
+.Generator .top .society .society-info h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.Generator .top .society .society-info p {
+  font-size: 15px;
+}
+.Generator .top .top-r {
+  width: 50%;
+}
+.Generator .top .top-r .devis {
+  width: 100%;
+  background-color: #d4d4d4;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.Generator .top .top-r .devis h1 {
+  font-size: 23px;
+}
+.Generator .top .top-r .devis .devis-info p {
+  font-size: 15px;
+}
+.Generator .top .top-r .client {
+  margin: 30px 0 0 0;
+  padding: 0 5px;
+}
+.Generator .top .top-r .client h2 {
+  font-size: 18px;
+}
+.Generator .top .top-r .client .client-info {
+  margin-top: 15px;
+}
+.Generator .top .top-r .client .client-info p {
+  font-size: 15px;
+}
+.Generator .table-container {
+  width: 100%;
+  margin-top: 75px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+.Generator .table-container .objet {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: flex-start;
+  margin-bottom: 20px;
+  margin-left: 5px;
+}
+.Generator .table-container .objet h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+.Generator .table-container .objet p {
+  margin-left: 10px;
+  font-size: 18px;
+}
+.Generator .table-container .mid {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.Generator .table-container .mid .condition {
+  margin-top: 75px;
+  display: flex;
+  width: 70%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.Generator .table-container .mid .condition h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+.Generator .table-container .mid .condition p {
+  margin-top: 20px;
+  font-size: 18px;
+}
+.Generator .table-container .mid .total {
+  width: 35%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin: 50px 5px 0 0;
+  flex-direction: column;
+}
+.Generator .table-container .mid .total .total-sub-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+}
+.Generator .table-container .mid .total .total-sub-container h3 {
+  font-size: 15px;
+  font-weight: bold;
+}
+.Generator .table-container .mid .total .total-sub-container .total-tab {
+  margin-left: 5px;
+  padding: 15px;
+  width: 150px;
+  background-color: #d4d4d4;
+}
+.Generator .table-container .mid .total .total-sub-container .total-tab p {
+  font-size: 18px;
+  text-align: right;
+}
+.Generator .table-container .mid .total .total-sub-container .total-tab.alt {
+  background-color: #353535;
+}
+.Generator .table-container .mid .total .total-sub-container .total-tab.alt p {
+  font-size: 20px;
+  color: #fff;
+}
+.Generator .signature {
+  margin: 100px 5px 0 auto;
+  padding: 10px 0 0 10px;
+  width: 200px;
+  height: 100px;
+  border: 1px solid #ddd;
+  background-color: rgb(188, 187, 187);
+}
+.Generator .bottom {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.Generator .bottom .divider {
+  width: 100%;
+  height: 2px;
+  border-radius: 15px;
+  background-color: #cdcdcd;
+  margin: 20px 0;
+}
+.Generator .bottom .bottom-info {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Generator .bottom .bottom-info p {
+  font-size: 13px;
+  margin: 5px 0;
+  color: #868686;
+}
+
+.Generator table {
+  width: 95%;
+  border-collapse: collapse;
+}
+
+.Generator th, .Generator td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+
+.Generator th {
+  background-color: #f2f2f2;
+}
+
+
+</style>
+<body>
+  <div class="Generator">
+      <div class="top">
+        <div class="society">
+          <div class="logoName">
+            <img src="./0d4ae847-6828-4179-892b-35ca46596170.webp" alt="logo" />
+          </div>
+          <div class="society-info">
+            <h2>Ma society Name</h2>
+            <p>Adresse: ' . $userAdress . '</p>
+            <p>Code Postal: rajouter</p>
+            <p>Ville: rajouter</p>
+            <p>Téléphone: ' . $userPhoneNumber . '</p>
+            <p>Mail : ' . $userEmail . '</p>
+          </div>
+        </div>
+        <div class="top-r">
+          <div class="devis">
+            <h1>Devis</h1>
+            <div class="devis-info">
+              <p>Numéro de devis:  ' . $devisNumber . '</p>
+              <p>Date: '. $devisDate .'</p>
+              <p>Validité du devis: 3 Mois</p>
+            </div>
+          </div>
+          <div class="client">
+            <h2>Information Client</h2>
+            <div class="client-info">
+              <p>' . $customerInfo . '</p>
+              <p>Adresse: ' . $customerAddress . '</p>
+              <p>Code Postal: ' . $customerPostalCode . '</p>
+              <p>Ville: ' . $customerCity . '</p>
+              <p>Téléphone: ' . $customerPhoneNumber . ' </p>
+              <p>Mail: ' . $customerEmail . '</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-container">
+        <div class="objet">
+          <h2>Objet:</h2>
+          <p id="commande-title">Prise en charge des repas dun marriage</p>
+        </div>
+        <div id="wrapper">
+        <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            ' . $tableRows . '
+        </tbody>
+    </table>
+</div>
+        <div class="mid">
+          <div class="condition">
+            <h2>Conditions de paiement:</h2>
+            <p>
+    Paiement dun acompte de 30% du prix total TTC à la commande 70% à
+              la livraison
+            </p>
+          </div>
+          <div class="total">
+            <div class="total-sub-container">
+              <h3>Total HT:</h3>
+              <div class="total-tab"><p>' . $devisTotalPrice . ' €</p></div>
+            </div>
+            <div class="total-sub-container">
+              <h3>TVA (20%):</h3>
+              <div class="total-tab"><p>20%</p></div>
+            </div>
+            <div class="total-sub-container">
+              <h3>Total TTC:</h3>
+              <div class="total-tab alt"><p>' . $devisTotalDuePrice . ' €</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="signature">
+        <p>Signature</p>
+      </div>
+      <div class="bottom">
+        <div class="divider"></div>
+        <div class="bottom-info">
+          <p>SARL Fourchette</p>
+          <p>Capital de 1000 €</p>
+          <p>RCS:12345</p>
+          <p>Code APE: AZERTY12345</p>
+          <p>N° TVA: FR3353215643668909</p>
+        </div>
+      </div>
+    </div>
+</body>
+</html>';
+
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $pdfOutput = $dompdf->output();
+        $response = new Response($pdfOutput);
+        $response->headers->set('Content-Type', 'application/pdf');
+
+        // Vous pouvez personnaliser le nom du fichier PDF ici
+        $filename = 'devis-vide.pdf';
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        return $response;
+    }
+
 
 }
