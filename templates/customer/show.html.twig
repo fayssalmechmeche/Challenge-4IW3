@@ -1,50 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Customer{% endblock %}
+{% block title %}Customer
+{% endblock %}
 
 {% block body %}
-    <h1>Customer</h1>
+	{% set modal_id = 'customerDetailsModal' %}
+	{% set modal_content_id = 'customerDetailsModalContainer' %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ customer.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ customer.name }}</td>
-            </tr>
-            <tr>
-                <th>LastName</th>
-                <td>{{ customer.lastName }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ customer.address }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ customer.email }}</td>
-            </tr>
-            <tr>
-                <th>Phone Number</th>
-                <td>{{ customer.phoneNumber }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ customer.createdAt ? customer.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ customer.updatedAt ? customer.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('customerDetailsModal', 'customerDetailsModalContainer')">
+		Fermer
+	</button>
 
-    <a href="{{ path('app_customer_index') }}">back to list</a>
 
-    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
+	<!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5">Détails du Client</h2>
 
-    {{ include('customer/_delete_form.html.twig') }}
+	<div class="flex flex-wrap gap-y-5 gap-x-10">
+		{% if customer.nameSociety %}
+			<div class="flex flex-col px-1 my-1">
+				<p class="text-xl font-medium">Nom de la Société</p>
+				<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">{{ customer.nameSociety }}</p>
+			</div>
+		{% else %}
+			<div class="flex flex-col px-1 my-1">
+				<p class="text-xl font-medium">Nom du Client</p>
+				<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">{{ customer.name }}</p>
+			</div>
+			<div class="flex flex-col px-1 my-1">
+				<p class="text-xl font-medium">Prénom du Client</p>
+				<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">{{ customer.lastName }}</p>
+			</div>
+		{% endif %}
+
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-medium">Devis en attente (brut)
+			</p>
+			{# <p class="text-xl">{{ customer.devisCounts.pending }}</p> #}
+			<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
+		</div>
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-medium">Devis payés (brut)</p>
+			{# <p class="text-xl">{{ customer.devisCounts.paid }}</p> #}
+			<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
+		</div>
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-medium">Devis partiellement payés (brut)</p>
+			{# <p class="text-xl">{{ customer.devisCounts.paid }}</p> #}
+			<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
+		</div>
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-medium">Devis remboursés (brut)</p>
+			{# <p class="text-xl">{{ customer.devisCounts.refunded }}</p> #}
+			<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
+		</div>
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-medium">Total de devis(brut)</p>
+			{# <p class="text-xl">{{ customer.totalDevisCount }}</p> #}
+			<p class="rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
+		</div>
+	</div>
+
+	<div class="flex mt-7 justify-start items-center">
+		<button onclick="editFromShow({{ customer.id }})" class="text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg  px-3 py-2 mr-3">
+			Modifier
+		</button>
+		{{ include('customer/_delete_form.html.twig') }}
+	</div>
 {% endblock %}

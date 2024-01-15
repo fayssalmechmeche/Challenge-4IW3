@@ -1,32 +1,44 @@
-{{ form_start(form, {'action': form_action}) }}
-    {{ form_label(form.name) }}
-    {{ form_widget(form.name) }}
-<br>
+{{ form_start(form, {'action': form_action, 'attr': {'class': 'w-full'}}) }}
 
-<!-- Zone pour sélectionner un produit -->
-<div>
-    {{ form_label(form.selectedProduct) }}
-    {{ form_widget(form.selectedProduct) }}
-    <input type="number" id="productQuantity" placeholder="Quantité">
-    <button id="addProductButton" type="button" class="btn btn-primary">Ajouter à la formule</button>
+<div class="flex flex-wrap gap-y-5 gap-x-10">
+
+
+	<div class="flex flex-col px-1 my-1">
+		{{ form_label(form.name) }}
+		{{ form_widget(form.name) }}
+	</div>
+
+	<!-- Zone pour sélectionner un produit -->
+	<div class="flex flex-col  my-1 w-96">
+		{{ form_label(form.selectedProduct) }}
+		{{ form_widget(form.selectedProduct) }}
+		<div class="flex justify-between mt-2 w-full">
+			<input type="number" id="productQuantity" placeholder="Quantité" class="rounded-xl w-32 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">
+			<button id="addProductButton" type="button" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg px-3 py-2">Ajouter à la formule</button>
+		</div>
+
+	</div>
+
+
+	<!-- Conteneur pour le tableau Grid.js -->
+	<div id="productGrid" class="gridjs-container w-full"></div>
+
+
+	{# <div id="productDataContainer">
+					{{ form_widget(form.productFormulasData) }}
+				</div> #}
+
+	<div class="flex flex-col px-1 my-1">
+		{{ form_label(form.price) }}
+		{{ form_widget(form.price) }}
+	</div>
+
+	<div class="flex justify-center items-center px-1 my-1">
+		<button type="submit" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg px-3 py-2">Sauvegarder</button>
+	</div>
+
 </div>
-<br>
-
-<!-- Conteneur pour le tableau Grid.js -->
-<div id="productGrid" class="gridjs-container"></div>
-<br>
-
-
 <div id="productDataContainer">
-
-        {{ form_widget(form.productFormulasData) }}
-
-
+	{{ form_widget(form.productFormulasData) }}
 </div>
-<br>
-
-{{ form_label(form.price) }}
-{{ form_widget(form.price) }}
-<br>
-<button type="submit" class="btn">Sauvegarder</button>
 {{ form_end(form) }}

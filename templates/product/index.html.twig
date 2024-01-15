@@ -1,25 +1,56 @@
 {% extends 'base_caterer.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Product index
+{% endblock %}
 
 {% block content %}
-    <h1>Product index</h1>
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Liste des Produits</h1>
+		<button onclick="openProductCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Créer un Nouveau Produit</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="product-table"></div>
+	</div>
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <!-- Conteneur pour le tableau Grid.js -->
-    <div id="product-table"></div>
+	<!-- Modal pour la création d'un nouveau produit -->
+	{% set dynamicContent %}
+	<div>
+		<p>Contenu construit directement dans Twig.</p>
+	</div>
+	{% endset %}
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'newProductModalId',
+        'modal_content_id': 'newProductModalContentId',
+        'content': dynamicContent
+    } %}
+
+    <!-- Modal pour la modification d'un produit -->
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'productEditModal',
+        'modal_content_id': 'productEditModalContent',
+        'content': dynamicContent
+    } %}
+
+    <!-- Modal pour les détails d'un produit -->
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'produitDetailsModal',
+        'modal_content_id': 'produitDetailsModalContentId',
+        'content': dynamicContent
+    } %}
+
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        var csrfToken = '{{ csrf_token('delete_product') }}';
-    </script>
-    <script src="{{ asset('js/productGrid.js') }}"></script>
+	{{ parent() }}
+	<script>
+		var csrfToken = '{{ csrf_token('delete_product') }}';
+	</script>
+	<script src="{{ asset('js/productGrid.js') }}"></script>
+	<script src="{{ asset('js/product.js') }}"></script>
+
 {% endblock %}

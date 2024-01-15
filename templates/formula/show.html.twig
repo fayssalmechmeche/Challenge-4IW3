@@ -1,28 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Formula{% endblock %}
+
+{% block title %}Formula
+{% endblock %}
 
 {% block body %}
-    <h1>Formula</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ formula.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ formula.name }}</td>
-            </tr>
-            <tr>
+	{% set modal_id = 'formulaDetailsModal' %}
+	{% set modal_content_id = 'formulaDetailsModalContentId' %}
 
-        </tbody>
-    </table>
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('formulaDetailsModal', 'formulaDetailsModalContentId')">
+		Fermer
+	</button>
 
-    <a href="{{ path('app_formula_index') }}">back to list</a>
 
-    <a href="{{ path('app_formula_edit', {'id': formula.id}) }}">edit</a>
+	<!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5">Détails de la formule</h2>
+	<div class="flex flex-wrap gap-y-5 gap-x-10">
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-bold">Nom de la formule</p>
+			<p id="formulaName" class="text-xl">{{ data.name }}</p>
+		</div>
+		<div class="flex flex-col px-1 my-1">
+			<p class="text-xl font-bold">Prix</p>
+			<p id="formulaPrice" class="text-xl">{{ (data.price / 100)|number_format(2, '.', '') }}
+				€</p>
+		</div>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id='dataToShow' class="hidden">{{ data.products|json_encode }}</div>
+		<div id="productGrid" class="gridjs-container w-full"></div>
+	</div>
 
-    {{ include('formula/_delete_form.html.twig') }}
+
 {% endblock %}

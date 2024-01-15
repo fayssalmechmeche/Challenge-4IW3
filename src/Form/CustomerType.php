@@ -25,7 +25,7 @@ class CustomerType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'customerName',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Nom',
                 'label_attr' => ['class' => 'font-medium'],
@@ -41,7 +41,7 @@ class CustomerType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'customerLastName',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Prénom',
                 'label_attr' => ['class' => 'font-medium'],
@@ -57,7 +57,7 @@ class CustomerType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'customerNameSociety',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Nom de la Société',
                 'label_attr' => ['class' => 'font-medium'],
@@ -72,7 +72,7 @@ class CustomerType extends AbstractType
             ->add('streetName', TextType::class, [
                 'attr' => [
                     'id' => 'customerStreetName',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Nom de la rue',
                 'label_attr' => ['class' => 'font-medium'],
@@ -82,7 +82,7 @@ class CustomerType extends AbstractType
             ->add('streetNumber', IntegerType::class, [
                 'attr' => [
                     'id' => 'customerStreetNumber',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Numéro de rue',
                 'label_attr' => ['class' => 'font-medium'],
@@ -92,7 +92,7 @@ class CustomerType extends AbstractType
             ->add('city', TextType::class, [
                 'attr' => [
                     'id' => 'customerCity',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Ville',
                 'label_attr' => ['class' => 'font-medium'],
@@ -102,7 +102,7 @@ class CustomerType extends AbstractType
             ->add('postalCode', TextType::class, [
                 'attr' => [
                     'id' => 'customerPostalCode',
-                    'class' => 'rounded-xl w-full h-10 mb-1 p-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent'
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Code postal',
                 'label_attr' => ['class' => 'font-medium'],
@@ -112,6 +112,12 @@ class CustomerType extends AbstractType
             ->add('email', EmailType::class, [
                 'required' => false,
                 'label' => 'Adresse e-mail',
+                'attr' => [
+                    'id' => 'customerEmail',
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                ],
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new Email([
                         'message' => 'Veuillez renseigner une adresse e-mail valide.',
@@ -122,21 +128,27 @@ class CustomerType extends AbstractType
                 ],
             ])
 
-        ->add('phoneNumber', TextType::class, [
-            'required' => false,
-            'label' => 'Numéro de téléphone',
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Veuillez renseigner un numéro de téléphone.',
-                ]),
-                new Length([
-                    'min' => 10,
-                    'max' => 10,
-                    'minMessage' => 'Le numéro de téléphone doit comporter 10 chiffres.',
-                    'maxMessage' => 'Le numéro de téléphone doit comporter 10 chiffres.'
-                ])
-            ],
-        ]);
+            ->add('phoneNumber', TextType::class, [
+                'required' => false,
+                'label' => 'Numéro de téléphone',
+                'attr' => [
+                    'id' => 'customerPhoneNumber',
+                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                ],
+                'label_attr' => ['class' => 'font-medium'],
+                'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner un numéro de téléphone.',
+                    ]),
+                    new Length([
+                        'min' => 10,
+                        'max' => 10,
+                        'minMessage' => 'Le numéro de téléphone doit comporter 10 chiffres.',
+                        'maxMessage' => 'Le numéro de téléphone doit comporter 10 chiffres.'
+                    ])
+                ],
+            ]);
 
 
         // Ajouter un écouteur d'événement pour valider les données avant la soumission du formulaire
