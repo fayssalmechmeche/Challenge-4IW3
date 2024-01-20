@@ -23,8 +23,16 @@ class MailjetService
         );
     }
 
-    public function sendEmail(string $email, string $name, int $templateID, $data = []): bool
+    public function sendEmail(string $email, string $name, int $templateID, $data = [], string $pdfName = null): bool
     {
+        $attachments = $pdfName ?  [
+            [
+                'ContentType' => "application/pdf",
+                'Filename' => "document.pdf",
+                'ContentID' => uniqid(),
+                'Base64Content' => base64_encode(file_get_contents($this->parameterBag->get("pdf_directory") . $pdfName . '.pdf'))
+            ]
+        ] : null;
         $body = [
             'Messages' => [
                 [
@@ -37,6 +45,8 @@ class MailjetService
                     'TemplateID' => $templateID,
                     "TemplateLanguage" => true,
                     'Variables' => $data,
+                    'Attachments' => $attachments
+
                 ]
             ]
         ];
