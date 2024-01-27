@@ -22,11 +22,11 @@ function initDevisGrid() {
             'Nom',
             {
                 name: 'Quantité',
-                formatter: (cell, row) => html(`<input type="number" min="1" value="${cell}" data-id="${row.cells[2].data}" class="quantity-input" onchange="updateDevisItemQuantity(this)">`)
+                formatter: (cell, row) => html(`<input class='rounded-xl w-24 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'  type="number" min="1" value="${cell}" data-id="${row.cells[2].data}"  onchange="updateDevisItemQuantity(this)">`),
             },
             {
                 name: 'Supprimer',
-                formatter: (_, row) => html(`<button type="button" onclick="removeDevisItemFromGrid('${row.cells[2].data}')">Supprimer</button>`)
+                formatter: (_, row) => html(`<button class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2" type="button" onclick="removeDevisItemFromGrid('${row.cells[2].data}')">Supprimer</button>`)
             },
             {
                 name: 'Prix',
@@ -37,6 +37,20 @@ function initDevisGrid() {
                 }
             }
         ],
+        style: {
+            table: {
+              border: "none",
+            },
+            th: {
+              "background-color": "#d4d4d4",
+              color: "#000",
+              "text-align": "center",
+            },
+            td: {
+              "text-align": "center",
+              
+            },
+          },
         data: []
     });
     devisGrid.render(document.getElementById("wrapper"));
@@ -68,7 +82,6 @@ function handleCustomerSelectChange() {
         });
     }
 }
-console.log("wouf");
 
 function fetchCustomerInfo(customerId, clientInfoDiv) {
     if (customerId) {

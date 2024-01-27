@@ -3,7 +3,6 @@ import { Grid, html } from "https://unpkg.com/gridjs?module";
 let devisGrid;
 let productIndex;
 let formulaIndex;
-console.log("A l'huile");
 document.addEventListener('DOMContentLoaded', () => {
     // Sélectionner tous les éléments qui commencent par 'devis_devisProducts_' et 'devis_devisFormulas_'
     const productElements = document.querySelectorAll('[id^="devis_devisProducts_"]');
@@ -53,7 +52,6 @@ export function init(existingDevisItems, initialCustomerId) {
         }
     });
 }
-console.log("AJFZFK")
 function addDevisItem(type) {
     console.log('addDevisItem called with type:', type);
     let selectElement;
@@ -131,7 +129,7 @@ function addHiddenFieldsForGridItem(itemId, quantity, type, index, pricePerUnit)
         addHiddenInput(hiddenFieldsContainer, `devis[devisFormulas][${index}][price]`, pricePerUnit.toFixed(2),pricePerUnit.toFixed(2), priceId);
     }
 }
-console.log("done");
+
 
 window.updateDevisItemQuantity = function (inputElement) {
     console.log("updateDevisItemQuantity called with inputElement:", inputElement);
@@ -328,9 +326,9 @@ function handleDevisFormSubmit(event) {
     // Ajoutez le champ caché au formulaire
     const devisForm = document.getElementById('devisForm');
     devisForm.appendChild(hiddenJsonInput);
-    console.log(devisForm);
+    console.log("ici", devisForm);
     // Soumettez le formulaire
-    devisForm.submit();
+    // devisForm.submit();
 }
 
 function initDevisGrid(existingDevisItems) {
@@ -352,11 +350,12 @@ function initDevisGrid(existingDevisItems) {
             'Nom',
             {
                 name: 'Quantité',
-                formatter: (cell, row) => html(`<input type="number" min="1" value="${cell}" data-id="${row.cells[2].data}" class="quantity-input" onchange="updateDevisItemQuantity(this)">`)
+                formatter: (cell, row) => html(`<input class='rounded-xl w-24 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form' type="number" min="1" value="${cell}" data-id="${row.cells[2].data}" class="quantity-input" onchange="updateDevisItemQuantity(this)">`)
             },
             {
                 name: 'Supprimer',
-                formatter: (_, row) => html(`<button type="button" onclick="removeDevisItemFromGrid('${row.cells[2].data}')">Supprimer</button>`)
+                formatter: (_, row) => html(`<button 
+                class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2" type="button" onclick="removeDevisItemFromGrid('${row.cells[2].data}')">Supprimer</button>`)
             },
             {
                 name: 'Prix',
@@ -367,6 +366,20 @@ function initDevisGrid(existingDevisItems) {
                 }
             }
         ],
+        style: {
+            table: {
+              border: "none",
+            },
+            th: {
+              "background-color": "#d4d4d4",
+              color: "#000",
+              "text-align": "center",
+            },
+            td: {
+              "text-align": "center",
+              
+            },
+          },
         data: initialData
     });
     existingDevisItems.products.forEach(item => {

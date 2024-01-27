@@ -1,20 +1,24 @@
 {% extends 'base_caterer.html.twig' %}
 
-{% block title %}Devis index{% endblock %}
+{% block title %}Devis index
+{% endblock %}
 
 {% block content %}
-    <h1>Devis index</h1>
 
-    <!-- Conteneur pour le tableau Grid.js -->
-    <div id="devis-table"></div>
-
-    <a href="{{ path('app_devis_new') }}">Create new</a>
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Liste des Devis</h1>
+		<button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			<a class="text-decoration-none" href="{{ path('app_devis_new') }}">Créer un nouveau Devis</a>
+		</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="devis-table"></div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        var csrfToken = '{{ csrf_token('delete_devis') }}';
-    </script>
-    <script src="{{ asset('js/devisGrid.js') }}"></script>
+	{{ parent() }}
+	<script>
+		var csrfToken = '{{ csrf_token('delete_devis') }}';
+	</script>
+	<script src="{{ asset('js/devisGrid.js') }}"></script>
 {% endblock %}
