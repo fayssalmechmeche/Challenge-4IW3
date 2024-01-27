@@ -64,6 +64,7 @@ module.exports = {
         "bg-light-red": "#F5DCDC",
         "light-green": "#4FD18B",
         "bg-light-green": "#DCF5E8",
+        "nav-bar-black": "#353535"
       },
       spacing: {
         "90-vh": "90vh",
@@ -76,6 +77,7 @@ module.exports = {
         "5px": "5px",
         "15px": "15px",
         "35%": "35%",
+        "37%": "37%",
         "50px": "50px",
         "70%": "70%",
         "closed-nav": "48px",
