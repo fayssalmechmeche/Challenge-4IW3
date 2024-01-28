@@ -15,6 +15,8 @@ use App\Service\Stripe\StripeService;
 use const App\Entity\ROLE_SOCIETY;
 use Symfony\Component\Mime\Address;
 use const App\Entity\ROLE_ACCOUNTANT;
+use const App\Entity\ROLE_HEAD;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,7 +73,7 @@ class RegistrationController extends AbstractController
             switch ($this->getUser()->getRoles()) {
                 case in_array(ROLE_ADMIN, $this->getUser()->getRoles()):
                     return $this->redirectToRoute('admin_index');
-                case in_array(ROLE_ACCOUNTANT, $this->getUser()->getRoles()):
+                case in_array(ROLE_HEAD, $this->getUser()->getRoles()):
                     return $this->redirectToRoute('home_index');
                 default:
                     return $this->redirectToRoute('home_index');
@@ -99,7 +101,7 @@ class RegistrationController extends AbstractController
             );
 
             $user->setIsVerified(false);
-            $user->setRoles([ROLE_SOCIETY]);
+            $user->setRoles([ROLE_HEAD]);
             $user->setCreatedAt(new \DateTime());
             $user->setSociety($society);
             $user->setToken($token);

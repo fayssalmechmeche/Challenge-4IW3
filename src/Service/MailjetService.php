@@ -9,8 +9,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MailjetService
 {
-    const TEMPLATE_REGISTER = 5538680;
-    const TEMPLATE_CONFIRM_REGISTER = 5538702;
+    const TEMPLATE_REGISTER = 5603301;
+    const TEMPLATE_CONFIRM_REGISTER = 5603317;
+    const TEMPLATE_FORGET_PASSWORD = 5603341;
+    const TEMPLATE_DEVIS = 5603324;
+    const TEMPLATE_INVOICE = 5603327;
+
 
     private $client;
     public function __construct(private ParameterBagInterface $parameterBag)

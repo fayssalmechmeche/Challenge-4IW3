@@ -40,7 +40,8 @@ security:
     role_hierarchy:
         ROLE_ACCOUNTANT: [ROLE_ACCOUNTANT]
         ROLE_SOCIETY: [ROLE_SOCIETY]
-        ROLE_ADMIN: [ROLE_ADMIN,ROLE_ACCOUNTANT,ROLE_SOCIETY]
+        ROLE_HEAD: [ROLE_SOCIETY, ROLE_ACCOUNTANT]
+        ROLE_ADMIN: [ROLE_ADMIN,ROLE_ACCOUNTANT,ROLE_SOCIETY,ROLE_HEAD]
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

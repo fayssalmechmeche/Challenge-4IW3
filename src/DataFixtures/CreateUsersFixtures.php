@@ -43,6 +43,16 @@ class CreateUsersFixtures extends Fixture
             $admin->setIsVerified(true);
             $admin->setRoles(["ROLE_ADMIN"]);
 
+            $head = new User();
+            $head->setName($faker->firstName());
+            $head->setLastName($faker->lastName());
+            $head->setEmail('chef' . $i . '@gmail.com');
+            $head->setPassword($this->passwordHasher->hashPassword($head, SELF::PASSWORD));
+            $head->setCreatedAt(new DateTime());
+            $head->setSociety($society);
+            $head->setIsVerified(true);
+            $head->setRoles(["ROLE_HEAD"]);
+
 
             $accountant = new User();
             $accountant->setName($faker->firstName());
@@ -74,6 +84,7 @@ class CreateUsersFixtures extends Fixture
             $user->setCreatedAt(new DateTime());
             $user->setSociety($society);
             $user->setIsVerified(true);
+            $manager->persist($head);
             $manager->persist($user);
             $manager->persist($admin);
             $manager->persist($accountant);
