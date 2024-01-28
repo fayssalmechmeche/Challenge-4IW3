@@ -1,50 +1,69 @@
 // devisShow.js
 import { Grid, html } from "https://unpkg.com/gridjs?module";
 
-let devisGrid;
-
-document.addEventListener('DOMContentLoaded', function() {
-    initializeGrid();
-    loadDevisData();
+document.addEventListener("DOMContentLoaded", function () {
+  initializeGrid();
 });
 
 function initializeGrid() {
-    devisGrid = new Grid({
-        columns: ['Nom', 'Quantité','Prix'],
-        data: []
-    });
-    devisGrid.render(document.getElementById("wrapper"));
+  const devisGrid = new Grid({
+    columns: ["Nom", "Quantité", "Prix"],
+    data: [],
+    style: {
+      table: {
+        border: "none",
+      },
+      th: {
+        "background-color": "#d4d4d4",
+        color: "#000",
+        "text-align": "center",
+      },
+      td: {
+        "text-align": "center",
+        
+      },
+    },
+  });
+  devisGrid.render(document.getElementById("wrapper"));
+
+  setTimeout(() => {
+    loadDevisData(devisGrid);
+  }, 1000);
 }
 
-function loadDevisData() {
-    const devisProductsData = document.getElementById('devisProductsData');
-    const devisFormulasData = document.getElementById('devisFormulasData');
+function loadDevisData(devisGrid) {
+  const devisProductsData = document.getElementById("devisProductsData");
+  const devisFormulasData = document.getElementById("devisFormulasData");
 
-
-    if (devisProductsData && devisFormulasData) {
-        const products = JSON.parse(devisProductsData.getAttribute('data-products'));
-        const formulas = JSON.parse(devisFormulasData.getAttribute('data-formulas'));
-        initDevisGridWithData(products, formulas);
-        console.log(products, formulas);
-    }
-
+  if (devisProductsData && devisFormulasData) {
+    const products = JSON.parse(
+      devisProductsData.getAttribute("data-products")
+    );
+    const formulas = JSON.parse(
+      devisFormulasData.getAttribute("data-formulas")
+    );
+    initDevisGridWithData(products, formulas, devisGrid);
+    console.log("here ! :", products, formulas);
+  }
 }
 
-function initDevisGridWithData(products, formulas) {
-    const productRows = products.map(product => [
-        product.name,
-        product.quantity,
-        (product.price * product.quantity / 100).toFixed(2) + ' €',
-        'product'
-    ]);
-    const formulaRows = formulas.map(formula => [
-        formula.name,
-        formula.quantity,
-        (formula.price * formula.quantity / 100).toFixed(2) + ' €',
-        'formula'
-    ]);
-    const gridData = productRows.concat(formulaRows);
-    console.log(gridData);
+function initDevisGridWithData(products, formulas, devisGrid) {
+  const productRows = products.map((product) => [
+    product.name,
+    product.quantity,
+    ((product.price * product.quantity) / 100).toFixed(2) + " €",
+    "product",
+  ]);
+  console.log("product" ,productRows);
+  const formulaRows = formulas.map((formula) => [
+    formula.name,
+    formula.quantity,
+    ((formula.price * formula.quantity) / 100).toFixed(2) + " €",
+    "formula",
+  ]);
+  console.log("formula" ,productRows);
+  const gridData = productRows.concat(formulaRows);
+  console.log(gridData);
 
-    devisGrid.updateConfig({ data: gridData }).forceRender();
+  devisGrid.updateConfig({ data: gridData }).forceRender();
 }

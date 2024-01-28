@@ -81,7 +81,11 @@ class FormulaController extends AbstractController
             'products' => $productsData
         ];
 
-        return $this->json($data);
+       
+
+        return $this->render('formula/show.html.twig', [
+            'data' => $data
+        ]);
     }
 
     #[Route('/new', name: 'app_formula_new', methods: ['GET', 'POST'])]
