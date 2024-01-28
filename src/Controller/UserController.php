@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Society;
 
-use const App\Entity\ROLE_ADMIN;
 use const App\Entity\ROLE_HEAD;
+use const App\Entity\ROLE_ADMIN;
 use App\Form\Admin\AdminUserType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\ResetPasswordRequest;
 
+use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\ResetPasswordController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,6 +70,13 @@ class UserController extends AbstractController
                     'message' => "Token invalid"
                 ));
             }
+            if (!filter_var($data['admin_user[email]'], FILTER_VALIDATE_EMAIL)) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "L'e-mail n'est pas valide"
+                ));
+            }
             if ($this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $data['admin_user[email]']])) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -76,6 +84,7 @@ class UserController extends AbstractController
                     'message' => "L'utilisateur existe déja"
                 ));
             }
+            $user->setIsVerified(false);
             $this->_setDataUser($user, $data, false);
             $response = $this->forward('App\Controller\ResetPasswordController::processSendingPasswordResetEmail', [
                 'emailFormData' => $data['admin_user[email]']
@@ -142,10 +151,8 @@ class UserController extends AbstractController
         $user->setCreatedAt(new \DateTime());
         $user->setSociety($this->getUser()->getSociety());
         $user->setRoles([$roles]);
-        $user->setIsVerified($edit);
 
         $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $email]);
-        dump('existe déjà');
         if ($isUserExist && $isUserExist->getId() != $user->getId()) {
             return new JsonResponse(array(
                 'code' => 200,
@@ -164,5 +171,32 @@ class UserController extends AbstractController
 
         $this->entityManagerInterface->persist($user);
         $this->entityManagerInterface->flush();
+    }
+
+    #[Route('/delete/{id}/{token}', name: 'delete')]
+    public function delete(User $user, string $token): Response
+    {
+        if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
+
+            $tokens = $this->entityManagerInterface->getRepository(ResetPasswordRequest::class)->findBy(['user' => $user]);
+            foreach ($tokens as $resetPasswordRequest) {
+                $this->entityManagerInterface->remove($resetPasswordRequest);
+            }
+
+            $this->entityManagerInterface->flush();
+
+            $this->entityManagerInterface->remove($user);
+            $this->entityManagerInterface->flush();
+            return new JsonResponse(array(
+                'code' => 200,
+                'success' => true,
+                'message' => "Utilisateur a été supprimé avec succès"
+            ));
+        }
+        return new JsonResponse(array(
+            'code' => 200,
+            'success' => false,
+            'message' => "Token invalide"
+        ));
     }
 }
