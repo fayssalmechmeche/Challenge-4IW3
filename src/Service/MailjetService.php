@@ -9,8 +9,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MailjetService
 {
-    const TEMPLATE_REGISTER = 5538680;
-    const TEMPLATE_CONFIRM_REGISTER = 5538702;
+    const TEMPLATE_REGISTER = 5603301;
+    const TEMPLATE_CONFIRM_REGISTER = 5603317;
+    const TEMPLATE_FORGET_PASSWORD = 5603341;
+    const TEMPLATE_DEVIS = 5603324;
+    const TEMPLATE_INVOICE = 5603327;
+
 
     private $client;
     public function __construct(private ParameterBagInterface $parameterBag)
@@ -23,8 +27,16 @@ class MailjetService
         );
     }
 
-    public function sendEmail(string $email, string $name, int $templateID, $data = []): bool
+    public function sendEmail(string $email, string $name, int $templateID, $data = [], string $pdfName = null): bool
     {
+        $attachments = $pdfName ?  [
+            [
+                'ContentType' => "application/pdf",
+                'Filename' => "document.pdf",
+                'ContentID' => uniqid(),
+                'Base64Content' => base64_encode(file_get_contents($this->parameterBag->get("pdf_directory") . $pdfName . '.pdf'))
+            ]
+        ] : null;
         $body = [
             'Messages' => [
                 [
@@ -37,6 +49,8 @@ class MailjetService
                     'TemplateID' => $templateID,
                     "TemplateLanguage" => true,
                     'Variables' => $data,
+                    'Attachments' => $attachments
+
                 ]
             ]
         ];

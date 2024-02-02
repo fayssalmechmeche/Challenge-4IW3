@@ -1,0 +1,23 @@
+{% extends 'base_caterer.html.twig' %}
+
+{% block title %}Dashboard Utilisateur
+{% endblock %}
+
+{% block content %}
+
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Liste des utilisateurs</h1>
+		<button onclick="openUserCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Créer un nouveau utilisateur</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="tabUserGridJs"></div>
+		{% include "admin/component/modal.html.twig" %}
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+
+	<script src="{{ asset('js/userGrid.js') }}"></script>
+	<script src="{{ asset('js/user.js') }}"></script>
+{% endblock %}
