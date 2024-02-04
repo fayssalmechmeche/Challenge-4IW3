@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Compte
+{% endblock %}
+
+
+{% block body %}
+	<div id="alerts" data-alert="{{ app.session.flashBag.all()|json_encode()}}"></div>
+	<!-- Close Button -->
+	<a class="fixed bottom-3 left-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1 flex items-center gap-1" href="{{path("default_index")}}">
+		<span class="material-symbols-outlined">
+				arrow_circle_left</span>Retour à la page d'accueil
+	</a>
+	<div class='mx-auto h-full 3xl:h-screen bg-gray-300 pt-5'>
+		<div class="w-90% h-44 mx-auto bg-gradient-to-r from-[#011936] to-[#012F63] rounded-[24px] flex items-center justify-center px-5">
+			<div class="relative px-10 w-80 sm:w-[700px] h-40 flex justify-start items-center bg-white rounded-3xl shadow-xl transform translate-y-10 gap-10">
+				<img class="w-32 rounded-3xl transform shadow-md" src="./0d4ae847-6828-4179-892b-35ca46596170.webp" alt="logo"/>
+				<div class="flex flex-col justify-start items-start self-start mt-10">
+					<h2 class="text-xl sm:text-4xl font-semibold">{{ user.name }}
+						{{ user.lastName }}</h2>
+					<p class="text-lg sm:text-xl text-gray-500">{{ society.address }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="flex justify-center 3xl:justify-between items-start flex-wrap w-90% mx-auto">
+			<div class="mt-20 mr-2 mb-10 px-10 pt-10 w-80 sm:w-[500px] flex flex-col justify-start items-center bg-white rounded-3xl shadow-2xl">
+				<h2 class="font-semibold text-3xl mb-2">Information de l'Utilisateur</h2>
+				<form method="post" class="w-full flex flex-col justify-start items-center">
+					<div class="flex flex-wrap gap-y-5 gap-x-10">
+						{{ form_start(userForm) }}
+						{{ form_row(userForm.name) }}
+						{{ form_row(userForm.lastName) }}
+						{{ form_row(userForm.email) }}
+					</div>
+					<input class='text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg px-5 py-2 mt-7 mb-3' type="submit" value="Sauvegarder"/>
+					{{ form_end(userForm) }}
+				</form>
+			</div>
+
+			<div class="mt-20 mb-10 px-10 pt-10 w-80 sm:w-[900px] flex flex-col justify-start items-center bg-white rounded-3xl shadow-2xl">
+				<h2 class="font-semibold text-3xl mb-2">Information de la Société</h2>
+				<form method="post" class="w-full flex flex-col justify-start items-center">
+					<div class="flex flex-wrap gap-y-5 gap-x-10">
+						{{ form_start(societyForm) }}
+						{{ form_row(societyForm.name) }}
+						{{ form_row(societyForm.address) }}
+						{{ form_row(societyForm.phone) }}
+						{{ form_row(societyForm.email) }}
+						{{ form_row(societyForm.siret) }}
+					</div>
+					<input class='text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg px-5 py-2 mt-7 mb-3' type="submit" value="Sauvegarder"/>
+					{{ form_end(societyForm) }}
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/addFlash.js') }}"></script>
+	<script src="{{ asset('js/profilePage.js') }}"></script>
+{% endblock %}

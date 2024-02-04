@@ -64,7 +64,7 @@ module.exports = {
         "bg-light-red": "#F5DCDC",
         "light-green": "#4FD18B",
         "bg-light-green": "#DCF5E8",
-        "nav-bar-black": "#353535"
+        "nav-bar-black": "#353535",
       },
       spacing: {
         "90-vh": "90vh",
@@ -88,6 +88,7 @@ module.exports = {
         "550px": "550px",
         "500px": "500px",
         "1150px": "1150px",
+        "90%": "90%",
       },
       width: {
         "content-space-open": "calc(100% - 257px)",
@@ -112,6 +113,10 @@ module.exports = {
       },
       boxShadow: {
         form: "0px 4px 18px 0px rgba(158, 168, 189, 0.31)",
+      },
+      screens: {
+        "3xl": "1618px",
+        // => @media (min-width: 1280px) { ... }
       },
     },
   },
