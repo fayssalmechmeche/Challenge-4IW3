@@ -10,6 +10,12 @@
 		<button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
 			<a class="text-decoration-none" href="{{ path('app_devis_new') }}">Créer un nouveau Devis</a>
 		</button>
+		<button onclick="generateDevisXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Générer XLSX
+		</button>
+		<button onclick="generateDevisPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Générer PDF
+		</button>
 		<!-- Conteneur pour le tableau Grid.js -->
 		<div id="devis-table"></div>
 	</div>
@@ -21,4 +27,5 @@
 		var csrfToken = '{{ csrf_token('delete_devis') }}';
 	</script>
 	<script src="{{ asset('js/devisGrid.js') }}"></script>
+	<script src="{{ asset('js/excel.js') }}"></script>
 {% endblock %}
