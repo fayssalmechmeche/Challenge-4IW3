@@ -1,0 +1,12 @@
+<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
+	<p class="text-grey-p text-base">{{ description }}</p>
+	<h2 class="text-3xl font-bold">{{ amount }}</h2>
+	{% if trend is defined %}
+		<div class="flex justify-center items-center {{ trend.background }} w-24 rounded-3xl px-5 py-2">
+			<span class="material-symbols-outlined {{ trend.color }}">
+				{{ trend.icon }}
+			</span>
+			<p class="font-bold {{ trend.color }}">{{ trend.prefix }}{{ trend.percentage }}</p>
+		</div>
+	{% endif %}
+</div>

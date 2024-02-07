@@ -5,6 +5,7 @@
         "@symfony/webpack-encore": "^4.0.0",
         "autoprefixer": "^10.4.16",
         "core-js": "^3.23.0",
+        "cross-env": "^7.0.3",
         "postcss": "^8.4.32",
         "postcss-loader": "^7.3.3",
         "regenerator-runtime": "^0.13.9",
@@ -21,7 +22,7 @@
     "scripts": {
         "dev-server": "encore dev-server",
         "dev": "encore dev",
-        "watch": "encore dev --watch",
+        "watch": "cross-env NODE_ENV=development encore dev --watch",
         "build": "encore production --progress"
     },
     "dependencies": {
