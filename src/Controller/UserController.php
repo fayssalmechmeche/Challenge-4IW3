@@ -87,7 +87,8 @@ class UserController extends AbstractController
             $user->setIsVerified(false);
             $this->_setDataUser($user, $data, false);
             $response = $this->forward('App\Controller\ResetPasswordController::processSendingPasswordResetEmail', [
-                'emailFormData' => $data['admin_user[email]']
+                'emailFormData' => $data['admin_user[email]'],
+                'isReset' => false
             ]);
             return new JsonResponse(array(
                 'code' => 200,

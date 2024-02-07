@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ResetPasswordRequestRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -30,7 +31,8 @@ class ResetPasswordController extends AbstractController
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private EntityManagerInterface $entityManager,
-        private MailjetService $mailjet
+        private MailjetService $mailjet,
+        private ResetPasswordRequestRepository $resetPasswordRequestRepository
     ) {
     }
 
@@ -46,6 +48,7 @@ class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
+                true
             );
         }
 
@@ -68,6 +71,66 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
+        ]);
+    }
+
+    /**
+     * Validates and process the reset URL that the user clicked in their email.
+     */
+    #[Route('/confirm/{token}', name: 'app_confirm_account')]
+    public function confirm(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, string $token = null): Response
+    {
+        if ($token) {
+            // We store the token in session and remove it from the URL, to avoid the URL being
+            // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
+            $this->storeTokenInSession($token);
+
+            return $this->redirectToRoute('app_confirm_account');
+        }
+        $token = $this->getTokenFromSession();
+        if (null === $token) {
+            throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
+        }
+        try {
+            $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
+        } catch (ResetPasswordExceptionInterface $e) {
+            $this->addFlash('info', "Votre mot de passe a déjà été modifié. Vous pouvez vous connecter.");
+            return $this->redirectToRoute('app_login');
+        }
+
+        // The token is valid; allow the user to change their password.
+        $form = $this->createForm(ChangePasswordFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // A password reset token should be used only once, remove it.
+            $this->resetPasswordHelper->removeResetRequest($token);
+
+            // Encode(hash) the plain password, and set it.
+            $encodedPassword = $passwordHasher->hashPassword(
+                $user,
+                $form->get('plainPassword')->getData()
+            );
+
+            $user->setPassword($encodedPassword);
+            $user->setIsVerified(true);
+            $this->entityManager->flush();
+            $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
+                'link' => $link,
+                'firstName' => $user->getName(),
+                'name' => $user->getLastName()
+            ]);
+            $this->addFlash('success', 'Votre compte a bien été activé');
+
+            // The session is cleaned up after the password has been changed.
+            $this->cleanSessionAfterReset();
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('reset_password/reset.html.twig', [
+            'resetForm' => $form->createView(),
         ]);
     }
 
@@ -113,7 +176,6 @@ class ResetPasswordController extends AbstractController
             );
 
             $user->setPassword($encodedPassword);
-            $user->setIsVerified(true);
             $this->entityManager->flush();
             $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
             $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
@@ -121,7 +183,7 @@ class ResetPasswordController extends AbstractController
                 'firstName' => $user->getName(),
                 'name' => $user->getLastName()
             ]);
-            $this->addFlash('success', 'Votre compte a bien été activé');
+            $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter.');
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -134,7 +196,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    public function processSendingPasswordResetEmail(string $emailFormData): RedirectResponse
+    public function processSendingPasswordResetEmail(string $emailFormData, bool $isReset = true): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -144,33 +206,31 @@ class ResetPasswordController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_check_email');
         }
+        $token = $this->resetPasswordRequestRepository->findOneBy(['user' => $user]);
 
-        try {
-            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
-            // If you want to tell the user why a reset email was not sent, uncomment
-            // the lines below and change the redirect to 'app_forgot_password_request'.
-            // Caution: This may reveal if a user is registered or not.
-            //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     '%s - %s',
-            //     $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
-            //     $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
-            // ));
+        $token ?  $resetToken = $token->getHashedToken() : $resetToken = $this->resetPasswordHelper->generateResetToken($user);
 
-            return $this->redirectToRoute('app_check_email');
+        if ($isReset === true) {
+            $link = $this->generateUrl('app_reset_password', [
+                'token' => $token ? $resetToken = $token->getHashedToken() : $resetToken->getToken(),
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_FORGET_PASSWORD, [
+                'confirmation_link' => $link,
+                'firstName' => $user->getName(),
+                'lastName' => $user->getLastName()
+            ]);
+        } else {
+            $link = $this->generateUrl('app_confirm_account', [
+                'token' => $token ? $resetToken = $token->getHashedToken() : $resetToken->getToken(),
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_REGISTER, [
+                'confirmation_link' => $link,
+            ]);
         }
 
-        $link = $this->generateUrl('app_reset_password', [
-            'token' => $resetToken->getToken(),
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_REGISTER, [
-            'confirmation_link' => $link,
-        ]);
 
         // Store the token object in session for retrieval in check-email route.
-        $this->setTokenObjectInSession($resetToken);
+        $token ?? $this->setTokenObjectInSession($resetToken);
 
         return $this->redirectToRoute('app_check_email');
     }
