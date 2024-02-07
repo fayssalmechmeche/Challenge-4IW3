@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Excel;
 
 use DateTime;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class ExcelService
+class DevisExcelService
 {
     private $spreadsheet;
     private $sheet;

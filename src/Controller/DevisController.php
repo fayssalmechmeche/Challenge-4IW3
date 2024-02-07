@@ -8,7 +8,7 @@ use App\Entity\DevisProduct;
 use App\Repository\DevisRepository;
 use App\Repository\FormulaRepository;
 use App\Repository\ProductRepository;
-use App\Service\ExcelService;
+use App\Service\Excel\DevisExcelService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -761,12 +761,12 @@ nav button:hover {
 
 
   #[Route('/generate/xlsx', name: 'app_devis_generate_xlsx', methods: ['POST'])]
-  public function generateXlsx(ExcelService $excelService, Request $request, EntityManagerInterface $entityManager): Response
+  public function generateXlsx(DevisExcelService $DevisExcelService, Request $request, EntityManagerInterface $entityManager): Response
   {
     $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
 
     if ($request->isXmlHttpRequest()) {
-      return  $excelService->generateXlsx($devis);
+      return  $DevisExcelService->generateXlsx($devis);
     } else {
       return $this->json([
         'code' => 401,
@@ -776,11 +776,11 @@ nav button:hover {
   }
 
   #[Route('/generate/pdf', name: 'app_devis_generate_pdf', methods: ['POST'])]
-  public function generatePdf(ExcelService $excelService, Request $request, EntityManagerInterface $entityManager): Response
+  public function generatePdf(DevisExcelService $DevisExcelService, Request $request, EntityManagerInterface $entityManager): Response
   {
     $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
     if ($request->isXmlHttpRequest()) {
-      return  $excelService->generatePDF($devis);
+      return  $DevisExcelService->generatePDF($devis);
     } else {
       return $this->json([
         'code' => 401,
