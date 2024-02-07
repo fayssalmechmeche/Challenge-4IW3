@@ -99,6 +99,17 @@ ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+RUN apk update && apk add --no-cache \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    zlib-dev
+
+RUN docker-php-ext-configure gd \
+    --with-freetype=/usr/include/ \
+    --with-jpeg=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
 # prevent the reinstallation of vendors at every changes in the source code
 COPY composer.* symfony.* ./
 RUN set -eux; \
@@ -139,17 +150,6 @@ RUN set -eux; \
 	apk del .build-deps
 
 RUN rm -f .env.local.php
-
-RUN apk update && apk add --no-cache \
-    freetype-dev \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    zlib-dev
-
-RUN docker-php-ext-configure gd \
-    --with-freetype=/usr/include/ \
-    --with-jpeg=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
 
 
 # Build Caddy with the Mercure and Vulcain modules
