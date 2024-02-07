@@ -19,10 +19,14 @@ class ChangePasswordFormType extends AbstractType
                 'type' => PasswordType::class,
                 'options' => [
                     'attr' => [
-                        'autocomplete' => 'new-password',
+                        'autocomplete' => 'new-password'
                     ],
                 ],
                 'first_options' => [
+                    'attr' => [
+                        'autofocus' => true,
+                        'placeholder' => 'Votre mot de passe. 6 caractères min.'
+                    ],
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Please enter a password',
@@ -37,6 +41,9 @@ class ChangePasswordFormType extends AbstractType
                     'label' => 'New password',
                 ],
                 'second_options' => [
+                    'attr' => [
+                        'placeholder' => 'Confirmer votre mot de passe. 6 caractères min.'
+                    ],
                     'label' => 'Repeat Password',
                 ],
                 'invalid_message' => 'The password fields must match.',
