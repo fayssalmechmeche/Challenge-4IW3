@@ -99,20 +99,47 @@ class DevisProductExcelService
         $this->sheet->setCellValue('D1', "Quantité");
         $this->sheet->setCellValue('E1', "Prix");
         $this->sheet->setCellValue('F1', "Prix total");
+        $this->sheet->setCellValue('G1', "Catégorie");
 
         $line = 2;
+
+        // Initialise un tableau pour filtrer les doublons
+        $tabFiltered = [];
+
         /** @var DevisProduct $value */
         foreach ($devisProduct as $key => $value) {
+            $productName = $value->getProduct()->getName();
+            if (array_key_exists($productName, $tabFiltered)) {
+                $tabFiltered[$productName] += $value->getQuantity();
+            } else {
+                $tabFiltered[$productName] = $value->getQuantity();
+            }
+        }
 
+        foreach ($tabFiltered as $productName => $quantity) {
             $this->sheet->MergeCells('A' . $line . ':B' . $line);
             $this->sheet->getStyle('A' . $line . ':H' . $line)->getAlignment()->setHorizontal('center');
-            $this->sheet->setCellValue('A' . $line, $value->getId());
-            $this->sheet->setCellValue('C' . $line, $value->getProduct()->getName());
-            $this->sheet->setCellValue('D' . $line, $value->getQuantity());
-            $this->sheet->setCellValue('E' . $line, $value->getPrice());
-            $this->sheet->setCellValue('F' . $line, $value->getPrice() * $value->getQuantity());
-            $line++;
+
+            // Trouver le premier élément dans $devisProduct correspondant à ce nom de produit
+            $matchingDevisProduct = null;
+            foreach ($devisProduct as $value) {
+                if ($value->getProduct()->getName() === $productName) {
+                    $matchingDevisProduct = $value;
+                    break;
+                }
+            }
+
+            if ($matchingDevisProduct !== null) {
+                $this->sheet->setCellValue('A' . $line, $matchingDevisProduct->getId());
+                $this->sheet->setCellValue('C' . $line, $productName);
+                $this->sheet->setCellValue('D' . $line, $quantity);
+                $this->sheet->setCellValue('E' . $line, $matchingDevisProduct->getPrice() / 100);
+                $this->sheet->setCellValue('F' . $line, ($matchingDevisProduct->getPrice() / 100) * $quantity);
+                $this->sheet->setCellValue('G' . $line, $matchingDevisProduct->getProduct()->getProductCategory());
+                $line++;
+            }
         }
+
         $this->sheet->setCellValue('A' . $line, "Total");
         $this->sheet->setCellValue('D' . $line, "=SUM(D2:D" . ($line - 1) . ")");
         $this->sheet->setCellValue('E' . $line, "=SUM(E2:E" . ($line - 1) . ")");

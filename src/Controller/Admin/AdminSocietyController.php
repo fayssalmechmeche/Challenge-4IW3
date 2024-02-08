@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
 use App\Repository\SocietyRepository;
 use App\Service\Stripe\StripeHelper;
+use App\Service\Stripe\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,7 +64,7 @@ class AdminSocietyController extends AbstractController
 
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, StripeHelper $stripeHelper)
+    public function new(Request $request, StripeService $stripeService)
     {
         $society = new Society();
         $form = $this->createForm(SocietyType::class, $society);
@@ -80,7 +81,7 @@ class AdminSocietyController extends AbstractController
                 ));
             }
             $this->_setDataSociety($society, $data);
-            $stripeHelper->createCustomer($society);
+            $stripeService->createCustomer($society);
             return new JsonResponse(array(
                 'code' => 200,
                 'success' => true,
