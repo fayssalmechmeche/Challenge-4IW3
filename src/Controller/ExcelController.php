@@ -3,16 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\Devis;
+use App\Entity\DevisFormula;
 use App\Entity\DevisProduct;
 use App\Service\Excel\DevisExcelService;
+use App\Service\Excel\DevisFormulaExcelService;
 use App\Service\Excel\DevisProductExcelService;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/excel')]
+#[IsGranted('ROLE_ACCOUNTANT')]
 class ExcelController extends AbstractController
 {
 
@@ -56,7 +60,6 @@ class ExcelController extends AbstractController
                 $tabDevisProduct[] = $devisProduct;
             }
         }
-        dump($tabDevisProduct);
         if ($request->isXmlHttpRequest()) {
             return $devisProductExcelService->generateXlsx($tabDevisProduct);
         } else {
@@ -78,9 +81,50 @@ class ExcelController extends AbstractController
                 $tabDevisProduct[] = $devisProduct;
             }
         }
-        dump($tabDevisProduct);
         if ($request->isXmlHttpRequest()) {
             return $devisProductExcelService->generatePDF($tabDevisProduct);
+        } else {
+            return $this->json([
+                'code' => 401,
+                'message' => 'Requête non autorisée !',
+            ], 401);
+        }
+    }
+
+    #[Route('/generate/formula/xlsx', name: 'excel_devis_formula_xlsx')]
+    public function generateExcelDevisFormula(devisFormulaExcelService $devisFormulaExcelService, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $tabDevisProduct = [];
+        foreach ($devis as $devis) {
+            $devisProduct = $entityManager->getRepository(DevisFormula::class)->findBy(['devis' => $devis]);
+            foreach ($devisProduct as $devisProduct) {
+                $tabDevisProduct[] = $devisProduct;
+            }
+        }
+        if ($request->isXmlHttpRequest()) {
+            return $devisFormulaExcelService->generateXlsx($tabDevisProduct);
+        } else {
+            return $this->json([
+                'code' => 401,
+                'message' => 'Requête non autorisée !',
+            ], 401);
+        }
+    }
+
+    #[Route('/generate/formula/pdf', name: 'excel_devis_formula_pdf')]
+    public function generatePdfDevisFormula(DevisFormulaExcelService $devisFormulaExcelService, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $tabDevisProduct = [];
+        foreach ($devis as $devis) {
+            $devisProduct = $entityManager->getRepository(DevisFormula::class)->findBy(['devis' => $devis]);
+            foreach ($devisProduct as $devisProduct) {
+                $tabDevisProduct[] = $devisProduct;
+            }
+        }
+        if ($request->isXmlHttpRequest()) {
+            return $devisFormulaExcelService->generatePDF($tabDevisProduct);
         } else {
             return $this->json([
                 'code' => 401,
