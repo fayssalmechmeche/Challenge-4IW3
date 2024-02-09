@@ -1,42 +1,39 @@
 {% extends 'admin/base.back.html.twig' %}
 
-{% block title %}Dashboard Utilisateur
+{% block title %}
+  Dashboard Utilisateur
 {% endblock %}
 
 {% block body %}
+  <h1 class="text-5xl mt-2">Info de la société: <span class="h-fit w-fit rounded-lg bg-blue-700 px-4 text-white">{{ society.name }}</span></h1>
 
-	<main class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4">
-		<h1 class="mb-6 flex flex-wrap text-sm md:text-4xl text-center overflow-hidden">Société
-			{{society.name}}</h1>
+  {% set usersVerified = 0 %}
+  {% for user in society.users %}
+    {% if user.isVerified == true %}
+      {% set usersVerified = usersVerified + 1 %}
+    {% endif %}
+  {% endfor %}
+  {% set usersNotVerified = (society.users|length) - usersVerified %}
 
-		<section id="InfoCards" class="mb-4 flex flex-wrap h-1/6 w-full justify-around max-sm:h-1/4 max-lg:flex-col max-lg:items-center">
-			{% set usersVerified = 0 %}
-			{% for user in society.users %}
-				{% if user.isVerified == true %}
-					{% set usersVerified = usersVerified + 1 %}
-				{% endif %}
-			{% endfor %}
-			{% set usersNotVerified = society.users|length - usersVerified %}
-
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre utilisateurs","data": society.users|length,'add':false,'id':"" }%}
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs vérifiés","data": usersVerified,'add':false,'id':""  }%}
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": usersNotVerified,'add':false,'id':""  }%}
-		</section>
-		<h1 class="mb-6 flex flex-wrap text-sm md:text-4xl text-center overflow-hidden">Les utilisateurs de
-			{{society.name}}
-		</h1>
-		<section id="InfosUser" class="h-full w-full">
-			<div id="tabUserGridJs" class="h-full w-full" data-id="{{society.id}}"></div>
-		</section>
-		{% include "admin/component/modal.html.twig" %}
-
-	</main>
+  {# First block #}
+  <section id="InfoCards" class="mt-5 sm:mt-0 w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: society.users|length, description: 'Nombre utilisateurs' } %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-green-200', color: 'text-green-500', icon: 'verified_user', count: usersVerified, description: 'Utilisateurs vérifiés' } %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-red-200', color: 'text-red-500', icon: 'no_accounts', count: usersNotVerified, description: 'Utilisateurs non vérifiés' } %}
+  </section>
+  <section id="InfosUser" class="h-full w-full">
+  <h2 class="mb-3 text-3xl mt-4">Les Utilisateurs</h2>
+    <div id="tabUserGridJs" class="h-full w-full" data-id="{{ society.id }}"></div>
+  </section>
+  {% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 
 {% block script_js %}
-	{{ parent() }}
-	<script src="{{ asset('js/addFlash.js') }}"></script>
-	<script src="{{ asset('js/admin/societyUserGrid.js') }}"></script>
-	<script src="{{ asset('js/admin/user.js') }}"></script>
-
+  {{ parent() }}
+  <script src="{{ asset('js/addFlash.js') }}"></script>
+  <script src="{{ asset('js/admin/societyUserGrid.js') }}"></script>
+  <script src="{{ asset('js/admin/user.js') }}"></script>
 {% endblock %}

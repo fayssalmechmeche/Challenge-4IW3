@@ -54,20 +54,18 @@ class AdminUserType extends AbstractType
                 ],
             ])
             ->add('name', TextType::class, [
-                'label' => 'Nom du produit',
+                'label' => 'Prénom de l\'Utilisateur',
                 'label_attr' => ['class' => 'font-medium'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'id' => 'productName',
                     'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom du produit',
+                'label' => 'Nom de l\'Utilisateur',
                 'label_attr' => ['class' => 'font-medium'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'id' => 'productName',
                     'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ]);

@@ -64,6 +64,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-symfony}
     volumes:
       - db_data:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
 
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###

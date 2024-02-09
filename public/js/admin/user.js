@@ -27,7 +27,6 @@ function openUserShowModal(id) {
   fetch(`/admin/user/show/${id}`)
     .then((response) => response.text())
     .then((html) => {
-      console.log(html);
       document.getElementById("content").innerHTML = html;
       displayModalTwo(true);
     })
@@ -70,6 +69,23 @@ function addClassToElementTwo() {
   let customerDiv = document.getElementById("admin_user");
   if (customerDiv) {
     customerDiv.classList.add("flex", "flex-wrap", "gap-y-5", "gap-x-10");
+  }
+}
+
+// added for the case we have one grid js and for the modal that use  displayModal
+function displayModal(isVisibleBoolean) {
+  if (isVisibleBoolean) {
+    document.getElementById("modal_content_id").style.display = "block";
+    document.getElementById("modal_id").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("modal_content_id").style.top = "50%";
+    }, 20);
+  } else {
+    document.getElementById("modal_content_id").style.top = "-500px";
+    setTimeout(() => {
+      document.getElementById("modal_content_id").style.display = "none";
+      document.getElementById("modal_id").style.display = "none";
+    }, 200);
   }
 }
 

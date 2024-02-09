@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
   let id = document.getElementById("tabUserGridJs").getAttribute("data-id");
-  console.log(id);
   new gridjs.Grid({
     columns: [
       {
@@ -30,13 +29,13 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="w-full mx-auto flex justify-center items-center gap-2">
           <button
           class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
-          onclick="openUserShowModal(${user.id})
+          onclick="openUserShowModal(${user.id})"
           >
-              Voir la Société
+          Voir l'Utilisateur
           </button>
           <button
           class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
-          onclick="openUserShowModal(${user.id})
+          onclick="openUserEditModal(${user.id})"
           >
           Modifier
           </button>

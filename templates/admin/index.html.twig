@@ -5,30 +5,28 @@
 {% endblock %}
 
 {% block body %}
-  <h1 class="text-5xl mt-2 mb-3">Tableau de bord</h1>
+  <h1 class="text-5xl mt-2 mb-10">Tableau de bord</h1>
+  {# First block #}
+  <section id="InfoCards" class="w-full mx-auto flex md:flex-row my-2 flex-col justify-start items-center gap-3">
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: users|length, description: "Nombre d'Utilisateurs" } %}
 
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-yellow-200', color: 'text-yellow-500', icon: 'apartment', count: societies|length, description: 'Nombre de sociétés' } %}
 
-    {# First block #}
-    <section id="InfoCards" class="w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
-      {# card-admin #}
-      {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: users|length, description: "Nombre d'Utilisateurs" } %}
-
-      {# card-admin #}
-      {% include 'components/admin_card.twig' with { bgColor: 'bg-yellow-200', color: 'text-yellow-500', icon: 'apartment', count: societies|length, description: 'Nombre de sociétés' } %}
-
-      {# card-admin #}
-      {% include 'components/admin_card.twig' with { bgColor: 'bg-green-200', color: 'text-green-500', icon: 'description', count: devis|length, description: 'Nombre de devis' } %}
-    </section>
-    {# Second block #}
-    <section id="InfosEntreprise" class="mt-3 mb-5 w-full mx-auto flex items-start flex-col justify-start rounded-xl overflow-x-auto">
-      <h2 class="mb-3 text-3xl mt-4">Les Sociétés</h2>
-      <div id="tabSocietyGridJs" class="h-full w-full"></div>
-    </section>
-    {# Third block #}
-    <section id="InfosUser" class="mt-3 w-full mx-auto flex items-start flex-col justify-start overflow-x-auto">
-      <h2 class="mb-3 text-3xl mt-4">Les Utilisateurs</h2>
-      <div id="tabUserGridJs" class="h-full w-full"></div>
-    </section>
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-green-200', color: 'text-green-500', icon: 'description', count: devis|length, description: 'Nombre de devis' } %}
+  </section>
+  {# Second block #}
+  <section id="InfosEntreprise" class="mb-5 w-full mx-auto flex items-start flex-col justify-start rounded-xl overflow-x-auto">
+    <h2 class="mb-3 text-3xl mt-4">Les Sociétés</h2>
+    <div id="tabSocietyGridJs" class="h-full w-full"></div>
+  </section>
+  {# Third block #}
+  <section id="InfosUser" class="w-full mx-auto flex items-start flex-col justify-start overflow-x-auto">
+    <h2 class="mb-3 text-3xl mt-1">Les Utilisateurs</h2>
+    <div id="tabUserGridJs" class="h-full w-full"></div>
+  </section>
   {% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 

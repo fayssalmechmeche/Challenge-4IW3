@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
           gridjs.html(`
           <div class="w-full mx-auto flex justify-center items-center gap-2">
       <button
-        class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+        class="text-white w-40 font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-1 py-2"
       >
         <a class="text-decoration-none" href="/admin/society/show/${society.id}"
           >Voir la Société</a
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <button
         type="submit"
         class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
-        onclick="deleteSociety(${society.id},${society.token}"
+        onclick="deleteSociety(${society.id},'${society.token}')"
         )
       >
         Supprimer
