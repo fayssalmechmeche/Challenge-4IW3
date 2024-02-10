@@ -2,13 +2,14 @@
 
 {{ form_widget(form) }}
 
+
 <button  type="button" class="text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg mt-7 mb-3 px-3 py-2 "
 onclick="{{ actionId ? 'editUser(' ~ user.id ~ ')' : 'addNewUser()' }}"
-
->{% if actionId is not null %}
-			Éditer
-		{% else %}
-			Créer
-		{% endif %}
+>
+{% if actionId is not null %}
+	Éditer
+{% else %}
+	Créer
+{% endif %}
 </button>
 {{ form_end(form) }}
