@@ -18,6 +18,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 use const App\Entity\ROLE_ACCOUNTANT;
 use const App\Entity\ROLE_ADMIN;
+use const App\Entity\ROLE_HEAD;
 
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -55,7 +56,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         switch ($token->getUser()->getRoles()) {
             case in_array(ROLE_ADMIN, $token->getUser()->getRoles()):
                 return new RedirectResponse($this->urlGenerator->generate('admin_index'));
-            case in_array(ROLE_ACCOUNTANT, $token->getUser()->getRoles()):
+            case in_array(ROLE_HEAD, $token->getUser()->getRoles()):
                 return new RedirectResponse($this->urlGenerator->generate('home_index'));
             default:
                 return new RedirectResponse($this->urlGenerator->generate('home_index'));

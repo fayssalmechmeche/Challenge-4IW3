@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>
 			{% block title %}Welcome!
 			{% endblock %}
@@ -10,6 +11,7 @@
 
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 		<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 		<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
@@ -22,7 +24,25 @@
 	<body>
 		{% block body %}{% endblock %}
 		{% block javascripts %}
+
 			{{ encore_entry_script_tags('app') }}
+			<script src="{{ asset('js/addFlash.js') }}"></script>
+			<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+			<script>
+
+
+				console.log(JSON.parse(document.getElementById('alerts').getAttribute('data-alert')))
+if (document.getElementById('alerts').dataset.alert != '[]') {
+
+let alerts = JSON.parse(document.getElementById('alerts').dataset.alert)
+for (const type in alerts) {
+
+alerts[type].forEach(message => {
+addFlash(type, message)
+});
+}
+}
+			</script>
 		{% endblock %}
 	</body>
 </html>

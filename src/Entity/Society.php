@@ -36,6 +36,9 @@ class Society
     #[ORM\OneToMany(mappedBy: 'society', targetEntity: Product::class, orphanRemoval: true)]
     private Collection $products;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeId = null;
+
 
     public function __construct()
     {
@@ -195,6 +198,18 @@ class Society
                 $devi->setSociety(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStripeId(): ?string
+    {
+        return $this->stripeId;
+    }
+
+    public function setStripeId(?string $stripeId): static
+    {
+        $this->stripeId = $stripeId;
 
         return $this;
     }

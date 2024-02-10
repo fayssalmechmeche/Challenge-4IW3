@@ -2,40 +2,76 @@
 {% block title %}Connexion
 {% endblock %}
 {% block body %}
-	<a class="" href="{{ path('default_index') }}">
-		<i class="fa-sharp fa-solid fa-house fa-xl pt-10 pl-20"></i>
-	</a>
-	<div class="md:my-10 md:mx-20 max-sm:h-full flex justify-center  md:shadow-2xl">
-		<div class="bg-white-300 text-center flex justify-center sm:w-full md:w-1/2 rounded-l-lg my-20">
-			<div class="my-auto flex flex-col flex-wrap">
-				{% if error %}
-					<div class="border bg-red-400 py-4 p-4 ">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
-				<form method="post" class="my-auto flex flex-col flex-wrap">
-					<h1 class="font-bold text-5xl md:mt-20  font-sans">Se connecter</h1>
-					<label for="" class="font-bold text-start pt-8">Email</label>
-					<input type="text" class="w-80  border border-black border-solid rounded-md" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus/>
-					<label for="" class="font-bold text-start pt-8">Mot de passe</label>
-					<input type="password" class="w-80  border border-black border-solid rounded-md" type="password" name="password" id="inputPassword" autocomplete="current-password" required/>
-					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-					<button class="bg-[#3347FD] rounded-3xl my-10  md:mb-20 mx-auto py-2 px-4 text-white text-xl font-sans font-light">Se connecter</button>
+	<div class="flex h-screen w-screen flex-col">
+		<header class="flex h-10 w-full items-center bg-gradient-to-b from-slate-400 max-sm:h-auto max-sm:justify-center">
+			<a href="{{ path('default_index') }}">
+				<img src="{{ asset('images/navbar/Main Logo.svg') }}" alt="LogoAstroShe	">
+			</a>
+		</header>
 
-					<a href="{{ path('app_register') }}" class="bg-[#3347FD] rounded-3xl mx-auto py-2 px-4 text-white text-xl font-sans font-light  md:hidden">S'inscrire</a>
-
+		<main class="flex flex-1 px-4">
+			<section class="flex w-5/12 flex-col items-center justify-evenly bg-white py-4 max-sm:w-full">
+				<div class="sm:hidden">
+					<h2 class="text-center text-4xl text-slate-800 max-md:text-4xl">
+						Une seule plateforme pour vos devis et factures
+					</h2>
+				</div>
+				<div class="max-sm:hidden">
+					<h2 class="text-center text-4xl text-slate-800">
+						Gérez vos finances !
+					</h2>
+				</div>
+				<form action="" method="post" class="flex w-5/6 flex-col items-center justify-center md:w-7/12">
+					{% if error %}
+						<div class="text-red-400 p-1 ">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+					{% endif %}
+					<div class="w-full">
+						<label class="mb-2 block text-lg font-medium max-sm:text-xl" for="inputEmail">
+							Email
+						</label>
+						<input class="h-12 w-full rounded-md border-2 p-2 border-white text-lg drop-shadow-lg focus:border-blue-500 focus:outline-none invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500" type="email" name="email" id="inputEmail" value="{{ last_username }}" placeholder="Votre email" autofocus required/>
+					</div>
+					<div class="mt-6 w-full">
+						<label class="mb-2 block text-lg font-medium max-sm:text-xl" for="inputPassword">
+							Mot de passe
+						</label>
+						<input class="h-12 w-full rounded-md border-2 p-2 border-white text-lg drop-shadow-lg focus:border-blue-500 focus:outline-none invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500" type="password" name="password" id="inputPassword" placeholder="Votre mot de passe" autocomplete="current-password" required/>
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+					</div>
+					<div class="mt-12 flex w-full flex-col items-center justify-around">
+						<button type="submit" class="focus:shadow-outline h-12 w-full cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-center text-lg font-bold text-white drop-shadow-xl hover:bg-blue-700 focus:outline-none xl:w-4/6">
+							Se connecter
+						</button>
+						<a href="{{ path('app_forgot_password_request')}}" type="button" class="mt-3 inline-block align-baseline font-bold text-blue-600 hover:text-blue-800">
+							Mot de passe oublié ?
+						</a>
+					</div>
 				</form>
-			</div>
-		</div>
-		<div class="bg-[#FDB833] text-center flex flex-row justify-center max-md:hidden md:w-1/2 rounded-r-lg">
-			<div class="my-auto">
-				<h1 class="font-bold text-5xl font-sans">Bienvenue !
-				</h1>
-				<p class="py-4 text-xl font-normal">Pour pouvoir profitez de notre site
-					<br>veuillez vous inscrire</p>
-				<button class="bg-[#3347FD] rounded-3xl my-8 py-2 px-12 text-white text-xl font-sans font-light">
-					<a href="{{ path('app_register') }}">S'inscrire</a>
-				</button>
-			</div>
-		</div>
+				<div class="flex w-full items-center justify-evenly">
+					<h4 class="mt-3 inline-block align-baseline font-bold text-slate-400">
+						Vous n'avez pas de compte ?
+					</h4>
+					<a href="{{ path('app_register') }}" type="button" class="focus:shadow-outline h-12 cursor-pointer rounded-md bg-slate-500 px-4 py-3 text-center font-bold text-white hover:bg-slate-600 focus:outline-none">
+						S'inscrire
+					</a>
+				</div>
+			</section>
 
+			<section class="flex w-7/12 items-center justify-center rounded-2xl bg-gradient-to-r from-slate-900 to-blue-900 py-2 max-sm:hidden">
+				<div class="w-3/6">
+					<h2 class="text-3xl font-medium text-white">
+						Une seule plateforme pour vos devis et factures.
+					</h2>
+					<h3 class="mt-4 text-xl text-white">
+						Gérez toutes vos tâches, devis, factures et obtenez un aperçu en temps réel des performances. Tout ça dans une seule et m	ême application.
+					</h3>
+					<a href="#" type="button" class="focus:shadow-outline mt-4 cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-center text-lg font-bold text-white hover:bg-blue-700 focus:outline-none">
+						Commencez maintenant
+					</a>
+				</div>
+			</section>
+		</main>
+
+		<footer class="h-8 bg-gradient-to-t from-slate-400"></footer>
 	</div>
 {% endblock %}
