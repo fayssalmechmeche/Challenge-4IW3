@@ -27,7 +27,7 @@
 				<div class="flex flex-col xl:hidden justify-center items-center">
 					{% if app.user %}
 						<button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2">
-							<a class="text-decoration-none text-5xl xl:text-lg" href="{{path("app_login")}}">Mon compte</a>
+							<a class="text-decoration-none text-5xl xl:text-lg" href="{{path("profile_edit")}}">Mon compte</a>
 						</button>
 					{% else %}
 						<button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2">
@@ -43,7 +43,7 @@
 			<div class="hidden xl:flex justify-between items-center">
 				{% if app.user %}
 					<button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out">
-						<a class="text-decoration-none" href="{{path("app_login")}}">Mon compte</a>
+						<a class="text-decoration-none" href="{{path("profile_edit")}}">Mon compte</a>
 					</button>
 				{% else %}
 					<button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out">

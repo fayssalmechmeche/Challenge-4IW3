@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Compte{% endblock %}
+
+
+{% block body %}
+     <div
+      class="w-95% h-44 mx-auto bg-gradient-to-r from-[#011936] to-[#012F63] rounded-[24px] mt-5 flex items-center justify-center px-5"
+    >
+      <div
+        class="relative px-10 w-[700px] h-40 flex justify-start items-center bg-white rounded-3xl shadow-xl transform translate-y-10 gap-10"
+      >
+        <img
+          class="w-32 rounded-3xl transform shadow-md"
+          src="./0d4ae847-6828-4179-892b-35ca46596170.webp"
+          alt="logo"
+        />
+        <div class="flex flex-col justify-start items-start self-start mt-10">
+          <h2 class="text-4xl font-semibold">John Doe</h2>
+          <p class="text-xl text-gray-500">5 rue des champs</p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx-auto my-20 px-10 pt-10 w-[1000px] flex flex-col justify-start items-start bg-white rounded-3xl shadow-xl"
+    >
+      <h2 class="font-semibold text-3xl mb-2">Information de l'Utilisateur</h2>
+      <form name="customer" method="post" action="/customer/new" class="w-full">
+        <div id="customer" class="flex flex-wrap gap-y-5 gap-x-10">
+          <div class="flex flex-col px-1 my-1">
+            <label for="customer_name" class="font-medium">Nom</label
+            ><input
+              type="text"
+              id="customer_name"
+              name="customer[name]"
+              wfd-id="id2"
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <div class="flex flex-col px-1 my-1">
+            <label for="customer_lastName" class="font-medium">Prénom</label
+            ><input
+              type="text"
+              id="customer_lastName"
+              name="customer[lastName]"
+              wfd-id="id3"
+              style=""
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <div class="flex flex-col px-1 my-1">
+            <label
+              for="customer_nameSociety"
+              style="display: none"
+              class="font-medium"
+              >Nom de la Société</label
+            ><input
+              type="text"
+              id="customer_nameSociety"
+              name="customer[nameSociety]"
+              style="display: none"
+              wfd-id="id4"
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <div class="flex flex-col px-1 my-1">
+            <label for="customer_streetName" class="font-medium"
+              >Nom de la rue</label
+            ><input
+              type="text"
+              id="customer_streetName"
+              name="customer[streetName]"
+              wfd-id="id5"
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <div class="flex flex-col px-1 my-1">
+            <label for="customer_streetNumber" class="font-medium"
+              >Numéro de rue</label
+            ><input
+              type="number"
+              id="customer_streetNumber"
+              name="customer[streetNumber]"
+              wfd-id="id6"
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <div class="flex flex-col px-1 my-1">
+            <label for="customer_city" class="font-medium">Ville</label
+            ><input
+              type="text"
+              id="customer_city"
+              name="customer[city]"
+              wfd-id="id7"
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <div class="flex flex-col px-1 my-1">
+            <label for="customer_postalCode" class="font-medium"
+              >Code postal</label
+            ><input
+              type="text"
+              id="customer_postalCode"
+              name="customer[postalCode]"
+              wfd-id="id8"
+              class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+            />
+          </div>
+          <input
+            type="hidden"
+            id="customer__token"
+            name="customer[_token]"
+            value="07441a1dca8c36f16411543e2.OJbeLUj83fR_DThJeWXvwCdNnh2wkGFpf7AHNXelwnI.CdeaSz_Nu8YFd3MlCVOpp08D8F-IoAAZUsc_dxXkjjxz_uhyEL66nDggDA"
+            wfd-id="id9"
+            class="rounded-xl w-96 h-10 mt-1 px-1 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form"
+          />
+        </div>
+
+        <button
+          class="text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg px-5 py-2 mt-7 mb-3"
+        >
+          Sauvegarder
+        </button>
+      </form>
+    </div>
+    {# profile/show.html.twig #}
+
+    <h2>Profil de {{ user.name }} {{ user.lastName }}</h2>
+    <ul>
+        <li>Email: {{ user.email }}</li>
+        <li>Nom: {{ user.name }}</li>
+        <li>Prénom: {{ user.lastName }}</li>
+        {% if user.society %}
+            <li>Nom de la Société: {{ user.society.name }}</li>
+            {# Affichez ici d'autres informations de la société si nécessaire #}
+        {% else %}
+            <li>Société: Non définie</li>
+        {% endif %}
+    </ul>
+
+
+{# Lien pour modifier le profil #}
+<a href="{{ path('profile_edit') }}">Modifier le profil</a>
+
+{# Lien pour le processus de modification du mot de passe #}
+<a href="#">Modifier le mot de passe</a>
+{% endblock %}
+
+
+
+
+
+

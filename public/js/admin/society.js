@@ -2,7 +2,6 @@ function openSocietyCreateModal() {
   fetch(`/admin/society/new`)
     .then((response) => response.text())
     .then((html) => {
-      console.log(html);
       document.getElementById("content").innerHTML = html;
       displayModal(true);
     })
@@ -15,11 +14,7 @@ function openSocietyEditModal(id) {
   fetch(`/admin/society/edit/${id}`)
     .then((response) => response.text())
     .then((html) => {
-      console.log(html);
       document.getElementById("content").innerHTML = html;
-      // document.getElementById(
-      //   "formEditSociety"
-      // ).action = `/admin/society/edit/${id}`;
       displayModal(true);
     })
     .catch((error) =>
@@ -54,6 +49,7 @@ function openUserCreateModal() {
 }
 
 function displayModal(isVisibleBoolean) {
+  addClassToElement();
   if (isVisibleBoolean) {
     document.getElementById("modal_content_id").style.display = "block";
     document.getElementById("modal_id").style.display = "block";
@@ -69,104 +65,126 @@ function displayModal(isVisibleBoolean) {
   }
 }
 
-/// AJAX request SOCIETY //// 
+function addClassToElement() {
+  //Ce script est propre à ce formulaire : il rajoute une class à la div id customer qui ne peut être gérée dynamiquement depuis le form builder. #}
+  let customerDiv = document.getElementById("society");
+  if (customerDiv) {
+    customerDiv.classList.add("flex", "flex-wrap", "gap-y-5", "gap-x-10");
+  }
+}
+
+/// AJAX request SOCIETY ////
 
 function addNewSociety() {
-  let form = document.getElementById('formNewSociety');
+  let form = document.getElementById("formNewSociety");
   let formData = new FormData(form);
   let data = {};
   formData.forEach(function (value, key) {
     data[key] = value;
   });
 
-  fetch('/admin/society/new', {
-    method: 'POST',
+  fetch("/admin/society/new", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     },
-    body: JSON.stringify(data)
-  }).then(response => response.json()).then(responseData => {
-
-    addFlash(responseData.success ? 'success' : 'danger', responseData.message);
-    refreshCardSociety();
-
-    loadGridSociety();
-  }).catch(error => {
-    console.error('Erreur:', error);
-  });
-}
-
-function editSociety(id) {
-  let form = document.getElementById('formEditSociety');
-  let formData = new FormData(form);
-  let data = {};
-  formData.forEach(function (value, key) {
-    data[key] = value;
-  });
-
-  fetch('/admin/society/edit/' + id, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    },
-    body: JSON.stringify(data)
-  }).then(response => response.json()).then(responseData => {
-
-    addFlash(responseData.success ? 'success' : 'danger', responseData.message);
-    refreshCardSociety();
-
-    loadGridSociety();
-  }).catch(error => {
-    console.error('Erreur:', error);
-  });
-}
-
-
-function deleteSociety(id, token) {
-  if (confirm('Voulez-vous vraiment supprimer cette société ? Ceci effacera les utilisateurs de la société.')) {
-    fetch('/admin/society/delete/' + id + '/' + token, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    }).then(response => response.json()).then(responseData => {
-
-      addFlash(responseData.success ? 'success' : 'danger', responseData.message);
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((responseData) => {
+      addFlash(
+        responseData.success ? "success" : "danger",
+        responseData.message
+      );
       refreshCardSociety();
 
       loadGridSociety();
-    }).catch(error => {
-      console.error('Erreur:', error);
+    })
+    .catch((error) => {
+      console.error("Erreur:", error);
     });
-  }
-
 }
 
+function editSociety(id) {
+  let form = document.getElementById("formEditSociety");
+  let formData = new FormData(form);
+  let data = {};
+  formData.forEach(function (value, key) {
+    data[key] = value;
+  });
+
+  fetch("/admin/society/edit/" + id, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((responseData) => {
+      addFlash(
+        responseData.success ? "success" : "danger",
+        responseData.message
+      );
+      refreshCardSociety();
+
+      loadGridSociety();
+    })
+    .catch((error) => {
+      console.error("Erreur:", error);
+    });
+}
+
+function deleteSociety(id, token) {
+  if (
+    confirm(
+      "Voulez-vous vraiment supprimer cette société ? Ceci effacera les utilisateurs de la société."
+    )
+  ) {
+    fetch("/admin/society/delete/" + id + "/" + token, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        addFlash(
+          responseData.success ? "success" : "danger",
+          responseData.message
+        );
+        refreshCardSociety();
+
+        loadGridSociety();
+      })
+      .catch((error) => {
+        console.error("Erreur:", error);
+      });
+  }
+}
 
 function refreshCardSociety() {
-  let cardCountSocieties = document.getElementById('cardSocietiesLength');
-  fetch('/admin/society', {
-    method: 'GET',
+  let cardCountSocieties = document.getElementById("cardSocietiesLength");
+  fetch("/admin/society", {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     },
   })
-    .then(response => {
-
+    .then((response) => {
       if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des sociétés');
+        throw new Error("Erreur lors de la récupération des sociétés");
       }
       return response.json();
     })
-    .then(data => {
-      cardCountSocieties.innerHTML = data.data.countSocieties
+    .then((data) => {
+      cardCountSocieties.innerHTML = data.data.countSocieties;
     })
-    .catch(error => {
-      console.error('Erreur:', error);
+    .catch((error) => {
+      console.error("Erreur:", error);
     });
-
 }

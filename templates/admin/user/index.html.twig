@@ -1,30 +1,31 @@
 {% extends 'admin/base.back.html.twig' %}
 
-{% block title %}Dashboard Utilisateur
+{% block title %}
+  Dashboard Utilisateur
 {% endblock %}
 
 {% block body %}
-
-	<main class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4">
-		<h1 class="mb-6 flex flex-wrap text-4xl text-center">Dashboard Utilisateur</h1>
-		<section id="InfoCards" class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 flex-wrap">
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre utilisateurs","data": countUsers,'add':true,'id':'cardNumberLength' }%}
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs vérifiés","data": countUsersVerified,'add':false,'id':'cardUserVerfied' }%}
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Utilisateurs non vérifiés","data": countUsersNotVerified,'add':false,'id':'cardUserNotVerfied' }%}
-		</section>
-
-		<section id="InfosUser" class="h-full w-full">
-			<div id="tabUserGridJs" class="h-full w-full"></div>
-		</section>
-		{% include "admin/component/modal.html.twig" %}
-
-	</main>
+  <div class="flex justify-start items-center flex-wrap w-full gap-5">
+    <h1 class="text-5xl mt-2 mb-3">Gestions Des Utilisateurs</h1>
+    <button class="h-fit w-fit rounded-lg bg-blue-700 px-4 py-3 text-white transition-all max-sm:rounded-lg max-sm:px-3 max-sm:py-2 hover:bg-blue-600" onclick="openUserCreateModal()">Ajouter un utilisateur</button>
+  </div>
+  {# First block #}
+  <section id="InfoCards" class="mt-5 sm:mt-0 w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: countUsers, description: 'Nombre utilisateurs' } %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-green-200', color: 'text-green-500', icon: 'verified_user', count: countUsersVerified, description: 'Utilisateurs vérifiés' } %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-red-200', color: 'text-red-500', icon: 'no_accounts', count: countUsersNotVerified, description: 'Utilisateurs non vérifiés' } %}
+  </section>
+  <section id="InfosUser" class="mt-5 sm:mt-0 h-full w-full">
+    <div id="tabUserGridJs" class="h-full w-full"></div>
+  </section>
+  {% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 
 {% block script_js %}
-	{{ parent() }}
-
-
-	<script src="{{ asset('js/admin/userGrid.js') }}"></script>
-	<script src="{{ asset('js/admin/user.js') }}"></script>
+  {{ parent() }}
+  <script src="{{ asset('js/admin/userGrid.js') }}"></script>
+  <script src="{{ asset('js/admin/user.js') }}"></script>
 {% endblock %}

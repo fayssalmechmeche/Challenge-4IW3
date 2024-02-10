@@ -1,45 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: "jit",
-  content: ["**/**.html.twig"],
-  safelist: [
-    "flex",
-    "rotate-45",
-    "translate-y-3.5",
-    "absolute",
-    "duration-300",
-    "ease-out",
-    "bg-nav-btn",
-    "opacity-0",
-    "-rotate-45",
-    "-translate-y-3.5",
-    "top-28",
-    "duration-300",
-    "ease-out",
-    "top-up",
-    "duration-300",
-    "ease",
-    "bg-green-400",
-    "top-1/2",
-    "translate-x-full",
-    "bg-orange-400",
-    "hover:bg-orange-600",
-    "w-open-nav",
-    "rotate-180",
-    "w-closed-nav",
-    "w-content-space-open",
-    "w-content-space-closed",
-    "mx-auto",
-    "bg-nav-btn",
-    "text-gray-500",
-    "gap-x-10",
-    "gap-y-5",
-    "shadow-form",
-    "h-10",
-    "flex-wrap",
-    "w-modal-width",
-    "max-h-modal-height",
-    "gap-2",
+  content: [
+    "./templates/**/*.twig", // Cible tous les fichiers Twig dans `templates` et ses sous-dossiers
+    "./assets/**/*.js", // Cible tous les fichiers JS dans `assets` et ses sous-dossiers
+    "./public/js/**/*.js", // Cible tous les fichiers JS dans `public/js` et ses sous-dossiers
   ],
   theme: {
     extend: {
@@ -64,7 +29,7 @@ module.exports = {
         "bg-light-red": "#F5DCDC",
         "light-green": "#4FD18B",
         "bg-light-green": "#DCF5E8",
-        "nav-bar-black": "#353535"
+        "nav-bar-black": "#353535",
       },
       spacing: {
         "90-vh": "90vh",
@@ -88,6 +53,7 @@ module.exports = {
         "550px": "550px",
         "500px": "500px",
         "1150px": "1150px",
+        "90%": "90%",
       },
       width: {
         "content-space-open": "calc(100% - 257px)",
@@ -112,6 +78,10 @@ module.exports = {
       },
       boxShadow: {
         form: "0px 4px 18px 0px rgba(158, 168, 189, 0.31)",
+      },
+      screens: {
+        "3xl": "1618px",
+        // => @media (min-width: 1280px) { ... }
       },
     },
   },

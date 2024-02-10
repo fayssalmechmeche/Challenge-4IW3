@@ -18,11 +18,28 @@ document.addEventListener("DOMContentLoaded", function () {
             user.roles.includes('ROLE_ACCOUNTANT') ? 'Comptable' : user.roles.includes('ROLE_SOCIETY') ? 'Entreprise' : 'Utilisateur',
             user.status ? "Validé" : "Invalidé",
             gridjs.html(`
-            <div class="flex">
-              <button class="pr-3" onclick="openUserShowModal(${user.id})">👁‍🗨</button>
-              <button class="pr-3" onclick="openUserEditModal(${user.id})">📝</button>
-              <button onclick="deleteUser(${user.id},'${user.token}')" >❌</button>
-            </div>`),
+            <div class="w-full mx-auto flex justify-center items-center gap-2">
+      <button
+        class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+        onclick="openUserShowModal(${user.id})"
+      >
+        Voir l'Utilisateur
+      </button>
+      <button
+        class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+        onclick="openUserEditModal(${user.id})"
+      >
+        Modifier
+      </button>
+      <button
+        type="submit"
+        class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+        onclick="deleteUser(${user.id},'${user.token}')"
+        )
+      >
+        Supprimer
+      </button>
+    </div>`),
           ];
         }),
     },
@@ -47,6 +64,20 @@ document.addEventListener("DOMContentLoaded", function () {
         of: 'de',
         to: 'à'
       }
+    },
+    style: {
+      table: {
+        border: "none",
+      },
+      th: {
+        "background-color": "#d4d4d4",
+        color: "#000",
+        "text-align": "center",
+      },
+      td: {
+        "text-align": "center",
+        
+      },
     },
     sort: true,
   }).render(document.getElementById("tabUserGridJs"));

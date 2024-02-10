@@ -1,38 +1,40 @@
 {% extends 'admin/base.back.html.twig' %}
 
-{% block title %}Dashboard Administrateur
+{% block title %}
+  Dashboard Administrateur
 {% endblock %}
 
 {% block body %}
+  <h1 class="text-5xl mt-2 mb-10">Tableau de bord</h1>
+  {# First block #}
+  <section id="InfoCards" class="w-full mx-auto flex md:flex-row my-2 flex-col justify-start items-center gap-3">
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: users|length, description: "Nombre d'Utilisateurs" } %}
 
-	<main class="flex min-h-80vh w-full flex-col items-center justify-between rounded-2xl bg-transparent p-4">
-		<h1 class="mb-6 flex flex-wrap text-4xl text-center">Tableau de bord</h1>
-		<section id="InfoCards" class="mb-4 flex h-1/6 w-full justify-around max-sm:h-1/4 flex-wrap">
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-yellow-200', color: 'text-yellow-500', icon: 'apartment', count: societies|length, description: 'Nombre de sociétés' } %}
 
-			{% include "admin/component/cardUser.html.twig" with  {"title" :"Nombre de utilisateurs","data": users|length,'add':false ,'id':'cardNumberLength' }%}
-			{% include "admin/component/cardSociety.html.twig" with  {"title" :"Nombre de sociétés","data": societies|length,'add':false,'id':'cardSocietiesLength' }%}
-			{% include "admin/component/cardSociety.html.twig" with  {"title" :"Nombre de devis","data": devis|length,'add':false ,'id':'' }%}
-
-
-		</section>
-
-		<h1 class="mb-6 text-3xl text-center mt-4">Les sociétés</h1>
-		<section id="InfosEntreprise" class="h-full w-full">
-			<div id="tabSocietyGridJs" class="h-full w-full"></div>
-		</section>
-		<h1 class="mb-6 text-3xl text-center mt-4">Les utilisateurs</h1>
-		<section id="InfosUser" class="h-full w-full">
-			<div id="tabUserGridJs" class="h-full w-full"></div>
-		</section>
-	</main>
-	{% include "admin/component/modal.html.twig" %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { bgColor: 'bg-green-200', color: 'text-green-500', icon: 'description', count: devis|length, description: 'Nombre de devis' } %}
+  </section>
+  {# Second block #}
+  <section id="InfosEntreprise" class="mb-5 w-full mx-auto flex items-start flex-col justify-start rounded-xl overflow-x-auto">
+    <h2 class="mb-3 text-3xl mt-4">Les Sociétés</h2>
+    <div id="tabSocietyGridJs" class="h-full w-full"></div>
+  </section>
+  {# Third block #}
+  <section id="InfosUser" class="w-full mx-auto flex items-start flex-col justify-start overflow-x-auto">
+    <h2 class="mb-3 text-3xl mt-1">Les Utilisateurs</h2>
+    <div id="tabUserGridJs" class="h-full w-full"></div>
+  </section>
+  {% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 
 {% block script_js %}
-	{{ parent() }}
-	<script src="{{ asset('js/addFlash.js') }}"></script>
-	<script src="{{ asset('js/admin/societyGrid.js') }}"></script>
-	<script src="{{ asset('js/admin/userGrid.js') }}"></script>
-	<script src="{{ asset('js/admin/user.js') }}"></script>
-	<script src="{{ asset('js/admin/society.js') }}"></script>
+  {{ parent() }}
+  <script src="{{ asset('js/addFlash.js') }}"></script>
+  <script src="{{ asset('js/admin/societyGrid.js') }}"></script>
+  <script src="{{ asset('js/admin/userGrid.js') }}"></script>
+  <script src="{{ asset('js/admin/user.js') }}"></script>
+  <script src="{{ asset('js/admin/society.js') }}"></script>
 {% endblock %}
