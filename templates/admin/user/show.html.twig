@@ -2,38 +2,34 @@
 
 {# {% block title %}Création d'une Société{% endblock %} #}
 
-	{% block body %}
-		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold"> Visualisation d'un utilisateur
-	</h1>
-
-	<div
-		class='flex-col items-start w-full'>
-		{# <div class="w-48% max-md:w-full"> #}
-		<label class="mb-1 block">Prénom</label>
-		<p class="mb-3 bg-white w-full rounded-sm p-2">
-			{{user.name}}
-		</p>
-		<label class="mb-1 block">Nom</label>
-		<p class="mb-3 bg-white w-full rounded-sm p-2">
-			{{user.lastName}}
-		</p>
-		<label class="mb-1 block">Email</label>
-		<p class="mb-3 bg-white w-full rounded-sm p-2">
-			{{user.email}}
-		</p>
-		<label class="mb-1 block">Roles</label>
-		<p class="mb-3 bg-white w-full rounded-sm p-2">
-
-			{% for role in user.roles %}
-				{% if role == "ROLE_SOCIETY" %}
-					Traiteur,
-				{% elseif role == "ROLE_ACCOUNTANT" %}
-					Comptable,
-				{% else %}
-					Utilisateur
-				{% endif %}
-			{% endfor %}
-		</p>
-		{# </div> #}
-	</div>
+{% block body %}
+  <h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold">Visualisation d'un utilisateur</h1>
+  <div class="flex flex-wrap gap-y-5 gap-x-10 w-full">
+    <div class="flex flex-col px-1 my-1">
+      <label class="font-medium">Prénom</label>
+      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.name }}</p>
+    </div>
+    <div class="flex flex-col px-1 my-1">
+      <label class="font-medium">Nom</label>
+      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.lastName }}</p>
+    </div>
+    <div class="flex flex-col px-1 my-1">
+      <label class="font-medium">Email</label>
+      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.email }}</p>
+    </div>
+    <div class="flex flex-col px-1 my-1">
+      <label class="font-medium">Roles</label>
+      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">
+        {% for role in user.roles %}
+          {% if role == 'ROLE_SOCIETY' %}
+             Traiteur,
+          {% elseif role == 'ROLE_ACCOUNTANT' %}
+             Comptable,
+          {% else %}
+            Utilisateur
+          {% endif %}
+        {% endfor %}
+      </p>
+    </div>
+  </div>
 {% endblock %}

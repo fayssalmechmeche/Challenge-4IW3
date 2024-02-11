@@ -41,53 +41,53 @@
 	<div
 		class="px-5 md:w-ds-block mx-auto md:h-36 flex md:justify-between md:items-center my-10 md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
 		<!-- card-info -->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Revenu total</p>
-			<h2 class="text-3xl font-bold">$ 18532.52</h2>
-			<div class="flex justify-center items-center bg-bg-light-green w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-green">
-					trending_up
-				</span>
-				<p class="text-light-green font-bold">+</p>
-				<p class="text-light-green font-bold">11%</p>
-			</div>
-		</div>
+		{% include 'components/card-info.twig' with {
+		description: 'Revenu total',
+		amount: '$ 18532.52',
+		trend: {
+			background: 'bg-bg-light-green',
+			color: 'text-light-green',
+			icon: 'trending_up',
+			prefix: '+',
+			percentage: '15%'
+		}
+		} %}
 		<!-- card-info -->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Total des économies</p>
-			<h2 class="text-3xl font-bold">$ 137.43</h2>
-			<div class="flex justify-center items-center bg-bg-light-red w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-red">
-					trending_down
-				</span>
-				<p class="text-light-red font-bold">-</p>
-				<p class="text-light-red font-bold">8%</p>
-			</div>
-		</div>
+		{% include 'components/card-info.twig' with {
+    	description: 'Total des économies',
+    	amount: '$ 137.43',
+    	trend: {
+			background: 'bg-bg-light-red',
+			color: 'text-light-red',
+			icon: 'trending_down',
+			prefix: '-',
+			percentage: '8%'
+    	}
+		} %}
 		<!-- card-info -->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Dépense totale</p>
-			<h2 class="text-3xl font-bold">$ 5000.00</h2>
-			<div class="flex justify-center items-center bg-bg-light-green w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-green">
-					trending_up
-				</span>
-				<p class="text-light-green font-bold">+</p>
-				<p class="text-light-green font-bold">15%</p>
-			</div>
-		</div>
+		{% include 'components/card-info.twig' with {
+		description: 'Dépense totale',
+		amount: '$ 5000.00',
+		trend: {
+			background: 'bg-bg-light-green',
+			color: 'text-light-green',
+			icon: 'trending_up',
+			prefix: '+',
+			percentage: '15%'
+		}
+		} %}
 		<!-- card-info -->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Dépense totale</p>
-			<h2 class="text-3xl font-bold">$ 5000.00</h2>
-			<div class="flex justify-center items-center bg-bg-light-green w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-green">
-					trending_up
-				</span>
-				<p class="text-light-green font-bold">+</p>
-				<p class="text-light-green font-bold">15%</p>
-			</div>
-		</div>
+		{% include 'components/card-info.twig' with {
+		description: 'Dépense totale',
+		amount: '$ 5000.00',
+		trend: {
+			background: 'bg-bg-light-green',
+			color: 'text-light-green',
+			icon: 'trending_up',
+			prefix: '+',
+			percentage: '15%'
+		}
+		} %}
 	</div>
 	<!-- third block -->
 	<div
