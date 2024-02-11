@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>`),
         ]),
     },
-    // search: true,
+    search: true,
     pagination: {
       limit: 5,
     },
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       td: {
         "text-align": "center",
-        
+
       },
     },
     sort: true,
@@ -98,9 +98,7 @@ function loadGridSociety() {
   gridSociety
     .updateConfig({
       // search: true,
-      pagination: {
-        limit: 5,
-      },
+
     })
     .forceRender();
 }

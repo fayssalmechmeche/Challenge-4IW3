@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     // href="/admin/user/delete/${user.id}/${user.token}"
 
-    // search: true,
+    search: true,
     pagination: {
       limit: 5,
     },
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       td: {
         "text-align": "center",
-        
+
       },
     },
     sort: true,

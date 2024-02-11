@@ -1,29 +1,30 @@
 {% extends 'admin/base.back.html.twig' %}
 
 {% block title %}
-  Dashboard Société
+	Dashboard Société
 {% endblock %}
 
 {% block body %}
-  <div class="flex justify-start items-center flex-wrap w-full gap-5">
-    <h1 class="text-5xl mt-2 mb-3">Gestions Des Sociétés</h1>
-    <button class="h-fit w-fit rounded-lg bg-blue-700 px-4 py-3 text-white transition-all max-sm:rounded-lg max-sm:px-3 max-sm:py-2 hover:bg-blue-600" onclick="openSocietyCreateModal()">Ajouter une Société</button>
-  </div>
-  {# First block #}
-  <section id="InfoCards" class="mt-5 sm:mt-0 w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
-    {# card-admin #}
-    {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: societies|length, description: 'Nombre de sociétés' } %}
-  </section>
+	<div class="flex justify-start items-center flex-wrap w-full gap-5">
+		<h1 class="text-5xl mt-2 mb-3">Gestions Des Sociétés</h1>
+		<button class="h-fit w-fit rounded-lg bg-blue-700 px-4 py-3 text-white transition-all max-sm:rounded-lg max-sm:px-3 max-sm:py-2 hover:bg-blue-600" onclick="openSocietyCreateModal()">Ajouter une Société</button>
+	</div>
+	{# First block #}
+	<section
+		id="InfoCards" class="mt-5 sm:mt-0 w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
+		{# card-admin #}
+		{% include 'components/admin_card.twig' with { id:'cardSocietiesLength', bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: societies|length, description: 'Nombre de sociétés' } %}
+	</section>
 
-  <section id="InfosEntreprise" class="mt-5 sm:mt-0 h-full w-full">
-    <div id="tabSocietyGridJs" class="h-full w-full"></div>
-  </section>
-  {% include 'admin/component/modal.html.twig' %}
+	<section id="InfosEntreprise" class="mt-5 sm:mt-0 h-full w-full">
+		<div id="tabSocietyGridJs" class="h-full w-full"></div>
+	</section>
+	{% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 
 {% block script_js %}
-  {{ parent() }}
-  <script src="{{ asset('js/addFlash.js') }}"></script>
-  <script src="{{ asset('js/admin/societyGrid.js') }}"></script>
-  <script src="{{ asset('js/admin/society.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('js/addFlash.js') }}"></script>
+	<script src="{{ asset('js/admin/societyGrid.js') }}"></script>
+	<script src="{{ asset('js/admin/society.js') }}"></script>
 {% endblock %}

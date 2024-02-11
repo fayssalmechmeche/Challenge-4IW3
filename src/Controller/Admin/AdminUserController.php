@@ -34,6 +34,7 @@ class AdminUserController extends AbstractController
         $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(true);
         $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(false);
         if ($request->isXmlHttpRequest()) {
+            dump($request);
             return new JsonResponse(array(
                 'code' => 200,
                 'success' => true,

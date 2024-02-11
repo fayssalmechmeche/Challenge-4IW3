@@ -1,6 +1,7 @@
+let gridUser = null
 document.addEventListener("DOMContentLoaded", function () {
   let id = document.getElementById("tabUserGridJs").getAttribute("data-id");
-  new gridjs.Grid({
+  gridUser = new gridjs.Grid({
     columns: [
       {
         name: "Prénom",
@@ -20,10 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
           user.roles.includes("ROLE_ACCOUNTANT")
             ? "Comptable"
             : user.roles.includes("ROLE_USER")
-            ? "Utilisateur"
-            : user.roles.includes("ROLE_SOCIETY")
-            ? "Entreprise"
-            : user.roles.join(", "),
+              ? "Utilisateur"
+              : user.roles.includes("ROLE_SOCIETY")
+                ? "Entreprise"
+                : user.roles.join(", "),
           user.status ? "Validé" : "Invalidé",
           gridjs.html(`
           <div class="w-full mx-auto flex justify-center items-center gap-2">
@@ -42,9 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
           <button
           type="submit"
            class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
-           
+           onclick="deleteUser(${user.id},'${user.token}')"
             >
-            <a class='text-decoration-none' href="/admin/user/delete/${user.id}/${user.token}">Supprimer</a>
+            Supprimer
           </button>
           </div>`),
         ]),
@@ -72,3 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
     sort: true,
   }).render(document.getElementById("tabUserGridJs"));
 });
+
+function loadGridUser() {
+  gridUser.updateConfig({
+    search: true,
+    pagination: {
+      limit: 5,
+    },
+  }).forceRender();
+}
