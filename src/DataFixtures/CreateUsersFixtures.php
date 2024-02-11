@@ -25,9 +25,9 @@ class CreateUsersFixtures extends Fixture
             $society = new Society();
             $society->setName($faker->company());
             $society->setAddress($faker->address());
-            $society->setPhone($faker->phoneNumber());
+            $society->setPhone($faker->numerify('07########'));
             $society->setEmail('email' . $i . '@example.com');
-            $society->setSiret('siret');
+            $society->setSiret('12345678912345');
             $this->stripeService->createCustomer($society);
             $manager->persist($society);
 

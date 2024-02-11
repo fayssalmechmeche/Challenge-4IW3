@@ -12,11 +12,11 @@
   {# First block #}
   <section id="InfoCards" class="mt-5 sm:mt-0 w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
     {# card-admin #}
-    {% include 'components/admin_card.twig' with { bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: countUsers, description: 'Nombre utilisateurs' } %}
+    {% include 'components/admin_card.twig' with { id:'cardNumberLength', bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: countUsers, description: 'Nombre utilisateurs' } %}
     {# card-admin #}
-    {% include 'components/admin_card.twig' with { bgColor: 'bg-green-200', color: 'text-green-500', icon: 'verified_user', count: countUsersVerified, description: 'Utilisateurs vérifiés' } %}
+    {% include 'components/admin_card.twig' with { id:'cardUserVerfied', bgColor: 'bg-green-200', color: 'text-green-500', icon: 'verified_user', count: countUsersVerified, description: 'Utilisateurs vérifiés' } %}
     {# card-admin #}
-    {% include 'components/admin_card.twig' with { bgColor: 'bg-red-200', color: 'text-red-500', icon: 'no_accounts', count: countUsersNotVerified, description: 'Utilisateurs non vérifiés' } %}
+    {% include 'components/admin_card.twig' with { id:'cardUserNotVerfied', bgColor: 'bg-red-200', color: 'text-red-500', icon: 'no_accounts', count: countUsersNotVerified, description: 'Utilisateurs non vérifiés' } %}
   </section>
   <section id="InfosUser" class="mt-5 sm:mt-0 h-full w-full">
     <div id="tabUserGridJs" class="h-full w-full"></div>
