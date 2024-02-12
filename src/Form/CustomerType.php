@@ -25,10 +25,10 @@ class CustomerType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'customerName',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Nom',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([
@@ -41,10 +41,10 @@ class CustomerType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'customerLastName',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Prénom',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([
@@ -57,10 +57,10 @@ class CustomerType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'id' => 'customerNameSociety',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Nom de la Société',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([
@@ -72,40 +72,40 @@ class CustomerType extends AbstractType
             ->add('streetName', TextType::class, [
                 'attr' => [
                     'id' => 'customerStreetName',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Nom de la rue',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('streetNumber', IntegerType::class, [
                 'attr' => [
                     'id' => 'customerStreetNumber',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Numéro de rue',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('city', TextType::class, [
                 'attr' => [
                     'id' => 'customerCity',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Ville',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
             ->add('postalCode', TextType::class, [
                 'attr' => [
                     'id' => 'customerPostalCode',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'label' => 'Code postal',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'required' => false
             ])
@@ -114,9 +114,9 @@ class CustomerType extends AbstractType
                 'label' => 'Adresse e-mail',
                 'attr' => [
                     'id' => 'customerEmail',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new Email([
@@ -133,9 +133,9 @@ class CustomerType extends AbstractType
                 'label' => 'Numéro de téléphone',
                 'attr' => [
                     'id' => 'customerPhoneNumber',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'constraints' => [
                     new NotBlank([

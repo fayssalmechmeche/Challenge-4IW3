@@ -6,6 +6,7 @@ module.exports = {
     "./assets/**/*.js", // Cible tous les fichiers JS dans `assets` et ses sous-dossiers
     "./public/js/**/*.js", // Cible tous les fichiers JS dans `public/js` et ses sous-dossiers
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -30,6 +31,10 @@ module.exports = {
         "light-green": "#4FD18B",
         "bg-light-green": "#DCF5E8",
         "nav-bar-black": "#353535",
+        //DARK MODE
+        "dark-bg": "#0b1120",
+        "dark-section": "#1c2c54",
+        "dark-card": "#38446c",
       },
       spacing: {
         "90-vh": "90vh",
