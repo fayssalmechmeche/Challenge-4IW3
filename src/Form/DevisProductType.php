@@ -42,10 +42,7 @@ class DevisProductType extends AbstractType
                 'attr' => ['hidden' => true],
                 'label' => false
             ]);
-
-
     }
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -14,7 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
     case Pending = "PENDING";
     case Paid = "PAID";
     case Partial = "PARTIAL";
+    case Delayed = "DELAYED";
     case Refunded = "REFUNDED";
+}
+
+enum DepositStatus: string
+{
+    case NonExistant = 'NON_EXISTANT';
+    case Prevu = 'PREVU';
+    case Genere = 'GENERE';
 }
 
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
@@ -28,11 +36,11 @@ class Devis
     #[ORM\Column(nullable: true)]
     private ?int $taxe = null;
 
-    #[ORM\Column]
-    private ?int $totalPrice = null;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    private ?string $totalPrice = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $totalDuePrice = null;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: true)]
+    private ?string $totalDuePrice = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $subject = null;
@@ -53,6 +61,9 @@ class Devis
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
 
+    #[ORM\Column(type: 'string', enumType: DepositStatus::class, nullable: true)]
+    private ?DepositStatus $depositStatus = null;
+
 
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProductItem::class, orphanRemoval: true)]
     private Collection $productItems;
@@ -69,6 +80,9 @@ class Devis
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
+
+    #[ORM\Column(type: "float", nullable: true)]
+    private ?float $depositPercentage = null;
 
     /**
      * @return User|null
@@ -120,24 +134,24 @@ class Devis
         return $this;
     }
 
-    public function getTotalPrice(): ?int
+    public function getTotalPrice(): ?string
     {
         return $this->totalPrice;
     }
 
-    public function setTotalPrice(int $totalPrice): static
+    public function setTotalPrice(string $totalPrice): static
     {
         $this->totalPrice = $totalPrice;
 
         return $this;
     }
 
-    public function getTotalDuePrice(): ?int
+    public function getTotalDuePrice(): ?string
     {
         return $this->totalDuePrice;
     }
 
-    public function setTotalDuePrice(?int $totalDuePrice): static
+    public function setTotalDuePrice(?string $totalDuePrice): static
     {
         $this->totalDuePrice = $totalDuePrice;
 
@@ -201,6 +215,18 @@ class Devis
         return $this;
     }
 
+    public function getDepositStatus(): ?DepositStatus
+    {
+        return $this->depositStatus;
+    }
+
+    public function setDepositStatus(?DepositStatus $depositStatus): self
+    {
+        $this->depositStatus = $depositStatus;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, ProductItem>
      */
@@ -229,6 +255,17 @@ class Devis
     public function getDevisNumber(): ?string
     {
         return $this->devisNumber;
+    }
+
+    public function getDepositPercentage(): ?float
+    {
+        return $this->depositPercentage;
+    }
+
+    public function setDepositPercentage(?float $depositPercentage): self
+    {
+        $this->depositPercentage = $depositPercentage;
+        return $this;
     }
 
     public function addDevisProduct(DevisProduct $devisProduct): self
