@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\DepositStatus;
 use App\Entity\Devis;
 use App\Form\DevisType;
 use App\Entity\DevisProduct;
@@ -89,7 +90,6 @@ class DevisController extends AbstractController
     {
         $devis = new Devis();
         $user = $this->getUser();
-
         $devis->setUser($user);
         $lastDevisNumber = $devisRepository->findLastDevisNumberForUser($user);
         $newDevisNumber = $this->generateNewDevisNumber($lastDevisNumber);
@@ -106,6 +106,11 @@ class DevisController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $devis->setDevisNumber($newDevisNumber);
+            if (null !== $devis->getDepositPercentage()) {
+                $devis->setDepositStatus(DepositStatus::Prevu);
+            } else {
+                $devis->setDepositStatus(DepositStatus::NonExistant);
+            }
             $devisProductsJson = $request->request->get('devisProductsJson');
             if ($devisProductsJson) {
                 $devisProductsData = json_decode($devisProductsJson, true);
@@ -173,8 +178,6 @@ class DevisController extends AbstractController
                 'price' => $devisFormula->getPrice(),
             ];
         }
-
-
         return $this->render('devis/show.html.twig', [
             'devi' => $devi,
             'userEmail' => $userEmail,

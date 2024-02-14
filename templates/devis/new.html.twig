@@ -97,11 +97,19 @@
           <div
             class="condition mt-12 flex justify-start items-start flex-col w-70%"
           >
+            <div class="form-group">
+              <input type="checkbox" id="toggleDeposit" name="toggleDeposit">
+              <label for="toggleDeposit">Ajouter un acompte</label>
+            </div>
+            <div class="form-group hidden" id="depositPercentageGroup">
             <h2 class="text-lg font-semibold">Conditions de paiement:</h2>
-            <p class="mt-5 text-lg">
-              Paiement d'un acompte de 30% du prix total TTC à la commande 70% à
-              la livraison
-            </p>
+              <p class="mt-5 text-lg">
+                Paiement d'un acompte de  {{ form_widget(form.depositPercentage, {'attr': {'class': 'form-control w-9', 'id': 'devis_depositPercentage'}}) }}
+                {{ form_errors(form.depositPercentage) }}% du prix total TTC à la commande 70% à
+                la livraison
+              </p>
+
+            </div>
           </div>
           <div
             class="total w-35% flex justify-start items-end mt-12 mr-5px flex-col"
