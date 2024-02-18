@@ -1,49 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: "jit",
-  content: ["**/**.html.twig"],
-  safelist: [
-    "flex",
-    "rotate-45",
-    "translate-y-3.5",
-    "absolute",
-    "duration-300",
-    "ease-out",
-    "bg-nav-btn",
-    "opacity-0",
-    "-rotate-45",
-    "-translate-y-3.5",
-    "top-28",
-    "duration-300",
-    "ease-out",
-    "top-up",
-    "duration-300",
-    "ease",
-    "bg-green-400",
-    "top-1/2",
-    "translate-x-full",
-    "bg-orange-400",
-    "hover:bg-orange-600",
-    "w-open-nav",
-    "rotate-180",
-    "w-closed-nav",
-    "w-content-space-open",
-    "w-content-space-closed",
-    "mx-auto",
-    "text-gray-500",
-    "gap-x-10",
-    "gap-y-5",
-    "shadow-form",
-    "h-10",
-    "flex-wrap",
-    "w-modal-width",
-    "max-h-modal-height",
-    "gap-2",
   content: [
     "./templates/**/*.twig", // Cible tous les fichiers Twig dans `templates` et ses sous-dossiers
     "./assets/**/*.js", // Cible tous les fichiers JS dans `assets` et ses sous-dossiers
     "./public/js/**/*.js", // Cible tous les fichiers JS dans `public/js` et ses sous-dossiers
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -69,6 +32,10 @@ module.exports = {
         "light-green": "#4FD18B",
         "bg-light-green": "#DCF5E8",
         "nav-bar-black": "#353535",
+        //DARK MODE
+        "dark-bg": "#0b1120",
+        "dark-section": "#1c2c54",
+        "dark-card": "#38446c",
       },
       spacing: {
         "90-vh": "90vh",
@@ -100,7 +67,7 @@ module.exports = {
         "content-space-closed": "calc(100% - 48px)",
         "grid-dashboard-space": "calc(100% - 410px)",
         "ds-block": "1150px",
-        '1/2.5': '45%',
+        "1/2.5": "45%",
       },
       borderRadius: {
         "10px": "10px",

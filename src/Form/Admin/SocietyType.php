@@ -74,7 +74,7 @@ class SocietyType extends AbstractType
                     new Email(),
                 ],
             ])
-            ->add('siret',  IntegerType::class, [
+            ->add('siret', IntegerType::class, [
                 'label' => 'Siret de la société',
                 'label_attr' => ['class' => 'font-medium'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
