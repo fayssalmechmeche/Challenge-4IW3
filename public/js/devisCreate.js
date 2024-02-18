@@ -357,7 +357,27 @@ function handleCollectionItems(collectionId, addButtonId, itemClass, updatePrice
         if (totalDuePriceInput) {
             totalDuePriceInput.value = totalDuePrice.toFixed(2);
         }
+        console.log(totalDuePriceInput);
     }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleDeposit = document.getElementById('toggleDeposit');
+    const depositPercentageGroup = document.getElementById('depositPercentageGroup');
+
+    toggleDeposit.addEventListener('change', function() {
+        if (this.checked) {
+            depositPercentageGroup.classList.remove('hidden'); // Retire la classe 'hidden' pour afficher
+        } else {
+            depositPercentageGroup.classList.add('hidden'); // Ajoute la classe 'hidden' pour masquer
+            const depositPercentageInput = document.querySelector('#depositPercentageGroup input');
+            if (depositPercentageInput) {
+                depositPercentageInput.value = ''; // Vide le champ si l'acompte n'est pas désiré
+            }
+        }
+    });
+});
+
+console.log("bark bark");
 
 
 

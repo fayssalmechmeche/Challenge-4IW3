@@ -99,59 +99,81 @@
 			</div>
 
 
-			<div id="wrapper" class="h-56"></div>
-			<div class="mid w-full h-auto flex justify-between items-start">
-				<div class="condition mt-12 flex justify-start items-start flex-col w-70%">
-					<h2 class="text-lg font-semibold">Conditions de paiement:</h2>
-					<p class="mt-5 text-lg">
-						Paiement d'un acompte de 30% du prix total TTC à la commande 70% à       la livraison
-					</p>
-				</div>
-				<div class="total w-37% flex justify-start items-end mt-12 mr-5px flex-col">
-					<div class="total-sub-container flex justify-start items-center m-0">
-						{{ form_label(form.totalPrice, 'Total HT:', {'label_attr': {'class': 'text-base font-semibold'}}) }}
-						<div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
-							<p class="text-lg text-right">
-								{{ form_widget(form.totalPrice, {'attr': {'class': 'custom-class-for-total-price bg-the-grey-2 w-1/2'}}) }} €
-							</p>
-						</div>
-					</div>
-					<div class="total-sub-container flex justify-start items-center m-0">
-						<h3 class="text-base font-semibold">{{ form_label(form.taxe) }}</h3>
-						<div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
-							<p class="text-lg text-right">{{ form_widget(form.taxe, {'attr': {'class': 'bg-the-grey-2 w-1/2'}}) }} %</p>
-						</div>
-					</div>
-					<div class="total-sub-container flex justify-start items-center m-0">
-						<div class="total-sub-container flex justify-start items-center m-0">
-							{{ form_label(form.totalDuePrice, 'Total TTC:', {'label_attr': {'class': 'text-base font-semibold'}}) }}
-							<div class="total-tab alt ml-5px p-4 w-40 bg-light-dark">
-								<p class="text-lg text-right text-white">
-									{{ form_widget(form.totalDuePrice, {'attr': {'class': 'bg-light-dark w-1/2'}}) }} €
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="signature mt-12 mr-5px ml-auto pt-3 pl-3 w-52 h-28 border border-solid border-gray-300 bg-the-grey-2">
-			<p>Signature:</p>
-		</div>
-		<div class="bottom w-full flex justify-start items-start flex-col">
-			<div class="divider w-full h-2px rounded-2xl bg-the-grey-2 my-5"></div>
-			<div class="bottom-info w-full flex justify-center items-center">
-				<p class="text-sm my-2 text-the-grey">SARL Fourchette</p>
-				<p class="text-sm my-2 text-the-grey">Capital de 1000 €</p>
-				<p class="text-sm my-2 text-the-grey">RCS:12345</p>
-				<p class="text-sm my-2 text-the-grey">Code APE: AZERTY12345</p>
-				<p class="text-sm my-2 text-the-grey">N° TVA: FR3353215643668909</p>
-			</div>
-		</div>
-	</div>
-	<div id="hiddenFieldsContainer"></div>
-	<input type="hidden" id="devisProductsData" name="devisProductsData">
-	{{ form_end(form) }}
+
+        <div id="wrapper" class="h-56" ></div>
+        <div class="mid w-full h-auto flex justify-between items-start">
+          <div
+            class="condition mt-12 flex justify-start items-start flex-col w-70%"
+          >
+            <div class="form-group">
+              <input type="checkbox" id="toggleDeposit" name="toggleDeposit">
+              <label for="toggleDeposit">Ajouter un acompte</label>
+            </div>
+            <div class="form-group hidden" id="depositPercentageGroup">
+            <h2 class="text-lg font-semibold">Conditions de paiement:</h2>
+              <p class="mt-5 text-lg">
+                Paiement d'un acompte de  {{ form_widget(form.depositPercentage, {'attr': {'class': 'form-control w-9', 'id': 'devis_depositPercentage'}}) }}
+                {{ form_errors(form.depositPercentage) }}% du prix total TTC à la commande 70% à
+                la livraison
+              </p>
+
+            </div>
+          </div>
+          <div
+            class="total w-35% flex justify-start items-end mt-12 mr-5px flex-col"
+          >
+            <div class="total-sub-container flex justify-start items-center m-0">
+              {{ form_label(form.totalPrice, 'Total HT:', {'label_attr': {'class': 'text-base font-semibold'}}) }}
+              <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                <p class="text-lg text-right">
+                  {{ form_widget(form.totalPrice, {'attr': {'class': 'custom-class-for-total-price bg-the-grey-2 w-1/2'}}) }} €
+                </p>
+              </div>
+            </div>
+            <div
+              class="total-sub-container flex justify-start items-center m-0"
+            >
+              <h3 class="text-base font-semibold">{{ form_label(form.taxe) }}</h3>
+              <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                <p class="text-lg text-right">{{ form_widget(form.taxe, {'attr': {'class': 'bg-the-grey-2 w-1/2'}}) }} %</p>
+              </div>
+            </div>
+            <div
+              class="total-sub-container flex justify-start items-center m-0"
+            >
+              <div class="total-sub-container flex justify-start items-center m-0">
+                {{ form_label(form.totalDuePrice, 'Total TTC:', {'label_attr': {'class': 'text-base font-semibold'}}) }}
+                <div class="total-tab alt ml-5px p-4 w-40 bg-light-dark">
+                  <p class="text-lg text-right text-white">
+                    {{ form_widget(form.totalDuePrice, {'attr': {'class': 'bg-light-dark w-1/2'}}) }} €
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="signature mt-12 mr-5px ml-auto pt-3 pl-3 w-52 h-28 border border-solid border-gray-300 bg-the-grey-2"
+      >
+        <p>Signature:</p>
+      </div>
+      <div class="bottom w-full flex justify-start items-start flex-col">
+        <div class="divider w-full h-2px rounded-2xl bg-the-grey-2 my-5"></div>
+        <div class="bottom-info w-full flex justify-center items-center">
+          <p class="text-sm my-2 text-the-grey">SARL Fourchette</p>
+          <p class="text-sm my-2 text-the-grey">Capital de 1000 €</p>
+          <p class="text-sm my-2 text-the-grey">RCS:12345</p>
+          <p class="text-sm my-2 text-the-grey">Code APE: AZERTY12345</p>
+          <p class="text-sm my-2 text-the-grey">N° TVA: FR3353215643668909</p>
+        </div>
+      </div>
+    </div>
+    <div id="hiddenFieldsContainer"></div>
+  <input type="hidden" id="devisProductsData" name="devisProductsData">
+    {{ form_end(form) }}
+
+
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}

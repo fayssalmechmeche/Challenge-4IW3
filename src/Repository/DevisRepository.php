@@ -38,6 +38,17 @@ class DevisRepository extends ServiceEntityRepository
         return $lastDevis ? $lastDevis->getDevisNumber() : null;
     }
 
+    public function findPendingByUser($user)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.user = :user')
+            ->andWhere('d.paymentStatus = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', 'PENDING')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Devis[] Returns an array of Devis objects
 //     */

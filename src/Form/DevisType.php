@@ -46,7 +46,9 @@
                         'readonly' => false,
                     ],
                 ])
-                ->add('totalDuePrice', MoneyType::class, ['label' => 'Total TTC'])
+                ->add('totalDuePrice', NumberType::class, [
+                    'label' => 'Total TTC',
+                    'scale' => 2,])
                 ->add('subject', TextareaType::class, ['label' => 'Objet', 'attr' => ['cols' => 60, // Augmentez le nombre de colonnes visibles (par exemple, 60 colonnes)
                     'rows' => 1, ]])
                 ->add('customer', EntityType::class, [
@@ -79,6 +81,9 @@
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
+                ])
+                ->add('depositPercentage', NumberType::class, [
+                    'label' => 'Pourcentage d\'acompte',
                 ])
                 ->add('devisFormulas', CollectionType::class, [
                     'entry_type' => DevisFormulaType::class,

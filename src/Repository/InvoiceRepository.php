@@ -3,12 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Invoice;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Invoice>
- *
  * @method Invoice|null find($id, $lockMode = null, $lockVersion = null)
  * @method Invoice|null findOneBy(array $criteria, array $orderBy = null)
  * @method Invoice[]    findAll()
@@ -21,28 +20,21 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
-//    /**
-//     * @return Invoice[] Returns an array of Invoice objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findLastinvoiceNumberForUser(\App\Entity\User $user): ?string
+    {
 
-//    public function findOneBySomeField($value): ?Invoice
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $lastInvoice = $this->createQueryBuilder('d')
+            ->where('d.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('d.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (!$lastInvoice) {
+            return "wouf";
+        }
+        return $lastInvoice ? $lastInvoice->getInvoiceNumber() : null;
+    }
+
+    // Vous pouvez ajouter des méthodes personnalisées ici si nécessaire
 }
