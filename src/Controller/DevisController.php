@@ -85,15 +85,12 @@ class DevisController extends AbstractController
     return $this->json($data);
   }
 
-    #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository, DevisRepository $devisRepository): Response
-    {
-        $devis = new Devis();
-        $user = $this->getUser();
-        $devis->setUser($user);
-        $lastDevisNumber = $devisRepository->findLastDevisNumberForUser($user);
-        $newDevisNumber = $this->generateNewDevisNumber($lastDevisNumber);
 
+  #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
+  public function new(Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository, DevisRepository $devisRepository): Response
+  {
+    $devis = new Devis();
+    $user = $this->getUser();
     $devis->setUser($user);
     $lastDevisNumber = $devisRepository->findLastDevisNumberForUser($user);
     $newDevisNumber = $this->generateNewDevisNumber($lastDevisNumber);
@@ -102,19 +99,19 @@ class DevisController extends AbstractController
     $products = $productRepository->findBy(['user' => $user]);
     $formulas = $formulaRepository->findBy(['user' => $user]);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $devis->setDevisNumber($newDevisNumber);
-            if (null !== $devis->getDepositPercentage()) {
-                $devis->setDepositStatus(DepositStatus::Prevu);
-            } else {
-                $devis->setDepositStatus(DepositStatus::NonExistant);
-            }
-            $devisProductsJson = $request->request->get('devisProductsJson');
-            if ($devisProductsJson) {
-                $devisProductsData = json_decode($devisProductsJson, true);
+    $form = $this->createForm(DevisType::class, $devis, [
+      'user' => $user,
+    ]);
+    $form->get('devisNumber')->setData($newDevisNumber);
+    $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
       $devis->setDevisNumber($newDevisNumber);
+      if (null !== $devis->getDepositPercentage()) {
+        $devis->setDepositStatus(DepositStatus::Prevu);
+      } else {
+        $devis->setDepositStatus(DepositStatus::NonExistant);
+      }
       $devisProductsJson = $request->request->get('devisProductsJson');
       if ($devisProductsJson) {
         $devisProductsData = json_decode($devisProductsJson, true);
@@ -130,6 +127,7 @@ class DevisController extends AbstractController
           }
         }
       }
+      dd($devis);
       $entityManager->persist($devis);
       $entityManager->flush();
 
@@ -172,23 +170,23 @@ class DevisController extends AbstractController
     $formulasCollection = $devi->getDevisFormulas();
     $formulasCollection->initialize();
 
-        $formulasArray = [];
-        foreach ($formulasCollection as $devisFormula) {
-            $formula = $devisFormula->getFormula();
-            $formulasArray[] = [
-                'id' => $devisFormula->getId(),
-                'name' => $formula ? $formula->getName() : '',
-                'quantity' => $devisFormula->getQuantity(),
-                'price' => $devisFormula->getPrice(),
-            ];
-        }
-        return $this->render('devis/show.html.twig', [
-            'devi' => $devi,
-            'userEmail' => $userEmail,
-            'products' => $productsArray,
-            'formulas' => $formulasArray,
-        ]);
+    $formulasArray = [];
+    foreach ($formulasCollection as $devisFormula) {
+      $formula = $devisFormula->getFormula();
+      $formulasArray[] = [
+        'id' => $devisFormula->getId(),
+        'name' => $formula ? $formula->getName() : '',
+        'quantity' => $devisFormula->getQuantity(),
+        'price' => $devisFormula->getPrice(),
+      ];
     }
+    return $this->render('devis/show.html.twig', [
+      'devi' => $devi,
+      'userEmail' => $userEmail,
+      'products' => $productsArray,
+      'formulas' => $formulasArray,
+    ]);
+  }
 
 
   #[Route('/product/{id}/price', name: 'api_product_price', methods: ['GET'])]
@@ -401,8 +399,6 @@ class DevisController extends AbstractController
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
 * {
   margin: 0;
@@ -647,7 +643,6 @@ nav button:hover {
 .Generator th {
   background-color: #f2f2f2;
 }
-</head>
 
 
 </style>
