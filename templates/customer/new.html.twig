@@ -1,39 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Customer
+{% block title %}
+  New Customer
 {% endblock %}
 
 {% block body %}
-	{% set modal_id = 'newModalId' %}
-	{% set modal_content_id = 'newModalModalContentId' %}
+  {% set modal_id = 'newModalId' %}
+  {% set modal_content_id = 'newModalModalContentId' %}
 
-	<!-- Close Button -->
-	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('newModalId', 'newModalModalContentId')">
-		Fermer
-	</button>
+  <!-- Close Button -->
+  <button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('newModalId', 'newModalModalContentId')">Fermer</button>
 
-	<!-- Contenu de notre modal ici  -->
-	<h2 class="text-3xl mb-5">Créer un Nouveau Client</h2>
-	<div class="form-group flex items-center mt-3 mb-5">
-		<label for="switchClientType" class="mr-2 font-medium">Type de Client :</label>
-		<div
-			class="inline-flex items-center cursor-pointer" onclick="toggleSwitch()">
-			<!-- Switch -->
-			<span class="relative">
-				<span id="switchBackground" class="block w-10 h-6 bg-gray-200 rounded-full shadow-inner"></span>
-				<span id="switchDot" class="absolute block w-4 h-4 mt-1 ml-1 rounded-full shadow inset-y-0 left-0 transition-transform duration-300 ease-in-out bg-white transform">
-					<input type="checkbox" id="switchClientType" class="absolute opacity-0 w-0 h-0"/>
-				</span>
-			</span>
-			<!-- Label -->
-			<label for="switchClientType" class="ml-3 text-sm font-medium text-gray-900">Société</label>
-		</div>
-	</div>
+  <!-- Contenu de notre modal ici -->
+  <h2 class="text-3xl mb-5 dark:text-white">Créer un Nouveau Client</h2>
+  <div class="form-group flex items-center mt-3 mb-5">
+    <label for="switchClientType" class="mr-2 font-medium dark:text-white">Type de Client :</label>
+    <div class="inline-flex items-center cursor-pointer" onclick="toggleSwitch()">
+      <!-- Switch -->
+      <span class="relative">
+        <span id="switchBackground" class="block w-10 h-6 bg-gray-200 rounded-full shadow-inner"></span>
+        <span id="switchDot" class="absolute block w-4 h-4 mt-1 ml-1 rounded-full shadow inset-y-0 left-0 transition-transform duration-300 ease-in-out bg-white transform"><input type="checkbox" id="switchClientType" class="absolute opacity-0 w-0 h-0" /></span>
+      </span>
+      <!-- Label -->
+      <label for="switchClientType" class="ml-3 text-sm font-medium text-gray-900 dark:text-white">Société</label>
+    </div>
+  </div>
 
-	{{ include('customer/_form.html.twig') }}
-
+  {{ include('customer/_form.html.twig') }}
 {% endblock %}
 {% block javascripts %}
-	{{ parent() }}
-	<script src="{{ asset('js/customer.js') }}"></script>
+  {{ parent() }}
+  <script src="{{ asset('js/customer.js') }}"></script>
 {% endblock %}

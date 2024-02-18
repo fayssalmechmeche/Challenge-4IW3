@@ -34,8 +34,6 @@ function openFormulaModal(formulaId) {
       );
       modalContent.innerHTML = html;
 
-      
-
       toggleModal("formulaDetailsModal", "formulaDetailsModalContentId");
       initializeFormulaView();
     })
@@ -125,7 +123,7 @@ function initializeProductGridCreate() {
         name: "Quantité",
         formatter: (cell, row) => {
           return gridjs.html(
-            `<input type="number" min="1" value="${cell}" data-product-id="${row.cells[3].data}" class="quantity-input" onchange="updateQuantity(this)">`
+            `<input class='dark:bg-dark-card dark:text-white dark:border dark:border-solid dark:border-white w-full p-1 rounded-xl' type="number" min="1" value="${cell}" data-product-id="${row.cells[3].data}" class="quantity-input" onchange="updateQuantity(this)">`
           );
         },
       },
@@ -145,7 +143,7 @@ function initializeProductGridCreate() {
         name: "Actions",
         formatter: (cell, row) => {
           return gridjs.html(
-            `<button onclick="removeProductFromGrid('${row.cells[3].data}')">Supprimer</button>`
+            `<button class='text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1' onclick="removeProductFromGrid('${row.cells[3].data}')">Supprimer</button>`
           );
         },
       },
@@ -154,6 +152,14 @@ function initializeProductGridCreate() {
     search: false,
     pagination: false,
     sort: false,
+    className: {
+      th: "bg-white dark:bg-dark-bg text-black dark:text-white dark:border-dark-bg hover:bg-gray-200 dark:hover:bg-dark-card active:bg-gray-300 dark:active:bg-dark-card focus:bg-gray-300 dark:focus:bg-dark-card",
+      td: "text-black bg-white dark:text-white dark:bg-dark-card dark:border-dark-section",
+      paginationSummary: "text-black dark:text-white",
+      sort: "bg-yellow-400 ",
+      filter: "dark:bg-dark-card dark:text-white",
+      footer: "dark:bg-dark-card dark:text-white dark:border-dark-bg",
+    },
     language: {
       search: {
         placeholder: "🔍 Rechercher...",
@@ -172,6 +178,22 @@ function initializeProductGridCreate() {
   document
     .getElementById("addProductButton")
     .addEventListener("click", addProductToGridCreate);
+  const waitForGridToRender = () => {
+    return new Promise((resolve) => {
+      const checkExist = setInterval(() => {
+        const wrapper = document.querySelector("#productGrid");
+        if (wrapper) {
+          clearInterval(checkExist);
+          resolve();
+        }
+      }, 100); // vérifier toutes les 100 millisecondes
+    });
+  };
+
+  waitForGridToRender().then(() => {
+    // Le tableau est maintenant rendu, appliquez vos modifications ici
+    document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
+  });
 }
 
 function addProductToGridCreate() {
@@ -213,6 +235,8 @@ function addProductToGridCreate() {
             ]),
           })
           .forceRender();
+          document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
+
 
         addHiddenInput(selectedProductId, quantity);
         updateTotalPrice();
@@ -233,14 +257,11 @@ function togglePriceInput(isChecked) {
     // L'utilisateur ajuste le prix manuellement
     priceInput.readOnly = false;
     priceInput.style.pointerEvents = "auto"; // Permet les événements de souris
-    priceInput.style.backgroundColor = "#fff"; // Fond blanc (modifiable selon votre design)
-    priceInput.style.color = "#000"; // Texte noir (modifiable selon votre design)
   } else {
     // Le prix est calculé automatiquement
     priceInput.readOnly = true;
     priceInput.style.pointerEvents = "none"; // Désactive les événements de souris
-    priceInput.style.backgroundColor = "#e9ecef"; // Grisé pour montrer qu'il est désactivé
-    priceInput.style.color = "#6c757d"; // Couleur de texte grisé
+    priceInput.value = "Le prix est calculé automatiquement"; // Effacer la valeur
     updateTotalPrice();
   }
 }
@@ -277,6 +298,8 @@ function removeProductFromGrid(productId) {
       ),
     })
     .forceRender();
+    document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
+
 
   // Retirer les inputs cachés correspondants
   const container = document.getElementById("productDataContainer");
@@ -307,6 +330,8 @@ function updateQuantity(inputElement) {
   if (rowData) {
     rowData[1] = newQuantity;
     productGridInstance.forceRender();
+    document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
+
     updateTotalPrice();
   }
 
