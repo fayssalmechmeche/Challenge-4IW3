@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invoice{% endblock %}
+
+{% block body %}
+    <h1>Invoice</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ invoice.id }}</td>
+            </tr>
+            <tr>
+                <th>PaymentStatus</th>
+                <td>{{ invoice.paymentStatus }}</td>
+            </tr>
+            <tr>
+                <th>Taxe</th>
+                <td>{{ invoice.taxe }}</td>
+            </tr>
+            <tr>
+                <th>TotalPrice</th>
+                <td>{{ invoice.totalPrice }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ invoice.updatedAt ? invoice.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>InvoiceNumber</th>
+                <td>{{ invoice.invoiceNumber }}</td>
+            </tr>
+            <tr>
+                <th>TotalDuePrice</th>
+                <td>{{ invoice.totalDuePrice }}</td>
+            </tr>
+            <tr>
+                <th>Remise</th>
+                <td>{{ invoice.remise }}</td>
+            </tr>
+            <tr>
+                <th>PaymentDueTime</th>
+                <td>{{ invoice.paymentDueTime ? invoice.paymentDueTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_invoice_index') }}">back to list</a>
+
+    <a href="{{ path('app_invoice_edit', {'id': invoice.id}) }}">edit</a>
+
+    {{ include('invoice/_delete_form.html.twig') }}
+{% endblock %}

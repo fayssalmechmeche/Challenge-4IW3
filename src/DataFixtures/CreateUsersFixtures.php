@@ -31,8 +31,6 @@ class CreateUsersFixtures extends Fixture
             $this->stripeService->createCustomer($society);
             $manager->persist($society);
 
-
-
             $admin = new User();
             $admin->setName($faker->firstName());
             $admin->setLastName($faker->lastName());
