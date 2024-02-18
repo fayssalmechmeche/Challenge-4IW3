@@ -27,10 +27,9 @@ class FormulaType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom de la formule',
                 'attr' => [
-
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
             ])
             ->add('selectedProduct', EntityType::class, [
@@ -38,9 +37,9 @@ class FormulaType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Sélectionner un produit',
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form bg-white'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form bg-white'
                 ],
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'mapped' => false,
                 'query_builder' => function (ProductRepository $pr) use ($user) {
@@ -60,10 +59,10 @@ class FormulaType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('productFormulasData', CollectionType::class, [
@@ -73,14 +72,14 @@ class FormulaType extends AbstractType
             ])
             ->add('price', MoneyType::class, [
                 'label' => 'Prix de la formule',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
-                'currency' => 'EUR',
+                'currency' => false,
                 'divisor' => 100,
                 'attr' => [
                     'placeholder' => '12.39 pour 12€39',
                     'id' => 'formula_price',
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('adjustPrice', CheckboxType::class, [
@@ -88,7 +87,7 @@ class FormulaType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'attr' => ['class' => 'adjust-price-checkbox rounded-xl w-7 h-7 ml-3 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'],
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex items-center px-1 my-1'],
             ]);
     }

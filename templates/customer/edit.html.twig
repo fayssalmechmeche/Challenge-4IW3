@@ -11,10 +11,10 @@
 		Fermer
 	</button>
 	<!-- Contenu de notre modal ici  -->
-	<h2 class="text-3xl mb-5">Modifier un Client</h2>
+	<h2 class="text-3xl mb-5 dark:text-white">Modifier un Client</h2>
 
 	<div class="form-group flex items-center">
-		<label for="switchClientType" class="mr-2 font-medium">Type de Client :</label>
+		<label for="switchClientType" class="mr-2 font-medium dark:text-white">Type de Client :</label>
 		<input type="hidden" id="ClientTypeHidden" value="{{ customer.nameSociety}}">
 		<div
 			class="inline-flex items-center cursor-pointer" onclick="toggleSwitch()" id="switchToClick">
@@ -26,7 +26,7 @@
 				</span>
 			</span>
 			<!-- Label -->
-			<label for="switchClientType" class="ml-3 text-sm font-medium text-gray-900">Société</label>
+			<label for="switchClientType" class="ml-3 text-sm font-medium text-gray-900 dark:text-white">Société</label>
 		</div>
 	</div>
 	{{ include('customer/_form.html.twig',
