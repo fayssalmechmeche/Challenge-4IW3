@@ -3,9 +3,7 @@ document.addEventListener("DOMContentLoaded", darkModeInit);
 function darkModeInit() {
   // Récupère le thème actuel du stockage local ou définit le mode clair par défaut
   const currentTheme = localStorage.getItem("theme") || "light";
-  let gridWrapper = document.querySelectorAll(".gridjs-wrapper");
-  let gridSearch = document.querySelectorAll(".gridjs-search-input");
-  let gridPagination = document.querySelectorAll(".gridjs-pages button");
+  
 
   // Applique le thème au chargement de la page
   if (currentTheme === "dark") {
