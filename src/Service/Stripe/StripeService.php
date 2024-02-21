@@ -75,40 +75,45 @@ class StripeService
         return $this->stripe->charges->retrieve($chargeId);
     }
 
-    public function createPaymentIntent(Invoice $invoice, $isDeposit = false)
+    public function retriveSession($sessionId)
     {
-        $deposit = 30; // get deposit from database;
-        // if (!$invoice->getDevis()->getUser()->getStripeId()) {
-        //     $customer = $this->stripeHelper->createCustomer($booking->getUser());
-        // } else {
-        //     $customer = $this->stripe->customers->retrieve($booking->getUser()->getStripeId());
-        // }
+        return $this->stripe->checkout->sessions->retrieve($sessionId);
+    }
+
+    public function cancelSession($sessionId)
+    {
+        return $this->stripe->checkout->sessions->expire($sessionId);
+    }
+
+    public function createPaymentIntent(Invoice $invoice, $isDeposit = true)
+    {
+        $taxeValue = ($invoice->getDevis()->getTotalPrice() * $invoice->getDevis()->getTaxe()) / 100;
 
         $session = $this->stripe->checkout->sessions->create([
             'mode' => 'payment',
             'success_url' => $this->urlGenerator->generate('checkout_success', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' =>  $this->urlGenerator->generate('checkout_cancel', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
             'invoice_creation' => ["enabled" => true],
-            'billing_address_collection' => 'required',
             'shipping_address_collection' => [
                 'allowed_countries' => ['FR'],
             ],
+            'payment_method_types' => ['card'],
             'metadata' => [
-                'order_id' => $invoice->getId(),
-                // 'user_id' => $invoice->getUser()->getId(),
+                'invoice_id' => $invoice->getId(),
+                'type' => $isDeposit ? 'deposit' : 'invoice',
             ],
             'line_items' => [
                 [
                     'price_data' => [
+                        'product_data' => [
+                            'name' => $invoice->getInvoiceNumber(),
+                        ],
                         'currency' => 'eur',
-                        //si la réservation est immédiate ou si la réservation est différée et que le client ne veut pas payer avec un acompte
-                        // on lui demande de payer la totalité du montant
-                        //sinon on lui demande de payer 30% du montant
-                        'unit_amount_decimal' => !$isDeposit ? round($invoice->getTotalPrice() * 100) : round(($invoice->getTotalPrice() * (($deposit ?? 30) / 100)) * 100),
+                        'unit_amount_decimal' =>  !$isDeposit ? $invoice->getTotalPrice() * 100 : ($invoice->getDevis()->getTotalPrice() * ($invoice->getDevis()->getDepositPercentage() / 100) * 100) + ($taxeValue * ($invoice->getDevis()->getDepositPercentage() / 100) * 100)
+
                     ],
                     'quantity' => 1,
-                ],
-
+                ]
             ],
         ]);
         return $session;

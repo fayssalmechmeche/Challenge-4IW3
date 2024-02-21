@@ -2,19 +2,24 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Invoice;
 use App\Form\InvoiceType;
+use Psr\Log\LoggerInterface;
+use App\Entity\InvoiceStatus;
+use App\Entity\PaymentStatus;
+use Sabberworm\CSS\Value\URL;
+use App\Service\MailjetService;
 use App\Repository\DevisRepository;
 use App\Repository\InvoiceRepository;
+use App\Service\Stripe\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Psr\Log\LoggerInterface;
-use DateTime;
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/invoice')]
 class InvoiceController extends AbstractController
@@ -49,7 +54,7 @@ class InvoiceController extends AbstractController
 
             $data[] = [
                 'id' => $devi->getId(),
-                'devisNumber' => $devi -> getDevisNumber(),
+                'devisNumber' => $devi->getDevisNumber(),
                 'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d') : '',
                 'customer' => $customerName,
                 'depositStatus' => $devi->getDepositStatus() ? $devi->getDepositStatus()->value : 'NON_EXISTANT',
@@ -60,60 +65,76 @@ class InvoiceController extends AbstractController
     }
 
     #[Route('/new', name: 'app_invoice_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, InvoiceRepository $invoiceRepository,DevisRepository $devisRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, InvoiceRepository $invoiceRepository, DevisRepository $devisRepository, MailjetService $mailjetService): Response
     {
         $devisId = $request->query->get('devisId');
+        $deposit = $request->query->get('deposit');
         $invoice = new Invoice();
         $user = $this->getUser();
         $lastInvoiceNumber = $invoiceRepository->findLastInvoiceNumberForUser($user);
         $newInvoiceNumber = $this->generateNewinvoiceNumber($lastInvoiceNumber);
         $invoice->setUser($user);
+        $devis = $devisRepository->find($devisId);
+        $invoice->setDevis($devis);
         $user = $this->getUser();
         $userEmail = $user ? $user->getEmail() : '';
 
-        $form = $this->createForm(InvoiceType::class, $invoice);
-        $form->handleRequest($request);
-        $devis = $devisRepository->find($devisId);
+        $taxeValue = ($devis->getTotalPrice() * $devis->getTaxe()) / 100;
+        $totalTTC = $devis->getTotalPrice() + $taxeValue;
+        $depositAmount = ($devis->getTotalPrice() * ($devis->getDepositPercentage() / 100)) + ($taxeValue * ($devis->getDepositPercentage() / 100));
+        $new  = $totalTTC;
+
+        if ($request->isMethod('POST')) {
 
 
-        $customer = $devis->getCustomer();
+            $invoice->setInvoiceNumber($newInvoiceNumber);
+            $invoice->setTaxe($taxeValue);
+            $invoice->setTotalPrice($new);
+            $invoice->setTotalDuePrice($new);
+            $invoice->setRemise(0);
+            $invoice->setPaymentStatus(InvoiceStatus::Pending);
+            $invoice->setToken(uniqid());
+            $paymentDueTime = new DateTime('now + 10 days');
+            $invoice->setPaymentDueTime($paymentDueTime);
+            $createdAt = new DateTime();
+            $invoice->setCreatedAt($createdAt);
+            $entityManager->persist($invoice);
+            $entityManager->flush();
+
+            $mailjetService->sendEmail(
+                $invoice->getDevis()->getCustomer()->getEmail(),
+                'Nouvelle facture créée',
+                MailjetService::TEMPLATE_INVOICE_NO_DEPOSIT,
+                [
+                    'firstName' => $invoice->getDevis()->getCustomer()->getName(),
+                    'name' => $invoice->getDevis()->getCustomer()->getLastName(),
+                    'invoice_link' => $deposit ? $this->generateUrl('checkout_index', ['token' => $invoice->getToken(), 'deposit' => true], UrlGeneratorInterface::ABSOLUTE_URL) : $this->generateUrl('checkout_index', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL)
+                ]
+            );
+
+
+            $this->addFlash('success', 'La facture a été créée avec succès et est en attente de paiement par le client.');
+            return $this->redirectToRoute('app_invoice_index');
+        }
+
         return $this->render('invoice/new.html.twig', [
             'invoice' => $invoice,
-            'form' => $form,
             'userEmail' => $userEmail,
             'invoiceNumber' => $newInvoiceNumber,
-            'customer' => $customer,
-            'devis' => $devis,
+            'totalTTC' => $totalTTC,
+            'totalHT' => $devis->getTotalPrice(),
+            'taxeValue' => $taxeValue,
+            'depositAmount' => $depositAmount,
+            'newTotalDuePrice' => $new,
+
         ]);
     }
 
-    #[Route('/new/ajax', name: 'app_invoice_new_ajax', methods: ['POST'])]
-    public function newAjax(Request $request, EntityManagerInterface $entityManager, InvoiceRepository $invoiceRepository, DevisRepository $devisRepository, LoggerInterface $logger): Response
-    {
-        $user = $this->getUser();
-        $data = json_decode($request->getContent(), true);
-        $devis = $devisRepository->find($data['devisId']);
-        $invoice = new Invoice();
-        $invoice->setUser($user);
-        $invoice->setDevis($devis);
-        $invoice->setInvoiceNumber($data['invoiceNumber']);
-        $invoice->setTaxe($data['taxe']);
-        $invoice->setTotalPrice($data['totalPrice']);
-        $invoice->setTotalDuePrice($data['totalDuePrice']);
-        $invoice->setRemise($data['remise']);
-        $invoice->setPaymentStatus($data['paymentStatus']);
-        $paymentDueTime = new DateTime($data['paymentDueTime']);
-        $invoice->setPaymentDueTime($paymentDueTime);
-        $createdAt = new DateTime();
-        $invoice->setCreatedAt($createdAt);
-        $entityManager->persist($invoice);
-        $entityManager->flush();
-        return new JsonResponse(['success' => true]);
-    }
 
 
 
-    #[Route('/devisDetail', name: 'invoice_devis_detail', methods: ['GET','POST'])]
+
+    #[Route('/devisDetail', name: 'invoice_devis_detail', methods: ['GET', 'POST'])]
     public function devisDetail(Request $request, DevisRepository $devisRepository): Response
     {
         $devisId = $request->query->get('devisId');
@@ -175,7 +196,7 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$invoice->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->request->get('_token'))) {
             $entityManager->remove($invoice);
             $entityManager->flush();
         }

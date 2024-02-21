@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sort: true,
     }).render(document.getElementById('devis-table'));
 
-    document.getElementById('devis-table').addEventListener('click', function(event) {
+    document.getElementById('devis-table').addEventListener('click', function (event) {
         var target = event.target;
         while (target != null && !target.classList.contains('modalswap')) {
             target = target.parentNode;
@@ -36,8 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
             updateDevisSelectionDisplay(devisNumber);
 
             // Mise à jour des URLs pour tous les liens "Créer la facture"
-            document.querySelectorAll('.create-invoice-btn').forEach(link => {
-                link.href = `/invoice/new?devisId=${devisId}`; // Assurez-vous que le chemin est correct
+            document.querySelectorAll('.create-invoice-btn').forEach((link, index) => {
+                if (index === 0) {
+                    link.href = `/invoice/new?devisId=${devisId}&deposit=true`;
+                } else if (index === 1) {
+                    link.href = `/invoice/new?devisId=${devisId}&deposit=false`;
+                }
             });
 
             const depositInvoiceSection = document.getElementById('depositInvoiceSection');
@@ -50,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Trouver le lien dans la section et le désactiver
                 const link = depositInvoiceSection.querySelector('a');
                 link.classList.add('cursor-not-allowed');
-                link.addEventListener('click', function(event) {
+                link.addEventListener('click', function (event) {
                     event.preventDefault(); // Empêche la navigation
                 });
             } else {
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    function updateDevisSelectionDisplay(devisNumber) {
+function updateDevisSelectionDisplay(devisNumber) {
     document.getElementById('devis-selection-display').textContent = `Devis sélectionné : Devis numéro ${devisNumber} du client X`;
 }
 console.log("sheeesdfsdfsdfh");
