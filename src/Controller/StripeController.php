@@ -32,7 +32,7 @@ class StripeController extends AbstractController
         /** @var Invoice $invoice */
         $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['token' => $token, 'user' => $this->getUser()]);
         if (!$invoice) {
-            return $this->redirectToRoute('app_invoice_index');
+            return $this->redirectToRoute('default_index');
         }
 
         // on verifie si la commande a déjà été payée en bdd
@@ -92,9 +92,10 @@ class StripeController extends AbstractController
     public function cancel(string $token, EntityManagerInterface $entityManager): Response
     {
         $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(array('token' => $token));
+
         if ($invoice->getPaymentStatus() == InvoiceStatus::Paid || $invoice->getPaymentStatus() == InvoiceStatus::Partial) {
             $this->addFlash('success', 'La facture a déjà été payée ou partiellement payée');
-            return $this->redirectToRoute('default_index', ['token' => $invoice->getToken()]);
+            return $this->redirectToRoute('default_index');
         }
 
         return $this->render('checkout/cancel.html.twig', [
