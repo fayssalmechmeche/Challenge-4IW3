@@ -93,5 +93,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss'),
+    require('autoprefixer'),
+    // Other PostCSS plugins as needed
+  ]
 };
