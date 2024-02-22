@@ -88,7 +88,7 @@ class InvoiceController extends AbstractController
 
             $invoice->setInvoiceNumber($newInvoiceNumber);
             $invoice->setTaxe($taxeValue);
-            $invoice->setTotalPrice($new);
+            $invoice->setTotalPrice(round($new));
             $invoice->setTotalDuePrice(round($new));
             $invoice->setRemise(0);
             $invoice->setPaymentStatus(InvoiceStatus::Pending);
