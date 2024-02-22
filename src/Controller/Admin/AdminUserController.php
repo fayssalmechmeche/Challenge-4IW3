@@ -39,8 +39,8 @@ class AdminUserController extends AbstractController
             dump($request);
             $isShow = $request->query->get('isShow');
             if ($isShow) {
-                $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(true, $this->getUser()->getSociety());
-                $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(false, $this->getUser()->getSociety());
+                $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(true, $isShow);
+                $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(false, $isShow);
                 return new JsonResponse(array(
                     'code' => 200,
                     'success' => true,

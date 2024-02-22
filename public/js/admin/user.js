@@ -179,7 +179,7 @@ function refreshCardUser() {
   let cardCountUsers = document.getElementById("cardNumberLength");
   let cardCountUsersVerified = document.getElementById("cardUserVerfied");
   let cardCountUsersNotVerified = document.getElementById("cardUserNotVerfied");
-  let isShow = document.getElementById("isShow").dataset.isshow;
+  let isShow = document.getElementById("isShow") ? document.getElementById("isShow").dataset.isshow : 0;
 
   fetch(`/admin/user?isShow=${isShow}`, {
     method: "GET",
