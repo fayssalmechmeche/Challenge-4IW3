@@ -47,7 +47,7 @@ ehthumbs_vista.db
 .idea_modules/
 ###< IDE gitignore ###
 
-composer.lock
+# composer.lock
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
