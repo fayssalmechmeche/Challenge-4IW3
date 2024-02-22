@@ -6,6 +6,8 @@ use App\Entity\ResetPasswordRequest;
 use App\Entity\User;
 use App\Entity\Society;
 use const App\Entity\ROLE_ADMIN;
+use const App\Entity\ROLE_SOCIETY;
+
 use App\Form\Admin\AdminUserType;
 use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
@@ -35,6 +37,20 @@ class AdminUserController extends AbstractController
         $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(false);
         if ($request->isXmlHttpRequest()) {
             dump($request);
+            $isShow = $request->query->get('isShow');
+            if ($isShow) {
+                $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(true, $this->getUser()->getSociety());
+                $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(false, $this->getUser()->getSociety());
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => true,
+                    'data' => [
+                        'countUsers' => $usersNotVerified + $usersVerified,
+                        'countUsersVerified' => $usersVerified,
+                        'countUsersNotVerified' => $usersNotVerified
+                    ]
+                ));
+            }
             return new JsonResponse(array(
                 'code' => 200,
                 'success' => true,
@@ -109,12 +125,28 @@ class AdminUserController extends AbstractController
         $form->handleRequest($request);
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
+
             $data = json_decode($content, true);
+            dump($content);
             if (!$this->isCsrfTokenValid("admin_user", $data['admin_user[_token]'])) {
                 return new JsonResponse(array(
                     'code' => 200,
                     'success' => false,
                     'message' => "Token invalid"
+                ));
+            }
+
+            if (
+                isset($data['admin_user[email]']) && $data['admin_user[email]'] == ""
+                || isset($data['admin_user[name]']) && $data['admin_user[name]'] == ""
+                || isset($data['admin_user[lastName]']) && $data['admin_user[lastName]'] == ""
+                || isset($data['admin_user[society]']) && $data['admin_user[society]'] == ""
+                || isset($data['admin_user[roles][]']) && $data['admin_user[roles][]'] == ""
+            ) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Tous les champs sont obligatoires"
                 ));
             }
             if (!filter_var($data['admin_user[email]'], FILTER_VALIDATE_EMAIL)) {
