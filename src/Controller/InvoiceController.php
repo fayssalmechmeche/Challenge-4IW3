@@ -86,11 +86,10 @@ class InvoiceController extends AbstractController
 
         if ($request->isMethod('POST')) {
 
-
             $invoice->setInvoiceNumber($newInvoiceNumber);
             $invoice->setTaxe($taxeValue);
             $invoice->setTotalPrice($new);
-            $invoice->setTotalDuePrice($new);
+            $invoice->setTotalDuePrice(round($new));
             $invoice->setRemise(0);
             $invoice->setPaymentStatus(InvoiceStatus::Pending);
             $invoice->setToken(uniqid());
@@ -108,7 +107,7 @@ class InvoiceController extends AbstractController
                 [
                     'firstName' => $invoice->getDevis()->getCustomer()->getName(),
                     'name' => $invoice->getDevis()->getCustomer()->getLastName(),
-                    'invoice_link' => $deposit ? $this->generateUrl('checkout_index', ['token' => $invoice->getToken(), 'deposit' => true], UrlGeneratorInterface::ABSOLUTE_URL) : $this->generateUrl('checkout_index', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL)
+                    'invoice_link' => $deposit == "true" ? $this->generateUrl('checkout_index', ['token' => $invoice->getToken(), 'deposit' => true], UrlGeneratorInterface::ABSOLUTE_URL) : $this->generateUrl('checkout_index', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL)
                 ]
             );
 
