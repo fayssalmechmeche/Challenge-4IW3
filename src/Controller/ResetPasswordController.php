@@ -117,7 +117,7 @@ class ResetPasswordController extends AbstractController
             $this->entityManager->flush();
             $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
             $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
-                'link' => $link,
+                'confirmation_link' => $link,
                 'firstName' => $user->getName(),
                 'name' => $user->getLastName()
             ]);
@@ -179,7 +179,7 @@ class ResetPasswordController extends AbstractController
             $this->entityManager->flush();
             $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
             $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
-                'link' => $link,
+                'confirmation_link' => $link,
                 'firstName' => $user->getName(),
                 'name' => $user->getLastName()
             ]);

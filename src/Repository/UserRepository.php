@@ -49,6 +49,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getSingleScalarResult();
     }
+    public function countUsersVerfiedBySociety($isVerified, $society)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('count(u)')
+            ->where('u.isVerified = :isVerified')
+            ->andWhere('u.society = :society')
+            ->setParameter('society', $society)
+            ->setParameter('isVerified', $isVerified)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
