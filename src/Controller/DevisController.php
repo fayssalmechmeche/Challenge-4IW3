@@ -126,7 +126,7 @@ class DevisController extends AbstractController
                     }
                 }
             }
-            dd($devis);
+            // dd($devis);
             $entityManager->persist($devis);
             $entityManager->flush();
 

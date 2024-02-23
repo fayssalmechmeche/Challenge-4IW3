@@ -21,6 +21,86 @@ class DevisProductRepository extends ServiceEntityRepository
         parent::__construct($registry, DevisProduct::class);
     }
 
+    public function findMostSoldProductByUser()
+    {
+        return $this->createQueryBuilder('dp')
+            ->select('p.name', 'SUM(dp.quantity) as totalQuantity')
+            ->innerJoin('dp.product', 'p')
+            // ->where('dp.devis IN (
+            //     SELECT d.id FROM App\Entity\Devis d
+            //     WHERE d.user = :userId
+            // )')
+            ->groupBy('p.id')
+            ->orderBy('totalQuantity', 'DESC')
+            ->setMaxResults(1)
+            // ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findLessSoldProductByUser()
+    {
+        return $this->createQueryBuilder('dp')
+            ->select('p.name', 'SUM(dp.quantity) as totalQuantity')
+            ->innerJoin('dp.product', 'p')
+            // ->where('dp.devis IN (
+            //     SELECT d.id FROM App\Entity\Devis d
+            //     WHERE d.user = :userId
+            // )')
+            ->groupBy('p.id')
+            ->orderBy('totalQuantity', 'ASC')
+            ->setMaxResults(1)
+            // ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findAllOrderProductByUser()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT p.name, SUM(dp.quantity) as totalQuantity
+            FROM devis_product dp
+            RIGHT JOIN product p ON dp.product_id = p.id
+            -- WHERE dp.devis_id IN (
+            --     SELECT d.id FROM Devis d
+            --     WHERE d.user_id = :userId
+            -- )
+            GROUP BY p.id
+            ORDER BY totalQuantity ASC;
+        ';
+
+        $resultSet = $conn->executeQuery($sql);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+
+    }
+
+    public function findAllOrderCustomerByUser()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT p.name, SUM(dp.quantity) as totalQuantity
+            FROM devis_product dp
+            RIGHT JOIN product p ON dp.product_id = p.id
+            -- WHERE dp.devis_id IN (
+            --     SELECT d.id FROM Devis d
+            --     WHERE d.user_id = :userId
+            -- )
+            GROUP BY p.id
+            ORDER BY totalQuantity ASC;
+        ';
+
+        $resultSet = $conn->executeQuery($sql);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+
+    }
+
 //    /**
 //     * @return DevisProduct[] Returns an array of DevisProduct objects
 //     */

@@ -106,6 +106,19 @@
 			</a>
 		</div>
 		<!-- end item -->
+		<!-- Navbar item -->
+		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_accountant' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+			<a href="{{ path('app_accountant') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_accountant' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+
+				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
+					finance
+				</span>
+				<p class="nav-text font-semibold transition ease-in-out duration-300">
+					Rapports
+				</p>
+			</a>
+		</div>
+		<!-- end item -->
 		<!-- logout -->
 		<div class="group mt-auto mb-5 w-95% transition ease-in-out duration-300 cursor-pointer hover:bg-nav-btn h-12 rounded-10px flex justify-start items-center justify-self-end">
 			<a href="{{ path('home_index') }}" class="flex items-center w-full h-full text-gray-500 dark:text-white hover:text-white">

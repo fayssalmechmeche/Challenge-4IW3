@@ -2,11 +2,16 @@
 	<p class="text-grey-p text-base">{{ description }}</p>
 	<h2 class="text-3xl font-bold">{{ amount }}</h2>
 	{% if trend is defined %}
-		<div class="flex justify-center items-center {{ trend.background }} w-24 rounded-3xl px-5 py-2">
+		<div class="flex justify-center items-center {{ trend.background }} w-24 h-10 rounded-3xl px-5 py-2">
 			<span class="material-symbols-outlined {{ trend.color }}">
 				{{ trend.icon }}
 			</span>
 			<p class="font-bold {{ trend.color }}">{{ trend.prefix }}{{ trend.percentage }}</p>
 		</div>
+	{% endif %}
+	{% if redirectUrl is defined %}
+		<a href="{{ path(redirectUrl) }}" type="button" class="flex justify-center items-center w-24 h-10 rounded-3xl px-5 py-2 bg-progress-bar-1 text-white text-sm font-bold tracking-wider uppercase hover:bg-white hover:text-progress-bar-1 hover:border-progress-bar-1 border border-solid border-progress-bar-1 transition-all duration-300 ease-in-out">
+			Voir
+		</a>
 	{% endif %}
 </div>
