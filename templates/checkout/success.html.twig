@@ -1,0 +1,32 @@
+{% extends 'base.login.html.twig' %}
+
+
+{% block title %}Paiment effectué
+{% endblock %}
+
+{% block body %}
+
+	<div class="flex h-screen w-screen">
+
+
+		<main id="main" class="flex flex-1">
+
+			<section id="" class="z-10 flex flex-col items-center justify-center bg-gradient-to-r from-slate-900 to-blue-900 w-full">
+				<a href="{{ path('default_index') }}">
+					<img src="{{ asset('images/navbar/Main Logo.svg') }}" alt="LogoAstroShe	">
+				</a>
+
+				<div class="flex w-3/6 flex-col justify-center">
+					<h2 class="text-4xl text-white">Paiment effectué</h2>
+					<h3 class="mt-4 text-xl text-white">
+						Merci pour votre achat, vous recevrez un email de confirmation
+					</h3>
+					<a href="{{ path('default_index') }}" type="button" class="focus:shadow-outline mt-4 cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-center text-lg font-bold text-white hover:bg-blue-700 focus:outline-none">
+						Revenir à l'accueil
+					</a>
+				</div>
+			</section>
+		</main>
+
+	</div>
+{% endblock %}

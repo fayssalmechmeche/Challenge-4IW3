@@ -28,7 +28,6 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th>idDevis</th>
 				<th>InvoiceNumber</th>
 				<th>TotalDuePrice</th>
 				<th>PaymentStatus</th>
@@ -40,11 +39,10 @@
 		<tbody>
 			{% for invoice in invoices %}
 				<tr>
-					<td>{{ invoice.devis.id }}</td>
 					<td>{{ invoice.invoiceNumber }}</td>
 					<td>{{ invoice.totalDuePrice }}
 						€</td>
-					<td>{{ invoice.paymentStatus }}</td>
+					<td>{{ translateInvoiceStatus(invoice.paymentStatus) }}</td>
 					<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ invoice.paymentDueTime ? invoice.paymentDueTime|date('Y-m-d H:i:s') : '' }}</td>
 					<td>

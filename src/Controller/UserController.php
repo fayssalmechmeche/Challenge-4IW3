@@ -58,7 +58,9 @@ class UserController extends AbstractController
     public function new(Request $request,)
     {
         $user = new User();
-        $form = $this->createForm(AdminUserType::class, $user);
+        $form = $this->createForm(AdminUserType::class, $user, [
+            'user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
@@ -112,7 +114,9 @@ class UserController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(User $user, Request $request): Response
     {
-        $form = $this->createForm(AdminUserType::class, $user);
+        $form = $this->createForm(AdminUserType::class, $user, [
+            'user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
