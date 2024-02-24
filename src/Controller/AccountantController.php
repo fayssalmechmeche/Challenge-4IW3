@@ -19,14 +19,12 @@ class AccountantController extends AbstractController
     public function index(
         DevisRepository $devisRepository, 
         DevisProductRepository $devisProductRepository, 
-        ProductRepository $productRepository,
-        CustomerRepository $customerRepository,
         InvoiceRepository $invoiceRepository
     ): Response
     {
 
         $user = $this->getUser();
-        $devis = $devisRepository->findAll();//TODO Society
+        $devis = $devisRepository->findBy(['user' => $user]);//TODO Society
         $totalPriceDevisByMonth = [];
 
         //Calcul du totalDuePrice des devis par mois
@@ -38,12 +36,17 @@ class AccountantController extends AbstractController
             $totalPriceDevisByMonth[$month] += $d->getTotalDuePrice();
 
         }
-        ksort($totalPriceDevisByMonth); //Trie par date
+        // Trier par date
+        uksort($totalPriceDevisByMonth, function ($a, $b) {
+            $dateA = strtotime("01-$a");
+            $dateB = strtotime("01-$b");
+            return $dateA - $dateB;
+        });
 
-        $invoice = $invoiceRepository->findBy(['paymentStatus' => 'PAID']);//TODO Society
+        $invoice = $invoiceRepository->findBy(['paymentStatus' => 'PAID', 'user' => $user]);//TODO Society
         $totalPriceByMonth = [];
 
-        //Calcul du totalDuePrice des devis par mois
+        //Calcul du totalDuePrice des factures par mois
         foreach ($invoice as $i) {
             $month = $i->getCreatedAt()->format('m-Y');
             if (!isset($totalPriceByMonth[$month])) {
@@ -52,18 +55,22 @@ class AccountantController extends AbstractController
             $totalPriceByMonth[$month] += $i->getTotalDuePrice();
 
         }
-        ksort($totalPriceByMonth); //Trie par date
+        // Trier par date
+        uksort($totalPriceByMonth, function ($a, $b) {
+            $dateA = strtotime("01-$a");
+            $dateB = strtotime("01-$b");
+            return $dateA - $dateB;
+        });
         
-        // dd($devisRepository->findAmountInvoicePaid());
         return $this->render('accountant/index.html.twig', [
             'devis' => $devisRepository->findBy(['user' => $user]),
-            'customers' => $devisRepository->findAllCustomerWithOrdersAndTotalDuePrice(),
-            'products' => $devisProductRepository->findAllOrderProductByUser(),
-            'nameMostSellProduct' => $devisProductRepository->findMostSoldProductByUser(),
-            'nameLessSellProduct' => $devisProductRepository->findLessSoldProductByUser(),
-            'customerWithHighestSpending' => $devisRepository->findCustomerWithHighestTotalOrdersAndHisTotalSpending(),
-            'customerWithLowestSpending' => $devisRepository->findCustomerWithLowestTotalOrdersAndHisTotalSpending(),
-            'totalBalance' => $devisRepository->findAmountInvoicePaid(),
+            'customers' => $devisRepository->findAllCustomerWithOrdersAndTotalDuePrice($user),
+            'products' => $devisProductRepository->findAllOrderProductByUser($user),
+            'nameMostSellProduct' => $devisProductRepository->findMostSoldProductByUser($user),
+            'nameLessSellProduct' => $devisProductRepository->findLessSoldProductByUser($user),
+            'customerWithHighestSpending' => $devisRepository->findCustomerWithHighestTotalOrdersAndHisTotalSpending($user),
+            'customerWithLowestSpending' => $devisRepository->findCustomerWithLowestTotalOrdersAndHisTotalSpending($user),
+            'totalBalance' => $devisRepository->findAmountInvoicePaid($user),
             'totalPriceByMonth' => $totalPriceByMonth,
         ]);
     }

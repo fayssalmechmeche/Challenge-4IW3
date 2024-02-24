@@ -21,41 +21,41 @@ class DevisProductRepository extends ServiceEntityRepository
         parent::__construct($registry, DevisProduct::class);
     }
 
-    public function findMostSoldProductByUser()
+    public function findMostSoldProductByUser(\App\Entity\User $user)
     {
         return $this->createQueryBuilder('dp')
             ->select('p.name', 'SUM(dp.quantity) as totalQuantity')
             ->innerJoin('dp.product', 'p')
-            // ->where('dp.devis IN (
-            //     SELECT d.id FROM App\Entity\Devis d
-            //     WHERE d.user = :userId
-            // )')
+            ->where('dp.devis IN (
+                SELECT d.id FROM App\Entity\Devis d
+                WHERE d.user = :userId
+            )')
             ->groupBy('p.id')
             ->orderBy('totalQuantity', 'DESC')
             ->setMaxResults(1)
-            // ->setParameter('userId', $userId)
+            ->setParameter('userId', ['user' => $user->getId()])
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findLessSoldProductByUser()
+    public function findLessSoldProductByUser(\App\Entity\User $user)
     {
         return $this->createQueryBuilder('dp')
             ->select('p.name', 'SUM(dp.quantity) as totalQuantity')
             ->innerJoin('dp.product', 'p')
-            // ->where('dp.devis IN (
-            //     SELECT d.id FROM App\Entity\Devis d
-            //     WHERE d.user = :userId
-            // )')
+            ->where('dp.devis IN (
+                SELECT d.id FROM App\Entity\Devis d
+                WHERE d.user = :userId
+            )')
             ->groupBy('p.id')
             ->orderBy('totalQuantity', 'ASC')
             ->setMaxResults(1)
-            // ->setParameter('userId', $userId)
+            ->setParameter('userId', ['user' => $user->getId()])
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findAllOrderProductByUser()
+    public function findAllOrderProductByUser(\App\Entity\User $user)
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -63,22 +63,21 @@ class DevisProductRepository extends ServiceEntityRepository
             SELECT p.name, SUM(dp.quantity) as totalQuantity
             FROM devis_product dp
             RIGHT JOIN product p ON dp.product_id = p.id
-            -- WHERE dp.devis_id IN (
-            --     SELECT d.id FROM Devis d
-            --     WHERE d.user_id = :userId
-            -- )
+            WHERE dp.devis_id IN (
+                SELECT d.id FROM Devis d
+                WHERE d.user_id = :userId
+            )
             GROUP BY p.id
             ORDER BY totalQuantity ASC;
         ';
 
-        $resultSet = $conn->executeQuery($sql);
+        $resultSet = $conn->executeQuery($sql, ['userId' => $user->getId()]);
 
-        // returns an array of arrays (i.e. a raw data set)
         return $resultSet->fetchAllAssociative();
 
     }
 
-    public function findAllOrderCustomerByUser()
+    public function findAllOrderCustomerByUser(\App\Entity\User $user)
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -86,17 +85,16 @@ class DevisProductRepository extends ServiceEntityRepository
             SELECT p.name, SUM(dp.quantity) as totalQuantity
             FROM devis_product dp
             RIGHT JOIN product p ON dp.product_id = p.id
-            -- WHERE dp.devis_id IN (
-            --     SELECT d.id FROM Devis d
-            --     WHERE d.user_id = :userId
-            -- )
+            WHERE dp.devis_id IN (
+                SELECT d.id FROM Devis d
+                WHERE d.user_id = :userId
+            )
             GROUP BY p.id
             ORDER BY totalQuantity ASC;
         ';
 
-        $resultSet = $conn->executeQuery($sql);
+        $resultSet = $conn->executeQuery($sql, ['userId' => $user->getId()]);
 
-        // returns an array of arrays (i.e. a raw data set)
         return $resultSet->fetchAllAssociative();
 
     }

@@ -27,7 +27,6 @@ new Chart(chartCA, {
           "rgb(54, 162, 235)",
           "rgb(255, 205, 86)",
         ],
-        color: "#ff89",
       },
     ],
   },
@@ -40,10 +39,6 @@ new Chart(chartCA, {
     plugins: {
       legend: {
         display: false,
-        // labels: {
-        //   boxWidth: 0,
-        //   boxHeight: 0,
-        // },
       },
     },
   },
@@ -60,11 +55,6 @@ new Chart(chartProducts, {
         label: "Total commandes",
         data: dataChartProducts,
         borderWidth: 0,
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-        ],
       },
     ],
   },
@@ -94,11 +84,6 @@ new Chart(chartCustomers, {
         label: "Total commandes",
         data: dataChartCustomers,
         borderWidth: 0,
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-        ],
       },
     ],
   },

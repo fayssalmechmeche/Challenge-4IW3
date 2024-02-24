@@ -36,5 +36,20 @@ class InvoiceRepository extends ServiceEntityRepository
         return $lastInvoice ? $lastInvoice->getInvoiceNumber() : null;
     }
 
+    public function findLastInvoiceAmountForUser(\App\Entity\User $user): ?string
+    {
+
+        $lastInvoice = $this->createQueryBuilder('d')
+            ->where('d.user = :user')
+            ->andWhere('d.paymentStatus = :status')
+            ->setParameter('status', 'PAID')
+            ->setParameter('user', $user)
+            ->orderBy('d.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $lastInvoice ? $lastInvoice->getTotalDuePrice() : null;
+    }
+
     // Vous pouvez ajouter des méthodes personnalisées ici si nécessaire
 }
