@@ -21,10 +21,10 @@
       {{ encore_entry_script_tags('app') }}
     {% endblock %}
   </head>
-  <body class="bg-slate-200">
+  <body class="bg-content-bg">
     <div class="mega-container h-auto w-[98vw] flex flex-nowrap justify-start items-start m-0 p-0 overflow-hidden">
       {% include 'admin/navbar_back.html.twig' %}
-      <div class="site-content pl-10 my-8 mx-0 min-h-90vh w-content-space-open h-auto rounded-2xl dark:bg-dark-section">
+      <div class="site-content ml-10 p-5 my-8 mx-0 min-h-90vh w-content-space-open h-auto rounded-2xl dark:bg-dark-section">
         {% block body %}
           {# Ce bloc sera remplacé par le contenu spécifique de chaque page #}
         {% endblock %}

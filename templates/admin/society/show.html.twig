@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-  <h1 class="text-5xl mt-2">Info de la société: <span class="h-fit w-fit rounded-lg bg-blue-700 px-4 text-white">{{ society.name }}</span></h1>
+  <h1 class="text-5xl mt-2 dark:text-white">Info de la société: <span class="h-fit w-fit rounded-lg bg-blue-700 px-4 text-white">{{ society.name }}</span></h1>
 
   {% set usersVerified = 0 %}
   {% for user in society.users %}
@@ -25,9 +25,10 @@
     {% include 'components/admin_card.twig' with { id:'cardUserNotVerfied', bgColor: 'bg-red-200', color: 'text-red-500', icon: 'no_accounts', count: usersNotVerified, description: 'Utilisateurs non vérifiés' } %}
   </section>
   <section id="InfosUser" class="h-full w-full">
-  <h2 class="mb-3 text-3xl mt-4">Les Utilisateurs</h2>
+  <h2 class="mb-3 text-3xl mt-4 dark:text-white">Les Utilisateurs</h2>
     <div id="tabUserGridJs" class="h-full w-full" data-id="{{ society.id }}"></div>
   </section>
+  {% include 'components/dark_mode.html.twig'%}
   {% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 

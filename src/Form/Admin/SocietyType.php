@@ -22,10 +22,10 @@ class SocietyType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la société',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'constraints' => [
                     new Length([
@@ -36,10 +36,10 @@ class SocietyType extends AbstractType
             ])
             ->add('address', TextType::class, [
                 'label' => 'Addresse de la société',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'constraints' => [
                     new Length([
@@ -50,11 +50,10 @@ class SocietyType extends AbstractType
             ])
             ->add('phone', IntegerType::class, [
                 'label' => 'Téléphone de la société',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'constraints' => [
                     new Length([
@@ -65,10 +64,10 @@ class SocietyType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email de la société',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
                 'constraints' => [
                     new Email(),
@@ -76,10 +75,10 @@ class SocietyType extends AbstractType
             ])
             ->add('siret', IntegerType::class, [
                 'label' => 'Siret de la société',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ]);
     }

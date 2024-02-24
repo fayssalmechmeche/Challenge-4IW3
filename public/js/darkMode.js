@@ -9,7 +9,7 @@ function darkModeInit() {
   if (currentTheme === "dark") {
     document.body.classList.add("dark");
     if (adminBG) {
-      adminBG.classList.add("bg-dark-bg");
+      adminBG.classList.add("dark:bg-dark-bg");
     }
     document.body.style.transition = "background-color 0.5s ease";
     document.body.classList.add("bg-dark-bg");
@@ -27,7 +27,7 @@ function darkModeInit() {
       localStorage.setItem("theme", "dark");
       document.body.classList.add("bg-dark-bg");
       if (adminBG) {
-        adminBG.classList.add("bg-dark-bg");
+        adminBG.classList.add("dark:bg-dark-bg");
       }
       document.getElementById("toggleDarkMode").style.display = "none";
       document.getElementById("toggleLightMode").style.display = "flex";

@@ -77,7 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const waitForGridToRender = () => {
     return new Promise((resolve) => {
       const checkExist = setInterval(() => {
-        const wrapper = document.querySelector("#tabUserGridJs .gridjs-wrapper");
+        const wrapper = document.querySelector(
+          "#tabUserGridJs .gridjs-wrapper"
+        );
         if (wrapper) {
           clearInterval(checkExist);
           resolve();
@@ -90,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Le tableau est maintenant rendu, appliquez vos modifications ici
     document.querySelector("#tabUserGridJs .gridjs-wrapper").classList.add("dark:border-t-0");
     document
-      .querySelector(".gridjs-search-input")
+      .querySelector("#tabUserGridJs .gridjs-search-input")
       .classList.add(
         "bg-white",
         "dark:border-dark-bg",
