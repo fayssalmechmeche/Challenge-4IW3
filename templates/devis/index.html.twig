@@ -1,31 +1,25 @@
 {% extends 'base_caterer.html.twig' %}
 
-{% block title %}Devis index
+{% block title %}
+  Devis index
 {% endblock %}
 
 {% block content %}
-
-	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
-		<h1 class='text-4xl font-bold mb-3'>Liste des Devis</h1>
-		<button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
-			<a class="text-decoration-none" href="{{ path('app_devis_new') }}">Créer un nouveau Devis</a>
-		</button>
-		<button onclick="generateDevisXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
-			Générer XLSX
-		</button>
-		<button onclick="generateDevisPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
-			Générer PDF
-		</button>
-		<!-- Conteneur pour le tableau Grid.js -->
-		<div id="devis-table"></div>
-	</div>
+  <div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white dark:bg-dark-section p-3">
+    <h1 class="text-4xl font-bold mb-3 dark:text-white">Liste des Devis</h1>
+    <button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2"><a class="text-decoration-none" href="{{ path('app_devis_new') }}">Créer un nouveau Devis</a></button>
+    <button onclick="generateDevisXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Générer XLSX</button>
+    <button onclick="generateDevisPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Générer PDF</button>
+    <!-- Conteneur pour le tableau Grid.js -->
+    <div id="devis-table"></div>
+  </div>
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
-	<script>
+  {{ parent() }}
+  <script>
 		var csrfToken = '{{ csrf_token('delete_devis') }}';
 	</script>
-	<script src="{{ asset('js/devisGrid.js') }}"></script>
-	<script src="{{ asset('js/excel.js') }}"></script>
+  <script src="{{ asset('js/devisGrid.js') }}"></script>
+  <script src="{{ asset('js/excel.js') }}"></script>
 {% endblock %}

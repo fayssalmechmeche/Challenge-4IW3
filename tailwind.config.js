@@ -36,6 +36,9 @@ module.exports = {
         "dark-bg": "#0b1120",
         "dark-section": "#1c2c54",
         "dark-card": "#38446c",
+        //Gradiant
+        "gradient-1": "#011936",
+        "gradient-2": "#012F63",
       },
       spacing: {
         "90-vh": "90vh",
