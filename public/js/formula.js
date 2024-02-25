@@ -97,19 +97,9 @@ function openFormulaCreateModal() {
 
       initializeFormElements(modalBody);
       initializeCheckbox(); // Initialiser la checkbox ici
-      if (!productGridInstance) {
-        initializeProductGridCreate();
-      }
+      initializeProductGridCreate();
       toggleModal("newModalId", "newModalModalContentId");
       sheeesh();
-
-      // $('#formulaCreateModal').on('shown.bs.modal', function() {
-      //     if (!productGridInstance) {
-      //         initializeProductGridCreate();
-      //     }
-      // });
-
-      // $('#formulaCreateModal').modal('show');
     })
     .catch((error) =>
       console.error("Erreur lors de la récupération du formulaire:", error)
@@ -193,7 +183,9 @@ function initializeProductGridCreate() {
 
   waitForGridToRender().then(() => {
     // Le tableau est maintenant rendu, appliquez vos modifications ici
-    document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
+    document
+      .querySelector("#productGrid .gridjs-wrapper")
+      .classList.add("dark:border-y-0");
   });
 }
 
@@ -236,8 +228,9 @@ function addProductToGridCreate() {
             ]),
           })
           .forceRender();
-          document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
-
+        document
+          .querySelector("#productGrid .gridjs-wrapper")
+          .classList.add("dark:border-y-0");
 
         addHiddenInput(selectedProductId, quantity);
         updateTotalPrice();
@@ -299,8 +292,9 @@ function removeProductFromGrid(productId) {
       ),
     })
     .forceRender();
-    document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
-
+  document
+    .querySelector("#productGrid .gridjs-wrapper")
+    .classList.add("dark:border-y-0");
 
   // Retirer les inputs cachés correspondants
   const container = document.getElementById("productDataContainer");
@@ -331,7 +325,9 @@ function updateQuantity(inputElement) {
   if (rowData) {
     rowData[1] = newQuantity;
     productGridInstance.forceRender();
-    document.querySelector("#productGrid .gridjs-wrapper").classList.add("dark:border-y-0");
+    document
+      .querySelector("#productGrid .gridjs-wrapper")
+      .classList.add("dark:border-y-0");
 
     updateTotalPrice();
   }
@@ -384,9 +380,22 @@ function openFormulaEditModal(formulaId) {
       const modalBody = document.querySelector("#formulaEditModalContentId");
       modalBody.innerHTML = html;
 
-      if (!productGridInstance) {
-        initializeProductGridCreate(); // Initialise un Grid.js vide
-      }
+      // if (!productGridInstance) {
+      //   initializeProductGridCreate(); // Initialise un Grid.js vide
+      // }
+
+      //update the grid with data
+       // Ici, vous devez récupérer les données existantes de votre formulaire ou de votre API
+      // Pour cet exemple, supposons que vous avez une fonction fetchFormulaData qui retourne les données nécessaires
+      // fetchFormulaData(formulaId).then(data => {
+      //   if (!productGridInstance) {
+      //     initializeProductGridCreate(); // Initialise Grid.js si ce n'est pas déjà fait
+      //   }
+      //   productGridInstance.updateConfig({
+      //     data: data // Assurez-vous que cette 'data' est dans le format attendu par Grid.js
+      //   }).forceRender();
+      // });
+
 
       toggleModal("formulaEditModal", "formulaEditModalContentId");
     })
@@ -449,6 +458,12 @@ function toggleModal(modalId, modalContentId) {
       "ease-in"
     );
 
+    // Optionnellement, nettoyez l'instance Grid.js si nécessaire
+    if (productGridInstance) {
+      productGridInstance.destroy(); // Ou productGridInstance.updateConfig({data: []}).forceRender();
+      productGridInstance = null; // Réinitialisez l'instance si elle est détruite
+    }
+
     // Ajouter `hidden` après que la transition soit terminée
     setTimeout(() => {
       modal.classList.add("hidden");
@@ -475,54 +490,54 @@ function addClassToElement() {
 }
 
 function sheeesh() {
-  const form = document.querySelector('form.w-full');
-  document.getElementById("save-button").addEventListener("click", function(event) {
-    event.preventDefault(); // Empêche le comportement par défaut du bouton (envoi du formulaire)
-    // Ajoutez ici votre logique JavaScript supplémentaire si nécessaire
-    let isValid = true;
-    let messages = [];
+  const form = document.querySelector("form.w-full");
+  document
+    .getElementById("save-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Empêche le comportement par défaut du bouton (envoi du formulaire)
+      // Ajoutez ici votre logique JavaScript supplémentaire si nécessaire
+      let isValid = true;
+      let messages = [];
 
-    // Récupération des éléments input cachés pour les produits
-    const productInputs = document.querySelectorAll('input[type="hidden"][name^="formula[productFormulas]["][name$="][product]"]');
+      // Récupération des éléments input cachés pour les produits
+      const productInputs = document.querySelectorAll(
+        'input[type="hidden"][name^="formula[productFormulas]["][name$="][product]"]'
+      );
 
-    let hasProducts = false; // Supposons d'abord qu'aucun produit n'est présent
+      let hasProducts = false; // Supposons d'abord qu'aucun produit n'est présent
 
-// Vérifiez si au moins un input caché a une valeur (ID de produit)
-    for (let input of productInputs) {
-      if (input.value) {
-        hasProducts = true;
-        break; // Sortez de la boucle dès qu'un produit est trouvé
+      // Vérifiez si au moins un input caché a une valeur (ID de produit)
+      for (let input of productInputs) {
+        if (input.value) {
+          hasProducts = true;
+          break; // Sortez de la boucle dès qu'un produit est trouvé
+        }
       }
-    }
 
-// Validation de la présence de produits
-    if (!hasProducts) {
-      messages.push('Vous devez mettre des produits dans la formule');
-      isValid = false;
-    }
+      // Validation de la présence de produits
+      if (!hasProducts) {
+        messages.push("Vous devez mettre des produits dans la formule");
+        isValid = false;
+      }
 
-
-    // Affichage des messages d'erreur ou soumission du formulaire
-    if (!isValid) {
-      messages.forEach(message => {
-        Toastify({
-          text: message,
-          duration: 6000,
-          close: true,
-          gravity: "top", // `top` or `bottom`
-          position: "right", // `left`, `center` or `right`
-          backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-        }).showToast();
-      });
-    } else {
-      console.log('Validation réussie, soumission du formulaire.');
-      form.submit(); // Soumettre le formulaire si tout est valide
-    }
-
-  });
+      // Affichage des messages d'erreur ou soumission du formulaire
+      if (!isValid) {
+        messages.forEach((message) => {
+          Toastify({
+            text: message,
+            duration: 6000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+          }).showToast();
+        });
+      } else {
+        console.log("Validation réussie, soumission du formulaire.");
+        form.submit(); // Soumettre le formulaire si tout est valide
+      }
+    });
 }
 
-
-
-console.log('script chaffsdfsdfsdfrgé');
+console.log("script chaffsdfsdfsdfrgé");
