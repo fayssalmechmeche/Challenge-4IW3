@@ -9,7 +9,8 @@
     <nav class="w-4/5 h-full mx-auto flex justify-between items-center">
       <!-- logo -->
       <div class="logo z-10">
-        <img class="" src="{{ asset('images/landingPage/logo.svg') }}" alt="logo" />
+        <img class="dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo" />
+        <img class="hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo" />
       </div>
       <!-- Bouton menu burger -->
       <button id="burger" class="xl:hidden block z-10">
@@ -46,7 +47,7 @@
     </nav>
   </header>
 
-  <section class="w-full h-full xl:h-screen bg-gray-100 dark:bg-dark-section  font-roboto">
+  <section class="w-full h-full xl:h-screen bg-gray-100 dark:bg-dark-section font-roboto">
     <div class="w-4/5 mx-auto h-full flex flex-col xl:flex-row justify-between items-center">
       <div class="landing-info w-full xl:w-1/2 mt-32 xl:mt-0">
         <h1 class="text-[64px] leading-[80px] font-bold text-black dark:text-white mb-5">
@@ -155,6 +156,7 @@
     </div>
     <p class="text-center dark:text-white">2022 @TestTest. All rights reserved. -- Privacy Policy - Terms of Services</p>
   </footer>
+  {% include 'components/dark_mode.html.twig' %}
 {% endblock %}
 {% block javascripts %}
   {{ encore_entry_script_tags('app') }}

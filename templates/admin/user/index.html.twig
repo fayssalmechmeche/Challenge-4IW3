@@ -6,7 +6,7 @@
 
 {% block body %}
   <div class="flex justify-start items-center flex-wrap w-full gap-5">
-    <h1 class="text-5xl mt-2 mb-3">Gestions Des Utilisateurs</h1>
+    <h1 class="text-5xl mt-2 mb-3 dark:text-white">Gestions Des Utilisateurs</h1>
     <button class="h-fit w-fit rounded-lg bg-blue-700 px-4 py-3 text-white transition-all max-sm:rounded-lg max-sm:px-3 max-sm:py-2 hover:bg-blue-600" onclick="openUserCreateModal()">Ajouter un utilisateur</button>
   </div>
   {# First block #}
@@ -21,6 +21,7 @@
   <section id="InfosUser" class="mt-5 sm:mt-0 h-full w-full">
     <div id="tabUserGridJs" class="h-full w-full"></div>
   </section>
+  {% include 'components/dark_mode.html.twig'%}
   {% include 'admin/component/modal.html.twig' %}
 {% endblock %}
 
