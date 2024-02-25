@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Design Guide
+{% endblock %}
+
+{% block body %}
+  <div class="mx-auto px-8 py-8 bg-content-bg dark:bg-dark-bg">
+    <h1 class="text-5xl font-bold mb-9 dark:text-white">Design Guide de notre application</h1>
+    <p class="text-2xl dark:text-white">Ceci est le design système de notre application de gestion destinée au traiteur.</p>
+    <p class="text-2xl dark:text-white">Vous trouverez tous les éléments liés au style de notre application.</p>
+
+    <section class="my-8 ">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Couleurs</h2>
+      <div class="flex flex-wrap justify-start gap-2 items-center rounded-2xl bg-white dark:bg-dark-section p-3">
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-regal-blue rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">regal-blue</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-the-grey rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">the-grey</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-the-grey-2 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">the-grey-2</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-light-dark rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">light-dark</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-devis-bg rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">devis-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-landing-bg rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">landing-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-button-blue rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">button-blue</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-button-yellow rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">button-yellow</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-button-blue-hover rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">button-blue-hover</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-bg rounded-lg border border-solid border-black"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-menu rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-menu</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-btn rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-btn</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-card-grey rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">card-grey</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-progress-bar-1 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">progress-bar-1</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-progress-bar-2 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">progress-bar-2</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-content-bg rounded-lg border border-solid border-black"></div>
+          <p class="text-center text-lg font-bold dark:text-white">content-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-grey-p rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">grey-p</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-light-red rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">light-red</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-bg-light-red rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">bg-light-red</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-light-green rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">light-green</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-bg-light-green rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">bg-light-green</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-bar-black rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-bar-black</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-dark-bg rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">dark-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-dark-section rounded-lg border border-solid dark:border-white"></div>
+          <p class="text-center text-lg font-bold dark:text-white">dark-section</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-dark-card rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">dark-card</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-gradient-1 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">gradient-1</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-gradient-2 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">gradient-2</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-bold mb-3">Typographie</h2>
+      <div class="space-y-2">
+        <p class="text-base font-normal">Texte de base (text-base)</p>
+        <p class="text-lg font-medium">Texte plus grand (text-lg)</p>
+        <p class="text-xl font-semibold">Texte encore plus grand (text-xl)</p>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-bold mb-3">Boutons</h2>
+      <div class="flex space-x-4">
+        <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Bouton Principal</button>
+        <button class="bg-gray-500 text-white font-bold py-2 px-4 rounded">Bouton Secondaire</button>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-bold mb-3">Cartes</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="font-bold text-xl mb-2">Titre de la carte</h3>
+          <p class="text-gray-700 text-base">Contenu de la carte. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <!-- Répéter pour d'autres cartes -->
+      </div>
+    </section>
+
+    <!-- Ajoutez d'autres sections selon les besoins de votre guide de style -->
+  </div>
+
+  {% include 'components/dark_mode.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+  {{ encore_entry_script_tags('app') }}
+  <script src="{{ asset('js/darkMode.js') }}"></script>
+  <script src="{{ asset('js/landingPage.js') }}"></script>
+{% endblock %}

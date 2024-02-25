@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Hello DefaultController!
+  AstroShe
 {% endblock %}
 
 {% block body %}
@@ -24,7 +24,7 @@
       <div id="menu" class="z-50 flex flex-col xl:flex-row h-auto w-full xl:w-1/2 xl:flex xl:justify-center items-center absolute xl:relative left-0 xl:top-0 bg-white dark:bg-dark-bg xl:bg-transparent top-[-1000px] hidden">
         <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease" href="#">Accueil</a>
         <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Prix</a>
-        <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">FAQ</a>
+        <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="{{ path('design-guide') }}">Design Guide</a>
         <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
         <div class="flex flex-col xl:hidden justify-center items-center">
           {% if app.user %}
@@ -156,7 +156,7 @@
     </div>
     <p class="text-center dark:text-white">2022 @TestTest. All rights reserved. -- Privacy Policy - Terms of Services</p>
   </footer>
-  {% include 'components/dark_mode.html.twig' %}
+  {% include 'components/dark_mode.html.twig'%}
 {% endblock %}
 {% block javascripts %}
   {{ encore_entry_script_tags('app') }}
