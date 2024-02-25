@@ -3,28 +3,28 @@
 {# {% block title %}Création d'une Société{% endblock %} #}
 
 {% block body %}
-  <h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold">Visualisation d'un utilisateur</h1>
+  <h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold dark:text-white">Visualisation d'un utilisateur</h1>
   <div class="flex flex-wrap gap-y-5 gap-x-10 w-full">
     <div class="flex flex-col px-1 my-1">
-      <label class="font-medium">Prénom</label>
-      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.name }}</p>
+      <label class="font-medium dark:text-white">Prénom</label>
+      <p class="flex flex-col justify-center dark:text-white rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.name }}</p>
     </div>
     <div class="flex flex-col px-1 my-1">
-      <label class="font-medium">Nom</label>
-      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.lastName }}</p>
+      <label class="font-medium dark:text-white">Nom</label>
+      <p class="flex flex-col justify-center dark:text-white rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.lastName }}</p>
     </div>
     <div class="flex flex-col px-1 my-1">
-      <label class="font-medium">Email</label>
-      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.email }}</p>
+      <label class="font-medium dark:text-white">Email</label>
+      <p class="flex flex-col justify-center dark:text-white rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">{{ user.email }}</p>
     </div>
     <div class="flex flex-col px-1 my-1">
-      <label class="font-medium">Roles</label>
-      <p class="flex flex-col justify-center rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">
+      <label class="font-medium dark:text-white">Roles</label>
+      <p class="flex flex-col justify-center dark:text-white rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form">
         {% for role in user.roles %}
           {% if role == 'ROLE_SOCIETY' %}
-             Traiteur,
+            Traiteur,
           {% elseif role == 'ROLE_ACCOUNTANT' %}
-             Comptable,
+            Comptable,
           {% else %}
             Utilisateur
           {% endif %}

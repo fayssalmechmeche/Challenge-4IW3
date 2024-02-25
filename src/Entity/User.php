@@ -65,8 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
     private Collection $formula;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Product::class)]
-    private Collection $devis;
+
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
@@ -106,7 +105,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->customers = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->formula = new ArrayCollection();
-        $this->devis = new ArrayCollection();
     }
 
     /**

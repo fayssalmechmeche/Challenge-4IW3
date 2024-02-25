@@ -25,7 +25,7 @@ module.exports = {
         "card-grey": "#8A92A6",
         "progress-bar-1": "#3A57E8",
         "progress-bar-2": "#08B1BA",
-        caterer: "#EFF1F6",
+        'content-bg': "#EFF1F6",
         "grey-p": "#A1A0BD",
         "light-red": "#D14F4F",
         "bg-light-red": "#F5DCDC",
@@ -36,6 +36,9 @@ module.exports = {
         "dark-bg": "#0b1120",
         "dark-section": "#1c2c54",
         "dark-card": "#38446c",
+        //Gradiant
+        "gradient-1": "#011936",
+        "gradient-2": "#012F63",
       },
       spacing: {
         "90-vh": "90vh",

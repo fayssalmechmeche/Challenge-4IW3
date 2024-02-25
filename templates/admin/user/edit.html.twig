@@ -3,7 +3,7 @@
 {# {% block title %}Création d'une Société{% endblock %} #}
 
 	{% block body %}
-		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold"> Modification d'un utilisateur</h1>
+		<h1 class="mb-4 text-center text-3xl font-bold max-sm:text-xl max-sm:font-semibold dark:text-white"> Modification d'un utilisateur</h1>
 
 	<div class='flex-col items-start w-full'>
 		{% include "admin/user/_form.html.twig" with  {"action" :'admin_user_edit',"actionId":user.id,"id":"formEditUser" }%}

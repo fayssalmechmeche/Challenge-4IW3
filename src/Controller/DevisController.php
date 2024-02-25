@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\DepositStatus;
 use App\Entity\Devis;
+use App\Entity\Society;
 use App\Form\DevisType;
 use App\Entity\DevisProduct;
 use App\Repository\DevisRepository;
@@ -34,17 +35,28 @@ class DevisController extends AbstractController
   }
 
   #[Route('/', name: 'app_devis_index', methods: ['GET'])]
-  public function index(DevisRepository $devisRepository): Response
+  public function index(DevisRepository $devisRepository, EntityManagerInterface $entityManager): Response
   {
-    $user = $this->getUser(); // Récupère l'utilisateur connecté
+    $society = $this->getSociety(); // Récupère l'utilisateur connecté
 
-    if ($user) {
-      $devis = $devisRepository->findBy(['user' => $user]);
+    if ($society) {
+      $devis = $devisRepository->findBy(['society' => $society]);
     } else {
       $devis = []; // Si aucun utilisateur n'est connecté, aucun devis n'est retourné
     }
 
     $csrfToken = $this->csrfTokenManager->getToken('delete_devis')->getValue();
+
+      $devisRepository = $entityManager->getRepository(Devis::class);
+      $allDevis = $devisRepository->findAll();
+
+      // Met à jour le statut de paiement si nécessaire
+      foreach ($allDevis as $devis) {
+          $devis->updatePaymentStatusBasedOnValidity();
+      }
+
+      // Sauvegarde les modifications dans la base de données
+      $entityManager->flush();
 
     return $this->render('devis/index.html.twig', [
       'devis' => $devis,
@@ -55,10 +67,10 @@ class DevisController extends AbstractController
   #[Route('/api', name: 'api_devis_index', methods: ['GET'])]
   public function apiIndex(DevisRepository $devisRepository): Response
   {
-    $user = $this->getUser(); // Récupère l'utilisateur connecté
+    $society = $this->getSociety(); // Récupère l'utilisateur connecté
 
-    if ($user) {
-      $devis = $devisRepository->findBy(['user' => $user]);
+    if ($society) {
+      $devis = $devisRepository->findBy(['society' => $society]);
     } else {
       return $this->json([]); // Retourne une réponse vide si aucun utilisateur n'est connecté
     }
@@ -74,7 +86,7 @@ class DevisController extends AbstractController
 
       $data[] = [
         'id' => $devi->getId(),
-        'totalPrice' => $devi->getTotalPrice(),
+        'devisNumber' => $devi->getDevisNumber(),
         'totalDuePrice' => $devi->getTotalDuePrice(),
         'paymentStatus' => $devi->getPaymentStatus() ? $devi->getPaymentStatus()->value : '',
         'createdAt' => $devi->getCreatedAt() ? $devi->getCreatedAt()->format('Y-m-d') : '',
@@ -90,17 +102,20 @@ class DevisController extends AbstractController
   public function new(Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository, DevisRepository $devisRepository): Response
   {
     $devis = new Devis();
-    $user = $this->getUser();
-    $devis->setUser($user);
-    $lastDevisNumber = $devisRepository->findLastDevisNumberForUser($user);
+    $society = $this->getSociety();
+    $devis->setSociety($society);
+    $lastDevisNumber = $devisRepository->findLastDevisNumberForSociety($society);
     $newDevisNumber = $this->generateNewDevisNumber($lastDevisNumber);
 
-    $userEmail = $user ? $user->getEmail() : '';
-    $products = $productRepository->findBy(['user' => $user]);
-    $formulas = $formulaRepository->findBy(['user' => $user]);
+    $societyName = $society ? $society->getName() : '';
+    $societyEmail = $society ? $society->getEmail() : '';
+    $societyPhone = $society ? $society->getPhone() : '';
+    $societyAdress = $society ? $society->getAddress() : '';
+    $products = $productRepository->findBy(['society' => $society]);
+    $formulas = $formulaRepository->findBy(['society' => $society]);
 
     $form = $this->createForm(DevisType::class, $devis, [
-      'user' => $user,
+      'society' => $society,
     ]);
     $form->get('devisNumber')->setData($newDevisNumber);
     $form->handleRequest($request);
@@ -123,20 +138,28 @@ class DevisController extends AbstractController
             $devisProduct->setProduct($product);
             $devisProduct->setQuantity($productData['quantity']);
             $devisProduct->setPrice($product->getPrice()); // Définir le prix
+
             $devis->addDevisProduct($devisProduct);
           }
         }
       }
+        $entityManager->persist($devis);
+        $entityManager->flush();
+        $this->addFlash('success', 'Le devis a bien été crée.');
+        return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
 
-      $entityManager->persist($devis);
-      $entityManager->flush();
-
-      return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+    }elseif ($form->isSubmitted() && !$form->isValid()) {
+        // Nouvelle condition pour gérer les soumissions de formulaire non valides
+        $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+        return $this->redirectToRoute('app_devis_index');
     }
     return $this->render('devis/new.html.twig', [
       'devis' => $devis,
       'form' => $form->createView(),
-      'userEmail' => $userEmail,
+      'userEmail' => $societyEmail,
+      'userName' => $societyName,
+        'userPhone' => $societyPhone,
+        'userAddress' => $societyAdress,
       'products' => $products,
       'formulas' => $formulas,
       'devisNumber' => $newDevisNumber,
@@ -148,19 +171,21 @@ class DevisController extends AbstractController
   #[Route('/{id}/show', name: 'app_devis_show', methods: ['GET'])]
   public function show(Devis $devi): Response
   {
-    $user = $this->getUser();
-    $userEmail = $user ? $user->getEmail() : '';
+    $society = $this->getSociety();
+    $societyEmail = $society ? $society->getEmail() : '';
 
     // Traitement des produits
     $productsCollection = $devi->getDevisProducts();
     $productsCollection->initialize();
 
     $productsArray = [];
+
     foreach ($productsCollection as $devisProduct) {
       $product = $devisProduct->getProduct();
+
       $productsArray[] = [
         'id' => $devisProduct->getId(),
-        'name' => $product ? $product->getName() : '',
+        'name' => $devisProduct->getProduct()->getName(),
         'quantity' => $devisProduct->getQuantity(),
         'price' => $devisProduct->getPrice(),
       ];
@@ -175,14 +200,15 @@ class DevisController extends AbstractController
       $formula = $devisFormula->getFormula();
       $formulasArray[] = [
         'id' => $devisFormula->getId(),
-        'name' => $formula ? $formula->getName() : '',
+        'name' => $devisFormula->getFormula()->getName(),
         'quantity' => $devisFormula->getQuantity(),
         'price' => $devisFormula->getPrice(),
       ];
     }
+
     return $this->render('devis/show.html.twig', [
       'devi' => $devi,
-      'userEmail' => $userEmail,
+      'userEmail' => $societyEmail,
       'products' => $productsArray,
       'formulas' => $formulasArray,
     ]);
@@ -212,12 +238,15 @@ class DevisController extends AbstractController
   #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]
   public function edit(Request $request, Devis $devi, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository): Response
   {
-    $user = $this->getUser();
+    $society = $this->getSociety();
 
-    $userEmail = $user ? $user->getEmail() : '';
+      $societyName = $society ? $society->getName() : '';
+      $societyEmail = $society ? $society->getEmail() : '';
+      $societyPhone = $society ? $society->getPhone() : '';
+      $societyAdress = $society ? $society->getAddress() : '';
 
-    $products = $productRepository->findBy(['user' => $user]);
-    $formulas = $formulaRepository->findBy(['user' => $user]);
+    $products = $productRepository->findBy(['society' => $society]);
+    $formulas = $formulaRepository->findBy(['society' => $society]);
 
     $clientId = $devi->getCustomer()?->getId();
 
@@ -252,20 +281,31 @@ class DevisController extends AbstractController
     ];
 
     $form = $this->createForm(DevisType::class, $devi, [
-      'user' => $user,
+      'society' => $society,
     ]);
 
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $entityManager->flush();
-      return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+        try {
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Le devis a été modifié.');
+            return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+        } catch (\Exception $exception) {
+            // Logique de gestion des erreurs
+            $this->addFlash('error', 'Une erreur est survenue lors de la modification du devis. Veuillez réessayer.');
+            return $this->redirectToRoute('app_devis_index');
+        }
     }
 
     return $this->render('devis/edit.html.twig', [
       'devi' => $devi,
       'clientId' => $clientId,
-      'userEmail' => $userEmail,
+        'userEmail' => $societyEmail,
+        'userName' => $societyName,
+        'userPhone' => $societyPhone,
+        'userAddress' => $societyAdress,
       'form' => $form->createView(),
       'products' => $products,
       'formulas' => $formulas,
@@ -282,7 +322,7 @@ class DevisController extends AbstractController
       $entityManager->remove($devi);
       $entityManager->flush();
     }
-
+      $this->addFlash('success', 'Le devis a bien été supprimé.');
     return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
   }
 
@@ -352,11 +392,11 @@ class DevisController extends AbstractController
     }
 
     //Infos user
-    $user = $this->getUser();
-    $userEmail = $user ? $user->getEmail() : '';
-    $userSociety = $user->getSociety()?->getName();
-    $userAdress = $user->getSociety()?->getAddress();
-    $userPhoneNumber = $user->getSociety()?->getPhone();
+    $society = $this->getSociety();
+    $societyEmail = $society ? $society->getEmail() : '';
+    $societySociety = $society->getSociety()?->getName();
+    $societyAdress = $society->getSociety()?->getAddress();
+    $societyPhoneNumber = $society->getSociety()?->getPhone();
 
 
 
@@ -655,11 +695,11 @@ nav button:hover {
           </div>
           <div class="society-info">
             <h2>Ma society Name</h2>
-            <p>Adresse: ' . $userAdress . '</p>
+            <p>Adresse: ' . $societyAdress . '</p>
             <p>Code Postal: rajouter</p>
             <p>Ville: rajouter</p>
-            <p>Téléphone: ' . $userPhoneNumber . '</p>
-            <p>Mail : ' . $userEmail . '</p>
+            <p>Téléphone: ' . $societyPhoneNumber . '</p>
+            <p>Mail : ' . $societyEmail . '</p>
           </div>
         </div>
         <div class="top-r">
@@ -764,7 +804,7 @@ nav button:hover {
   #[Route('/generate/xlsx', name: 'app_devis_generate_xlsx', methods: ['POST'])]
   public function generateXlsx(DevisExcelService $DevisExcelService, Request $request, EntityManagerInterface $entityManager): Response
   {
-    $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+    $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getSociety()]);
 
     if ($request->isXmlHttpRequest()) {
       return  $DevisExcelService->generateXlsx($devis);
@@ -779,7 +819,7 @@ nav button:hover {
   #[Route('/generate/pdf', name: 'app_devis_generate_pdf', methods: ['POST'])]
   public function generatePdf(DevisExcelService $DevisExcelService, Request $request, EntityManagerInterface $entityManager): Response
   {
-    $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+    $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getSociety()]);
     if ($request->isXmlHttpRequest()) {
       return  $DevisExcelService->generatePDF($devis);
     } else {
@@ -789,4 +829,14 @@ nav button:hover {
       ], 401);
     }
   }
+
+    public function getSociety()
+    {
+        // Exemple de récupération de l'utilisateur courant et de sa société
+        $user = $this->getUser(); // Supposons que `getUser()` retourne l'utilisateur courant
+        if ($user) {
+            return $user->getSociety(); // Supposons que l'utilisateur a une méthode `getSociety()`
+        }
+        return null; // ou gérer autrement si l'utilisateur n'est pas connecté ou n'a pas de société
+    }
 }

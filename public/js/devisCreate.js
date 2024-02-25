@@ -132,6 +132,8 @@ function addDevisItem(type) {
         console.log("Prix par unité", pricePerUnit);
         console.log("Quantité", quantity);
         console.log("Prix total", totalPrice);
+        console.log("ID de l'élément", itemId);
+        console.log("Nom de l'élément", itemName);
 
         const dataExists = devisGrid.config.data.find(row => row.includes(itemId));
 
@@ -144,7 +146,7 @@ function addDevisItem(type) {
                 data: devisGrid.config.data.concat([newRow])
             }).forceRender();
 
-            addHiddenFieldsForGridItem(itemId, quantity, type, index, pricePerUnit);
+            addHiddenFieldsForGridItem(itemName,itemId, quantity, type, index, pricePerUnit);
 
             if (type === 'product') {
                 productIndex++;
@@ -164,7 +166,7 @@ function addDevisItem(type) {
 }
 
 
-function addHiddenFieldsForGridItem(itemId, quantity, type, index,pricePerUnit) {
+function addHiddenFieldsForGridItem(itemName,itemId, quantity, type, index,pricePerUnit) {
     const hiddenFieldsContainer = document.getElementById('hiddenFieldsContainer');
     const productId = `${type}-${index}-product`;
     const quantityId = `${type}-${index}-quantity`;
@@ -299,15 +301,60 @@ function handleCollectionItems(collectionId, addButtonId, itemClass, updatePrice
 
     function handleDevisFormSubmit(event) {
         event.preventDefault();
+        let isValid = true;
+        let messages = [];
         const hiddenJsonInput = document.createElement('input');
         hiddenJsonInput.type = 'hidden';
         hiddenJsonInput.name = 'devisProductsJson';
         // Ajoutez le champ caché au formulaire
         const devisForm = document.getElementById('devisForm');
+        const subject = document.getElementById('devis_subject').value;
+        const dateValidite = document.getElementById('devis_dateValidite').value;
+        const customer = document.getElementById('devis_customer').value;
+        const hiddenContainer = document.getElementById('hiddenFieldsContainer');
+
+        if ( !subject) {
+            messages.push('Veuillez préciser le sujet du devis.');
+            highlightInput(document.getElementById('devis_subject'));
+            isValid = false;
+        }
+        if ( !customer) {
+            messages.push('Veuillez préciser le client du devis.');
+            highlightInput(document.getElementById('devis_customer'));
+            isValid = false;
+        }
+        if (hiddenContainer.childElementCount === 0) {
+            alert('Veuillez ajouter des produits ou des formules au devis.');
+        }
+
+        if (!dateValidite) {
+            messages.push('Veuillez préciser le sujet du devis.');
+            highlightInput(document.getElementById('devis_dateValidite'));
+            isValid = false;
+        } else if (new Date(dateValidite) < new Date()) {
+            messages.push("La date ne doit pas être antérieure à aujourd'hui.");
+            highlightInput(document.getElementById('devis_dateValidite'));
+            isValid = false;
+        }
         devisForm.appendChild(hiddenJsonInput);
         console.log(devisForm);
         // Soumettez le formulaire
-        devisForm.submit();
+        if (!isValid) {
+            messages.forEach(message => {
+                Toastify({
+                    text: message,
+                    duration: 6000,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                }).showToast();
+            });
+        } else {
+            console.log('Validation réussie, soumission du formulaire.');
+            devisForm.submit(); // Soumettre le formulaire si tout est valide
+        }
     }
 
 
@@ -376,8 +423,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-console.log("bark bark");
+function highlightInput(inputElement) {
+    inputElement.style.borderColor = 'red'; // Met l'input en rouge
+}
+console.log(" bsdfsdfark");
 
 
 

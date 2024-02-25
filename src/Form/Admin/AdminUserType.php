@@ -24,10 +24,10 @@ class AdminUserType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Email de l\'Utilisateur',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('roles', ChoiceType::class, [
@@ -37,10 +37,10 @@ class AdminUserType extends AbstractType
                     'Comptable' => ROLE_ACCOUNTANT,
                 ],
                 'label' => 'Role',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-16 overflow-y-auto  mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96  mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('society', EntityType::class, [
@@ -57,26 +57,26 @@ class AdminUserType extends AbstractType
                         ->where('s.id = :id')
                         ->setParameter('id', $user->getSociety()->getId());
                 },
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('name', TextType::class, [
                 'label' => 'Prénom de l\'Utilisateur',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom de l\'Utilisateur',
-                'label_attr' => ['class' => 'font-medium'],
+                'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ]);
     }

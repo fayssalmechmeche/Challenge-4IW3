@@ -27,6 +27,7 @@ class DevisProduct
     #[ORM\Column]
     private ?int $quantity = null;
 
+
     public function getId(): ?int
     {
         return $this->id;

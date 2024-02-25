@@ -145,3 +145,5 @@ function addClassToElement() {
     formulaDiv.classList.add("flex", "flex-wrap", "gap-y-5", "gap-x-10");
   }
 }
+
+

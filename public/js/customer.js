@@ -135,8 +135,8 @@ function openCustomerCreateModal() {
       const modalBody = document.querySelector("#newModalModalContentId");
       modalBody.innerHTML = html;
       initializeFormFields();
-
       toggleModal("newModalId", "newModalModalContentId");
+      sheeesh();
     })
     .catch((error) =>
       console.error("Erreur lors de la récupération du formulaire:", error)
@@ -151,8 +151,8 @@ function openCustomerModal(customerId) {
         "customerDetailsModalContainer"
       );
       modalContent.innerHTML = html;
-
       toggleModal("customerDetailsModal", "customerDetailsModalContainer");
+      sheeesh();
     })
     .catch((error) =>
       console.error("Erreur lors de la récupération des données:", error)
@@ -262,3 +262,136 @@ function addClassToElement() {
     customerDiv.classList.add("flex", "flex-wrap", "gap-y-5", "gap-x-10");
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Lire les messages flash de l'élément script
+  const flashMessagesElement = document.getElementById('flash-messages');
+  const flashMessages = flashMessagesElement ? JSON.parse(flashMessagesElement.textContent) : {};
+
+  if (flashMessages) {
+    Object.keys(flashMessages).forEach(type => {
+      flashMessages[type].forEach(message => {
+        // Utilisez Toastify ou une fonction personnalisée pour afficher le message
+        Toastify({
+          text: message,
+          className: type, // 'success' ou 'error'
+          // Vous pouvez personnaliser davantage Toastify ici
+        }).showToast();
+      });
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Supposant que votre modale est directement dans le body ou dans un élément qui ne change pas
+  document.getElementById('newModalId').addEventListener('click', function(event) {
+    console.log('click détecté');s
+    // Vérifie si l'élément cliqué (ou un de ses parents) est le bouton vérifier
+    var target = event.target;
+    while (target != this) {
+      if (target.matches('.check')) { // Assurez-vous que le sélecteur correspond à votre bouton
+        // Votre code pour traiter le click sur le bouton vérifier
+        console.log('Bouton vérifier cliqué!');
+        break; // Sort de la boucle une fois l'élément trouvé et traité
+      }
+      target = target.parentNode;
+    }
+  });
+});
+
+function sheeesh() {
+  const form = document.querySelector('form.w-full');
+  document.getElementById("save-button").addEventListener("click", function(event) {
+      event.preventDefault(); // Empêche le comportement par défaut du bouton (envoi du formulaire)
+      // Ajoutez ici votre logique JavaScript supplémentaire si nécessaire
+    let isValid = true;
+    let messages = [];
+
+    // Récupération des valeurs du formulaire
+    const name = document.getElementById('customer_name').value;
+    const lastName = document.getElementById('customer_lastName').value;
+    const streetName = document.getElementById('customer_streetName').value;
+    const streetNumber = document.getElementById('customer_streetNumber').value;
+    const customerCity = document.getElementById('customer_city').value;
+    const customerPostalCode = document.getElementById('customer_postalCode').value;
+    const nameSociety = document.getElementById('customer_nameSociety').value;
+    const email = document.getElementById('customer_email').value;
+    const phoneNumber = document.getElementById('customer_phoneNumber').value;
+
+    // Validation du nom et du prénom ou du nom de la société
+    if ((!name || !lastName) && !nameSociety) {
+      messages.push('Vous devez remplir soit le Nom/Prénom soit le Nom de la Société.');
+        highlightInput(document.getElementById('customer_name'));
+        highlightInput(document.getElementById('customer_lastName'));
+        highlightInput(document.getElementById('customer_nameSociety'));
+      isValid = false;
+    }
+
+    // Validation de l'adresse email
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      messages.push('Veuillez renseigner une adresse e-mail valide.');
+        highlightInput(document.getElementById('customer_email'));
+      isValid = false;
+    }
+
+    // Validation du numéro de téléphone
+    if (!phoneNumber || !/^\d{10}$/.test(phoneNumber)) {
+      messages.push('Le numéro de téléphone doit comporter 10 chiffres.');
+        highlightInput(document.getElementById('customer_phoneNumber'));
+      isValid = false;
+    }
+
+    if (!customerPostalCode || !/^\d{5}$/.test(customerPostalCode)) {
+      messages.push('Le code postal doit comporter 5 chiffres.');
+      highlightInput(document.getElementById('customer_postalCode'));
+      isValid = false;
+    }
+
+    if ( !streetName) {
+      messages.push('Veuillez remplir un nom de rue.');
+        highlightInput(document.getElementById('customer_streetName'));
+      isValid = false;
+    }
+
+    if ( !streetNumber) {
+      messages.push('Veuillez remplir un numéro de rue.');
+      highlightInput(document.getElementById('customer_streetNumber'));
+      isValid = false;
+    }
+
+    if ( !customerCity) {
+      messages.push('Veuillez remplir une ville.');
+      highlightInput(document.getElementById('customer_city'));
+      isValid = false;
+    }
+
+    // Affichage des messages d'erreur ou soumission du formulaire
+    if (!isValid) {
+      messages.forEach(message => {
+        Toastify({
+          text: message,
+          duration: 6000,
+          close: true,
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+        }).showToast();
+      });
+    } else {
+      console.log('Validation réussie, soumission du formulaire.');
+      form.submit(); // Soumettre le formulaire si tout est valide
+    }
+
+  });
+}
+
+function highlightInput(inputElement) {
+  inputElement.style.borderColor = 'red'; // Met l'input en rouge
+}
+
+console.log('script chargé');
+
+
+
+
