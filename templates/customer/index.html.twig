@@ -11,17 +11,6 @@
 		<div id="customer-table"></div>
 	</div>
 
-	{% for message in app.flashes('error') %}
-		<div class="alert alert-danger">
-			{{ message }}
-		</div>
-	{% endfor %}
-
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success">
-			{{ message }}
-		</div>
-	{% endfor %}
 
 
 	<!-- Modal pour la création d'un nouveau client -->
@@ -57,7 +46,13 @@
 	<script>
 		var csrfToken = '{{ csrf_token('delete_customer') }}';
 	</script>
+	<script src="{{ asset('js/addFlash.js') }}"></script>
 	<script src="{{ asset('js/customerGrid.js') }}"></script>
 	<script src="{{ asset('js/customer.js') }}"></script>
+	<script id="flash-messages" type="application/json">
+  {{ app.flashes|json_encode|raw }}
+</script>
+
+
 
 {% endblock %}

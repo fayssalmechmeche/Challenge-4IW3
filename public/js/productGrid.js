@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 Consulter
             </button>
             <form
-                action="/formula/${product.id}"
+                action="/product/${product.id}"
                 method="POST"
                 onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer cette formule ?");'
             >
@@ -82,3 +82,4 @@ document.addEventListener("DOMContentLoaded", function () {
       );
   });
 });
+

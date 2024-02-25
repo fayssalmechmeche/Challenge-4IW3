@@ -39,6 +39,9 @@ class Society
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeId = null;
 
+    #[ORM\OneToMany(mappedBy: 'society', targetEntity: Product::class)]
+    private Collection $devis;
+
 
     public function __construct()
     {
