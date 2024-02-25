@@ -9,7 +9,8 @@ function toggleNavbar() {
   let navbar = document.querySelector(".vertical-nav");
   let navbarToggle = document.querySelector(".navbar-toggle");
   let navbarHiddenSpace = document.querySelector(".navbar-hidden-space");
-  let logo = document.querySelector(".nav-logo");
+  let logoLight = document.querySelector(".nav-logo-light");
+  let logoDark = document.querySelector(".nav-logo-dark");
   let siteContent = document.querySelector(".site-content");
   let navIcons = document.querySelectorAll(".nav-icon");
   let navTexts = document.querySelectorAll(".nav-text");
@@ -19,7 +20,8 @@ function toggleNavbar() {
     if (navbar.classList.contains("w-open-nav")) {
       // Navbar
       navbarToggle.classList.remove("rotate-180");
-      logo.classList.add("hidden");
+      logoLight.classList.add("hidden");
+      logoDark.classList.remove("dark:block");
       navbar.classList.remove("w-open-nav");
       navbar.classList.add("w-closed-nav", "duration-300", "ease-out");
       navbarHiddenSpace.classList.remove("w-open-nav");
@@ -47,7 +49,8 @@ function toggleNavbar() {
     } else {
       // Navbar
       navbarToggle.classList.add("rotate-180");
-      logo.classList.remove("hidden");
+      logoLight.classList.remove("hidden");
+      logoDark.classList.add("dark:block");
       navbar.classList.remove("w-closed-nav");
       navbar.classList.add("w-open-nav", "duration-300", "ease-in");
       navbarHiddenSpace.classList.remove("w-closed-nav");
@@ -77,7 +80,8 @@ function hoverNavbar() {
   let navbar = document.querySelector(".vertical-nav");
   let navbarToggle = document.querySelector(".navbar-toggle");
   let navbarHiddenSpace = document.querySelector(".navbar-hidden-space");
-  let logo = document.querySelector(".nav-logo");
+  let logoLight = document.querySelector(".nav-logo-light");
+  let logoDark = document.querySelector(".nav-logo-dark");
   let siteContent = document.querySelector(".site-content");
   let navIcons = document.querySelectorAll(".nav-icon");
   let navTexts = document.querySelectorAll(".nav-text");
@@ -86,7 +90,8 @@ function hoverNavbar() {
     if (fixedNavbar) return;
     // Navbar
     navbarToggle.classList.add("rotate-180");
-    logo.classList.remove("hidden");
+    logoLight.classList.remove("hidden");
+    logoDark.classList.add("dark:block");
     navbar.classList.remove("w-closed-nav");
     navbar.classList.add("w-open-nav", "duration-300", "ease-in");
     navbarHiddenSpace.classList.remove("w-closed-nav");
@@ -113,7 +118,8 @@ function hoverNavbar() {
     if (fixedNavbar) return;
     // Navbar
     navbarToggle.classList.remove("rotate-180");
-    logo.classList.add("hidden");
+    logoLight.classList.add("hidden");
+    logoDark.classList.remove("dark:block");
     navbar.classList.remove("w-open-nav");
     navbar.classList.add("w-closed-nav", "duration-300", "ease-out");
     navbarHiddenSpace.classList.remove("w-open-nav");
@@ -146,15 +152,23 @@ function navClick() {
       navLinks.forEach((otherLink) => {
         if (otherLink !== link) {
           otherLink.classList.remove("bg-nav-btn");
-          otherLink.children[0].classList.remove("text-white");
-          otherLink.children[0].classList.add("text-gray-500");
+          if (otherLink.children[1]) {
+            otherLink.children[1].classList.remove("text-white");
+            otherLink.children[1].classList.add("text-gray-500");
+            otherLink.children[0].classList.remove("text-white");
+            otherLink.children[0].classList.add("text-gray-500");
+          }
         }
       });
 
       // Ajouter les classes au lien cliqué
       link.classList.add("bg-nav-btn");
-      link.children[0].classList.remove("text-gray-500");
-      link.children[0].classList.add("text-white");
+      if (link.children[1]) {
+        link.children[0].classList.remove("text-gray-500");
+        link.children[0].classList.add("text-white");
+        link.children[1].classList.remove("text-gray-500");
+        link.children[1].classList.add("text-white");
+      }
     });
   });
 }

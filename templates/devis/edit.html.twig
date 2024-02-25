@@ -6,8 +6,6 @@
 
 {% block body  %}
 	{{ form_start(form, {'attr': {'id': 'devisForm'}}) }}
-
-
 	<nav class="flex justify-between w-full items-center py-3 px-5 bg-nav-bar-black ">
 		<a class="transition-all duration-300 text-white cursor-pointer hover:text-red-500 flex items-center gap-1" href="{{ path('app_devis_index') }}">
 			<span class="material-symbols-outlined">
@@ -154,6 +152,7 @@
 	<div id="hiddenFieldsContainer"></div>
 	{{ form_end(form) }}
 
+  {% include 'components/dark_mode.html.twig' with {'topHeight': 'top-20'} %}
 
 {% endblock %}
 {% block javascripts %}
