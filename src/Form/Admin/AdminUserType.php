@@ -48,7 +48,6 @@ class AdminUserType extends AbstractType
                 'choice_label' => 'name',
                 'required' => true,
                 'label' => 'Société',
-                'label_attr' => [font-medium dark:text-white],
                 'query_builder' => function (\Doctrine\ORM\EntityRepository $er)  use ($user) {
                     if ($user->getRoles()[0] === 'ROLE_ADMIN') {
                         return $er->createQueryBuilder('s')
