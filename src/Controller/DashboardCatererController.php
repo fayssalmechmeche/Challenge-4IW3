@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CustomerRepository;
 use App\Repository\DevisRepository;
 use App\Repository\InvoiceRepository;
 use App\Service\Stripe\StripeService;
@@ -14,7 +15,11 @@ class DashboardCatererController extends AbstractController
 {
     #[Route('/dashboard/caterer', name: 'home_index')]
     #[IsGranted('ROLE_SOCIETY')]
-    public function index(StripeService $stripeService, DevisRepository $devisRepository, InvoiceRepository $invoiceRepository): Response
+    public function index(
+        StripeService $stripeService, 
+        DevisRepository $devisRepository, 
+        InvoiceRepository $invoiceRepository, 
+        CustomerRepository $customerRepository): Response
     {
         $customerID = $this->getUser()->getSociety()->getStripeId();
 
@@ -42,9 +47,18 @@ class DashboardCatererController extends AbstractController
         $amountDevisPreviousMonth = $devisRepository->findAmountDevisForPreviousMonth($user);
 
         if ($amountDevisPreviousMonth != 0) {
-            $differenceLastAndCurrentMonthDevisMonth =  ($amountDevisMonth - $amountDevisPreviousMonth) / $amountDevisPreviousMonth * 100 ;
+            $differenceLastAndCurrentMonthDevis =  ($amountDevisMonth - $amountDevisPreviousMonth) / $amountDevisPreviousMonth * 100 ;
         } else {
-            $differenceLastAndCurrentMonthDevisMonth = 0;
+            $differenceLastAndCurrentMonthDevis = 0;
+        }
+
+        $NbNewCustomersMonth = $customerRepository->findNewCustomersForCurrentMonth($user);     
+        $NbNewCustomersPreviousMonth = $customerRepository->findNewCustomersForPreviousMonth($user);
+
+        if ($NbNewCustomersPreviousMonth != 0) {
+            $differenceLastAndCurrentMonthCustomers =  ($NbNewCustomersMonth - $NbNewCustomersPreviousMonth) / $NbNewCustomersPreviousMonth * 100 ;
+        } else {
+            $differenceLastAndCurrentMonthCustomers = 0;
         }
 
         return $this->render('dashboard_caterer/index.html.twig', [
@@ -53,8 +67,10 @@ class DashboardCatererController extends AbstractController
             'lastInvoicePaid' => $invoiceRepository->findLastInvoiceAmountForUser($user),
             'totalBalance' => $devisRepository->findAmountInvoicePaid($user),
             'amountDevisMonth' => $amountDevisMonth,
-            'differenceLastAndCurrentMonth' => $differenceLastAndCurrentMonthDevisMonth,
-            'amountDevisPendingMonth' => $devisRepository->findAmountDevisPendingForCurrentMonth($user),
+            'differenceLastAndCurrentMonthDevis' => $differenceLastAndCurrentMonthDevis,
+            // 'amountDevisPendingMonth' => $devisRepository->findAmountDevisPendingForCurrentMonth($user),
+            'NbNewCustomersMonth' => $NbNewCustomersMonth,
+            'differenceLastAndCurrentMonthCustomers' => $differenceLastAndCurrentMonthCustomers,
             'nbDevisPending' => $devisRepository->findDevisPending($user),
             'nbInvoicePending' => $devisRepository->findInvoicePending($user),
             'totalPriceByMonth' => $totalPriceByMonth, 

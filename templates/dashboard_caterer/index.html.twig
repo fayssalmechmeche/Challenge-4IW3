@@ -48,14 +48,14 @@
 		{% include 'components/card-info.twig' with {
 		description: 'Prévision pour ce mois :',
 		amount:'+ ' ~ amountDevisMonth ~ ' €',
-		percentage: differenceLastAndCurrentMonth|number_format(0)
+		percentage: differenceLastAndCurrentMonthDevis|number_format(0)
 		
 	} %}
 		<!-- card-info -->
 		{% include 'components/card-info.twig' with {
-    	description: 'Devis en attente :',
-    	amount: '+ ' ~ amountDevisPendingMonth ~ ' €',
-    	percentage: -1
+    	description: 'Nouveaux acquis :',
+    	amount: '+ ' ~ NbNewCustomersMonth ~ ' clients',
+    	percentage: differenceLastAndCurrentMonthCustomers
     	
 	} %}
 		<!-- card-info -->

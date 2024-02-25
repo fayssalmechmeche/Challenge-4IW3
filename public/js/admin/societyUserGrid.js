@@ -28,11 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
           user.lastName,
           user.roles.includes("ROLE_ACCOUNTANT")
             ? "Comptable"
-            : user.roles.includes("ROLE_USER")
-            ? "Utilisateur"
             : user.roles.includes("ROLE_SOCIETY")
             ? "Entreprise"
-            : user.roles.join(", "),
+            : user.roles.includes("ROLE_HEAD")
+            ? "Chef d'entreprise"
+            : "Utilisateur",
           user.status ? "Validé" : "Invalidé",
           gridjs.html(`
           <div class="w-full mx-auto flex justify-center items-center gap-2">

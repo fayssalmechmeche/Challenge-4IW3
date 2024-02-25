@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
               ? "Comptable"
               : user.roles.includes("ROLE_SOCIETY")
               ? "Entreprise"
+              : user.roles.includes("ROLE_HEAD")
+              ? "Chef d'entreprise"
               : "Utilisateur",
             user.status ? "Validé" : "Invalidé",
             gridjs.html(`

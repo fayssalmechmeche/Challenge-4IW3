@@ -87,22 +87,22 @@ class DevisRepository extends ServiceEntityRepository
     }
 
     public function findAmountDevisForPreviousMonth(\App\Entity\User $user)
-{
-    $startDate = new \DateTime('first day of last month');
-    $endDate = new \DateTime('last day of last month');
+    {
+        $startDate = new \DateTime('first day of last month');
+        $endDate = new \DateTime('last day of last month');
 
-    $result = $this->createQueryBuilder('d')
-        ->select('SUM(d.totalDuePrice) as totalDuePrice')
-        ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
-        ->andWhere('d.user = :user')
-        ->setParameter('startDate', $startDate)
-        ->setParameter('endDate', $endDate)
-        ->setParameter('user', $user)
-        ->getQuery()
-        ->getOneOrNullResult();
+        $result = $this->createQueryBuilder('d')
+            ->select('SUM(d.totalDuePrice) as totalDuePrice')
+            ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
+            ->andWhere('d.user = :user')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
 
-    return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
-}
+        return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
+    }
 
 
     public function findAmountInvoicePaid(\App\Entity\User $user)

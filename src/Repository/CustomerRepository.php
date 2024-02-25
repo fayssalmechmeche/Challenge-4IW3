@@ -21,6 +21,41 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
+    public function findNewCustomersForCurrentMonth(\App\Entity\User $user)
+    {
+        $startDate = new \DateTime('first day of this month');
+        $endDate = new \DateTime('last day of this month');
+
+        $result = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as totalCustomers')
+            ->andWhere('c.createdAt BETWEEN :startDate AND :endDate')
+            ->andWhere('c.user = :user')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $result['totalCustomers'] ? $result['totalCustomers'] : 0;
+    }
+
+    public function findNewCustomersForPreviousMonth(\App\Entity\User $user)
+    {
+        $startDate = new \DateTime('first day of last month');
+        $endDate = new \DateTime('last day of last month');
+
+        $result = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as totalCustomers')
+            ->andWhere('c.createdAt BETWEEN :startDate AND :endDate')
+            ->andWhere('c.user = :user')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['totalCustomers'] ? $result['totalCustomers'] : 0;
+    }
+
 //    /**
 //     * @return Customer[] Returns an array of Customer objects
 //     */
