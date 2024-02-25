@@ -9,8 +9,19 @@ use Doctrine\ORM\Mapping as ORM;
 enum InvoiceType: string
 {
     case null = "";
-    case Facture = "DEPOSIT";
-    case Avoir = "STANDARD";
+    case Deposit = "DEPOSIT";
+    case Invoice = "STANDARD";
+}
+
+enum InvoiceStatus: string
+{
+    case null = "";
+    case Pending = "PENDING";
+    case Paid = "PAID";
+    case Refused = "REFUSED";
+    case Partial = "PARTIAL";
+    case Refunded = "REFUNDED";
+    case Canceled = "CANCELED";
 }
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
@@ -21,8 +32,8 @@ class Invoice
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column( type: "string", length: 255, nullable: true)]
-    private ?string $paymentStatus = null;
+    #[ORM\Column(type: "string", enumType: InvoiceStatus::class, nullable: true)]
+    private InvoiceStatus $paymentStatus;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
@@ -31,9 +42,8 @@ class Invoice
     #[ORM\Column]
     private ?int $taxe = null;
 
-    #[ORM\Column( type: "string", enumType: InvoiceType::class,nullable: true)]
-    private ?string $invoiceType = null;
-
+    #[ORM\Column(type: "string", enumType: InvoiceType::class, nullable: true)]
+    private InvoiceType $invoiceType;
 
     #[ORM\Column]
     private ?int $totalPrice = null;
@@ -56,10 +66,15 @@ class Invoice
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $paymentDueTime = null;
 
-
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
 
     /**
      * @return User|null
@@ -142,12 +157,12 @@ class Invoice
         return $this;
     }
 
-    public function getPaymentStatus(): ?string
+    public function getPaymentStatus(): InvoiceStatus
     {
         return $this->paymentStatus;
     }
 
-    public function setPaymentStatus(?string $paymentStatus): self
+    public function setPaymentStatus($paymentStatus): self
     {
         $this->paymentStatus = $paymentStatus;
 
@@ -203,5 +218,39 @@ class Invoice
         return $this;
     }
 
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
 
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getInvoiceType(): InvoiceType
+    {
+        return $this->invoiceType;
+    }
+
+    public function setInvoiceType(?InvoiceType $invoiceType): static
+    {
+        $this->invoiceType = $invoiceType;
+
+        return $this;
+    }
 }

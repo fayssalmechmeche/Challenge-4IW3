@@ -5,14 +5,34 @@
 {% endblock %}
 
 {% block content %}
-  <div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white dark:bg-dark-section p-3">
-    <h1 class="text-4xl font-bold mb-3 dark:text-white">Liste des Devis</h1>
-    <button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2"><a class="text-decoration-none" href="{{ path('app_devis_new') }}">Créer un nouveau Devis</a></button>
-    <button onclick="generateDevisXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Générer XLSX</button>
-    <button onclick="generateDevisPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Générer PDF</button>
-    <!-- Conteneur pour le tableau Grid.js -->
-    <div id="devis-table"></div>
-  </div>
+
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3">
+		<h1 class='text-4xl font-bold mb-3'>Liste des Devis</h1>
+		<button onclick="openCustomerCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			<a class="text-decoration-none" href="{{ path('app_devis_new') }}">Créer un nouveau Devis</a>
+		</button>
+		<button onclick="generateDevisXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Excel des devis
+		</button>
+		<button onclick="generateDevisPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Pdf des devis
+		</button>
+		<button onclick="generateDevisProductXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Excel des produits commandés
+		</button>
+		<button onclick="generateDevisProductPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Pdf des produits commandés
+		</button>
+		<button onclick="generateDevisFormulaXLSX();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Excel des formulaires commandés
+		</button>
+		<button onclick="generateDevisFormulaPDF();" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+			Pdf des formulaires commandés
+		</button>
+
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="devis-table"></div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}

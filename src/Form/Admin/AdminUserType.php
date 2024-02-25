@@ -20,6 +20,7 @@ class AdminUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['user'];
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Email de l\'Utilisateur',
@@ -47,6 +48,16 @@ class AdminUserType extends AbstractType
                 'choice_label' => 'name',
                 'required' => true,
                 'label' => 'Société',
+                'label_attr' => [font-medium dark:text-white],
+                'query_builder' => function (\Doctrine\ORM\EntityRepository $er)  use ($user) {
+                    if ($user->getRoles()[0] === 'ROLE_ADMIN') {
+                        return $er->createQueryBuilder('s')
+                            ->orderBy('s.name', 'ASC');
+                    }
+                    return $er->createQueryBuilder('s')
+                        ->where('s.id = :id')
+                        ->setParameter('id', $user->getSociety()->getId());
+                },
                 'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
@@ -75,6 +86,7 @@ class AdminUserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'user' => null
         ]);
     }
 }

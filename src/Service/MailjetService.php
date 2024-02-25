@@ -14,6 +14,7 @@ class MailjetService
     const TEMPLATE_FORGET_PASSWORD = 5603341;
     const TEMPLATE_DEVIS = 5603324;
     const TEMPLATE_INVOICE = 5603327;
+    const TEMPLATE_INVOICE_NO_DEPOSIT = 5719613;
 
 
     private $client;

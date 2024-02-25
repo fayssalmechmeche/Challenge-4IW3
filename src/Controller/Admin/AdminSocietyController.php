@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use App\Repository\DevisRepository;
 use App\Repository\SocietyRepository;
 use App\Service\Stripe\StripeHelper;
+use App\Service\Stripe\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,7 +64,7 @@ class AdminSocietyController extends AbstractController
 
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, StripeHelper $stripeHelper)
+    public function new(Request $request, StripeService $stripeService)
     {
         $society = new Society();
         $form = $this->createForm(SocietyType::class, $society);
@@ -72,6 +73,58 @@ class AdminSocietyController extends AbstractController
             $content = $request->getContent();
             $data = json_decode($content, true);
 
+            if (
+                isset($data['society[name]']) && $data['society[name]'] == ""
+                || isset($data['society[address]']) && $data['society[address]'] == ""
+                || isset($data['society[phone]']) && $data['society[phone]'] == ""
+                || isset($data['society[email]']) && $data['society[email]'] == ""
+                || isset($data['society[siret]']) && $data['society[siret]'] == ""
+                || isset($data['society[_token]']) && $data['society[_token]'] == ""
+            ) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Tous les champs sont requis"
+                ));
+            }
+
+            foreach ($data as $key => $value) {
+                switch ($key) {
+                    case "society[name]":
+                        if (strlen($value) < 2)
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "Le nom de la société doit contenir au moins 2 caractères"
+                            ));
+
+                        break;
+                    case "society[address]":
+                        if (strlen($value) < 5)
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "L'adresse de la société doit contenir au moins 5 caractères"
+                            ));
+                        break;
+                    case "society[phone]":
+                        if (strlen($value) < 10)
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "Le téléphone de la société doit contenir au moins 10 chiffres"
+                            ));
+                        break;
+                    case "society[email]":
+                        if (!filter_var($value, FILTER_VALIDATE_EMAIL))
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "L'email de la société est invalide"
+                            ));
+                        break;
+                }
+            }
             if (!$this->isCsrfTokenValid("society", $data['society[_token]'])) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -80,7 +133,7 @@ class AdminSocietyController extends AbstractController
                 ));
             }
             $this->_setDataSociety($society, $data);
-            $stripeHelper->createCustomer($society);
+            $stripeService->createCustomer($society);
             return new JsonResponse(array(
                 'code' => 200,
                 'success' => true,
@@ -109,6 +162,58 @@ class AdminSocietyController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
             $data = json_decode($content, true);
+            if (
+                isset($data['society[name]']) && $data['society[name]'] == ""
+                || isset($data['society[address]']) && $data['society[address]'] == ""
+                || isset($data['society[phone]']) && $data['society[phone]'] == ""
+                || isset($data['society[email]']) && $data['society[email]'] == ""
+                || isset($data['society[siret]']) && $data['society[siret]'] == ""
+                || isset($data['society[_token]']) && $data['society[_token]'] == ""
+            ) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Tous les champs sont requis"
+                ));
+            }
+
+            foreach ($data as $key => $value) {
+                switch ($key) {
+                    case "society[name]":
+                        if (strlen($value) < 2)
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "Le nom de la société doit contenir au moins 2 caractères"
+                            ));
+
+                        break;
+                    case "society[address]":
+                        if (strlen($value) < 5)
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "L'adresse de la société doit contenir au moins 5 caractères"
+                            ));
+                        break;
+                    case "society[phone]":
+                        if (strlen($value) < 10)
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "Le téléphone de la société doit contenir au moins 10 chiffres"
+                            ));
+                        break;
+                    case "society[email]":
+                        if (!filter_var($value, FILTER_VALIDATE_EMAIL))
+                            return new JsonResponse(array(
+                                'code' => 200,
+                                'success' => false,
+                                'message' => "L'email de la société est invalide"
+                            ));
+                        break;
+                }
+            }
 
             if (!$this->isCsrfTokenValid("society", $data['society[_token]'])) {
                 return new JsonResponse(array(
