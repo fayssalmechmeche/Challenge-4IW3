@@ -48,6 +48,7 @@ function loadDevisData(devisGrid) {
 }
 
 function initDevisGridWithData(products, formulas, devisGrid) {
+  console.log("products", products);
   const productRows = products.map((product) => [
     product.name,
     product.quantity,

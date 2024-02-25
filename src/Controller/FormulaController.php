@@ -21,10 +21,10 @@ class FormulaController extends AbstractController
     #[Route('/', name: 'app_formula_index', methods: ['GET'])]
     public function index(FormulaRepository $formulaRepository): Response
     {
-        $user = $this->getUser();
+        $society = $this->getSociety();
 
-        if ($user) {
-            $formulas = $formulaRepository->findBy(['user' => $user]);
+        if ($society) {
+            $formulas = $formulaRepository->findBy(['society' => $society]);
         } else {
             $formulas = [];
         }
@@ -36,10 +36,10 @@ class FormulaController extends AbstractController
     #[Route('/api', name: 'api_formula_index', methods: ['GET'])]
     public function apiIndex(FormulaRepository $formulaRepository): Response
     {
-        $user = $this->getUser();
+        $society = $this->getSociety();
 
-        if ($user) {
-            $formulas = $formulaRepository->findBy(['user' => $user]);
+        if ($society) {
+            $formulas = $formulaRepository->findBy(['society' => $society]);
         } else {
             $formulas = [];
         }
@@ -62,7 +62,6 @@ class FormulaController extends AbstractController
     {
         $formulaRepository = $entityManager->getRepository(Formula::class);
         $formula = $formulaRepository->find($id);
-
         $productsData = [];
         foreach ($formula->getProductFormulas() as $productFormula) {
             $product = $productFormula->getProduct();
@@ -81,8 +80,6 @@ class FormulaController extends AbstractController
             'products' => $productsData
         ];
 
-       
-
         return $this->render('formula/show.html.twig', [
             'data' => $data
         ]);
@@ -92,22 +89,26 @@ class FormulaController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $formula = new Formula();
-        $user = $this->getUser();
+        $society = $this->getSociety();
         $form = $this->createForm(FormulaType::class, $formula, [
-            'user' => $user,
+            'society' => $society,
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formulaName = ucfirst($form->get('name')->getData());
             $formula->setName($formulaName);
-            $user = $this->getUser();
-            $formula->setUser($user);
+            $society = $this->getSociety();
+            $formula->setSociety($society);
 
             $entityManager->persist($formula);
             $entityManager->flush();
-
+            $this->addFlash('success', 'La création de la formule a été effectuée avec succès.');
             return $this->redirectToRoute('app_formula_index', [], Response::HTTP_SEE_OTHER);
+        }elseif ($form->isSubmitted() && !$form->isValid()) {
+            // Nouvelle condition pour gérer les soumissions de formulaire non valides
+            $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+            return $this->redirectToRoute('app_formula_index');
         }
 
         return $this->render('formula/new.html.twig', [
@@ -130,9 +131,9 @@ class FormulaController extends AbstractController
     #[Route('/{id}/edit', name: 'app_formula_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Formula $formula, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
+        $society = $this->getSociety();
         $form = $this->createForm(FormulaType::class, $formula, [
-            'user' => $user,
+            'society' => $society,
         ]);
         $form->handleRequest($request);
 
@@ -158,6 +159,17 @@ class FormulaController extends AbstractController
             $entityManager->remove($formula);
             $entityManager->flush();
         }
+        $this->addFlash('success', 'La formule a bien été supprimé.');
         return $this->redirectToRoute('app_formula_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    public function getSociety()
+    {
+        // Exemple de récupération de l'utilisateur courant et de sa société
+        $user = $this->getUser(); // Supposons que `getUser()` retourne l'utilisateur courant
+        if ($user) {
+            return $user->getSociety(); // Supposons que l'utilisateur a une méthode `getSociety()`
+        }
+        return null; // ou gérer autrement si l'utilisateur n'est pas connecté ou n'a pas de société
     }
 }
