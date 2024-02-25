@@ -29,6 +29,7 @@
     {% endblock %}
     {% block javascripts %}
       {{ encore_entry_script_tags('app') }}
+      <script src="{{ asset('js/darkMode.js') }}"></script>
       <script src="{{ asset('js/addFlash.js') }}"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
       <script>

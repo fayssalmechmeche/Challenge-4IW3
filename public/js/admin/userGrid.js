@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
               : user.roles.includes("ROLE_SOCIETY")
               ? "Entreprise"
               : "Utilisateur",
+            user.roles.includes("ROLE_ACCOUNTANT")
+              ? "Comptable"
+              : user.roles.includes("ROLE_SOCIETY")
+              ? "Entreprise"
+              : "Utilisateur",
             user.status ? "Validé" : "Invalidé",
             gridjs.html(`
             <div class="w-full mx-auto flex justify-center items-center gap-2">
@@ -66,7 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
     language: {
       search: {
         placeholder: "Rechercher...",
+        placeholder: "Rechercher...",
       },
+      noRecordsFound: "Aucun résultat",
+      loading: "Chargement...",
+      error: "Une erreur est survenue",
       noRecordsFound: "Aucun résultat",
       loading: "Chargement...",
       error: "Une erreur est survenue",
@@ -93,10 +102,56 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
     sort: true,
+    className: {
+      th: "bg-white dark:bg-dark-bg text-black dark:text-white dark:border-dark-bg hover:bg-gray-200 dark:hover:bg-dark-card active:bg-gray-300 dark:active:bg-dark-card focus:bg-gray-300 dark:focus:bg-dark-card",
+      td: "text-black bg-white dark:text-white dark:bg-dark-card dark:border-dark-section",
+      paginationSummary: "text-black dark:text-white",
+      sort: "bg-yellow-400 ",
+      filter: "dark:bg-dark-card dark:text-white",
+      footer: "dark:bg-dark-card dark:text-white dark:border-dark-bg",
+    },
   }).render(document.getElementById("tabUserGridJs"));
+
+  const waitForGridToRender = () => {
+    return new Promise((resolve) => {
+      const checkExist = setInterval(() => {
+        const wrapper = document.querySelector(
+          "#tabUserGridJs .gridjs-wrapper"
+        );
+        if (wrapper) {
+          clearInterval(checkExist);
+          resolve();
+        }
+      }, 100); // vérifier toutes les 100 millisecondes
+    });
+  };
+
+  waitForGridToRender().then(() => {
+    // Le tableau est maintenant rendu, appliquez vos modifications ici
+    document
+      .querySelector("#tabUserGridJs .gridjs-wrapper")
+      .classList.add("dark:border-t-0");
+    document
+      .querySelector("#tabUserGridJs .gridjs-search-input")
+      .classList.add(
+        "bg-white",
+        "dark:border-dark-bg",
+        "dark:bg-dark-bg",
+        "text-black",
+        "dark:text-white"
+      );
+  });
 });
 
 function loadGridUser() {
+  gridUser
+    .updateConfig({
+      // search: true,
+      pagination: {
+        limit: 5,
+      },
+    })
+    .forceRender();
   gridUser
     .updateConfig({
       // search: true,
