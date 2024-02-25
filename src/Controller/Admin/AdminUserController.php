@@ -102,7 +102,7 @@ class AdminUserController extends AbstractController
         $users = $userRepository->findBy(['society' => $society]);
         $data = [];
         foreach ($users as $user) {
-            if (in_array(ROLE_ADMIN, $user->getRoles()) || in_array(ROLE_HEAD, $user->getRoles())) {
+            if (in_array(ROLE_ADMIN, $user->getRoles())) {
                 continue;
             }
             $data[] = [
@@ -166,7 +166,7 @@ class AdminUserController extends AbstractController
                 return new JsonResponse(array(
                     'code' => 200,
                     'success' => false,
-                    'message' => "Vous ne pouvez pas vous attribuer le rôle administrateur"
+                    'message' => "Vous ne pouvez pas attribuer le rôle administrateur"
                 ));
             }
             if (!filter_var($data['admin_user[email]'], FILTER_VALIDATE_EMAIL)) {
