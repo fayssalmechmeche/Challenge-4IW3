@@ -38,19 +38,23 @@ class DashboardCatererController extends AbstractController
             return $dateA - $dateB;
         });
 
-        $amountDevisMonth = $devisRepository->findAmountDevisForCurrentMonth($user);
-        $amountDevisMonth['totalDuePrice'] ?? $amountDevisMonth['totalDuePrice'] = 0;
-        $amountDevisPendingMonth = $devisRepository->findAmountDevisPendingForCurrentMonth($user);
-        $amountDevisPendingMonth['totalDuePrice'] ?? $amountDevisPendingMonth['totalDuePrice'] = 0;
+        $amountDevisMonth = $devisRepository->findAmountDevisForCurrentMonth($user);     
+        $amountDevisPreviousMonth = $devisRepository->findAmountDevisForPreviousMonth($user);
 
-        // dd($invoiceRepository->findLastInvoiceAmountForUser($user));
+        if ($amountDevisPreviousMonth != 0) {
+            $differenceLastAndCurrentMonthDevisMonth =  ($amountDevisMonth - $amountDevisPreviousMonth) / $amountDevisPreviousMonth * 100 ;
+        } else {
+            $differenceLastAndCurrentMonthDevisMonth = 0;
+        }
+
         return $this->render('dashboard_caterer/index.html.twig', [
             'controller_name' => 'DashboardCatererController',
             'balance' => $stripeService->getBalance($customerID),
             'lastInvoicePaid' => $invoiceRepository->findLastInvoiceAmountForUser($user),
             'totalBalance' => $devisRepository->findAmountInvoicePaid($user),
             'amountDevisMonth' => $amountDevisMonth,
-            'amountDevisPendingMonth' => $amountDevisPendingMonth,
+            'differenceLastAndCurrentMonth' => $differenceLastAndCurrentMonthDevisMonth,
+            'amountDevisPendingMonth' => $devisRepository->findAmountDevisPendingForCurrentMonth($user),
             'nbDevisPending' => $devisRepository->findDevisPending($user),
             'nbInvoicePending' => $devisRepository->findInvoicePending($user),
             'totalPriceByMonth' => $totalPriceByMonth, 

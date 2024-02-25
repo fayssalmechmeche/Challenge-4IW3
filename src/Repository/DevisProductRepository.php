@@ -24,7 +24,7 @@ class DevisProductRepository extends ServiceEntityRepository
     public function findMostSoldProductByUser(\App\Entity\User $user)
     {
         return $this->createQueryBuilder('dp')
-            ->select('p.name', 'SUM(dp.quantity) as totalQuantity')
+            ->select('p.name', 'SUM(dp.quantity) as totalQuantity', 'SUM(dp.price) as totalSpending')
             ->innerJoin('dp.product', 'p')
             ->where('dp.devis IN (
                 SELECT d.id FROM App\Entity\Devis d
@@ -41,7 +41,7 @@ class DevisProductRepository extends ServiceEntityRepository
     public function findLessSoldProductByUser(\App\Entity\User $user)
     {
         return $this->createQueryBuilder('dp')
-            ->select('p.name', 'SUM(dp.quantity) as totalQuantity')
+            ->select('p.name', 'SUM(dp.quantity) as totalQuantity', 'SUM(dp.price) as totalSpending')
             ->innerJoin('dp.product', 'p')
             ->where('dp.devis IN (
                 SELECT d.id FROM App\Entity\Devis d

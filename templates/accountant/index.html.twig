@@ -32,16 +32,16 @@
 			<p class="text-grey-p text-base">Rapports formules commandées :</p>
 			<div class="flex gap-1">
 				<button onclick="generateDevisFormulaXLSX();" class="text-white w-48 font-medium bg-green-600 hover:bg-green-500 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
-					Excel des formulaires
+					Excel des formules
 				</button>
 				<button onclick="generateDevisFormulaPDF();" class="text-white w-48 font-medium bg-red-600 hover:bg-red-500 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
-					Pdf des formulaires
+					Pdf des formules
 				</button>
 			</div>
 		</div>
 		<!-- Chart Block -->
 		<div class="lg:ml-10 relative px-10 w-[535px] h-72 flex flex-col justify-center items-center bg-white rounded-3xl shadow-xl">
-			<p class="text-grey-p text-base">Montant ventes effectuées par mois (en €) :</p>
+			<p class="text-grey-p text-base">Montant factures payées par mois (en €) :</p>
 			<canvas id="chartCA">
 				<p>Chart CA</p>
 			</canvas>
@@ -77,60 +77,56 @@
 			<p class="text-grey-p text-base">Produit le plus vendu</p>
 			<h2 class="text-3xl font-bold">{{nameMostSellProduct.name is defined ? nameMostSellProduct.name : 'Aucun'}}</h2>
 			<p class="text-grey-p text-base">Quantité:
-				{{nameMostSellProduct.totalQuantity is defined ? nameMostSellProduct.totalQuantity : 'Aucun'}}</p>
-			<div class="flex justify-center items-center bg-bg-light-green w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-green">
-					trending_up
+				<span class=" font-semibold">
+					{{nameMostSellProduct.totalQuantity is defined ? nameMostSellProduct.totalQuantity : 'Aucun'}}</span>
+			</p>
+			<p class="text-grey-p text-base">Gains:
+				<span class="text-[#4FD18B] font-semibold">
+					{{nameMostSellProduct.totalSpending is defined ? nameMostSellProduct.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
-				<p class="text-light-green font-bold">+</p>
-				<p class="text-light-green font-bold">11%</p>
-			</div>
+			</p>
 		</div>
 		<!-- card-info Less Product -->
 		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
 			<p class="text-grey-p text-base">Produit le moins vendu</p>
 			<h2 class="text-3xl font-bold">{{nameLessSellProduct.name is defined ? nameLessSellProduct.name : 'Aucun'}}</h2>
 			<p class="text-grey-p text-base">Quantité:
-				{{nameLessSellProduct.totalQuantity is defined ? nameLessSellProduct.totalQuantity : 'Aucun' }}</p>
-			<div class="flex justify-center items-center bg-bg-light-red w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-red">
-					trending_down
+				<span class=" font-semibold">
+					{{nameLessSellProduct.totalQuantity is defined ? nameLessSellProduct.totalQuantity : 'Aucun' }}</span>
+			</p>
+			<p class="text-grey-p text-base">Gains:
+				<span class="text-[#4FD18B] font-semibold">
+					{{nameLessSellProduct.totalSpending is defined ? nameLessSellProduct.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
-				<p class="text-light-red font-bold">-</p>
-				<p class="text-light-red font-bold">8%</p>
-			</div>
+			</p>
 		</div>
 		<!-- card-info Highest Customer -->
 		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
 			<p class="text-grey-p text-base">Client le plus fidèle</p>
 			<h2 class="text-3xl font-bold">{{customerWithHighestSpending.name is defined ? customerWithHighestSpending.name : 'Aucun'}}</h2>
 			<p class="text-grey-p text-base">Commandes:
-				{{customerWithHighestSpending.totalOrders is defined ? customerWithHighestSpending.totalOrders : 'Aucun'}}</p>
-			{# <p class="text-grey-p text-base">Dépensé:
-																																																																																																																																																																{{customerWithHighestSpending.totalSpending}}</p> #}
-			<div class="flex justify-center items-center bg-bg-light-green w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-green">
-					trending_up
+				<span class=" font-semibold">
+					{{customerWithHighestSpending.totalOrders is defined ? customerWithHighestSpending.totalOrders : 'Aucun'}}</span>
+			</p>
+			<p class="text-grey-p text-base">Dépensé:
+				<span class="text-[#4FD18B] font-semibold">
+					{{customerWithHighestSpending.totalSpending is defined ? customerWithHighestSpending.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
-				<p class="text-light-green font-bold">+</p>
-				<p class="text-light-green font-bold">15%</p>
-			</div>
+			</p>
 		</div>
 		<!-- card-info Lowest Customer-->
 		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
 			<p class="text-grey-p text-base">Client le moins fidèle</p>
 			<h2 class="text-3xl font-bold">{{customerWithLowestSpending.name is defined ? customerWithLowestSpending.name : 'Aucun'}}</h2>
 			<p class="text-grey-p text-base">Commandes:
-				{{customerWithLowestSpending.totalOrders is defined ? customerWithLowestSpending.totalOrders : 'Aucun'}}</p>
-			{# <p class="text-grey-p text-base">Dépensé:
-																																																																																																																																																																{{customerWithLowestSpending.totalSpending}}</p> #}
-			<div class="flex justify-center items-center bg-bg-light-red w-24 rounded-3xl px-5 py-2">
-				<span class="material-symbols-outlined text-light-red">
-					trending_down
+				<span class=" font-semibold">
+					{{customerWithLowestSpending.totalOrders is defined ? customerWithLowestSpending.totalOrders : 'Aucun'}}</span>
+			</p>
+			<p class="text-grey-p text-base">Dépensé:
+				<span class="text-[#4FD18B] font-semibold">
+					{{customerWithLowestSpending.totalSpending is defined ? customerWithLowestSpending.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
-				<p class="text-light-red font-bold">-</p>
-				<p class="text-light-red font-bold">8%</p>
-			</div>
+			</p>
 		</div>
 	</div>
 	<!-- End Third block -->

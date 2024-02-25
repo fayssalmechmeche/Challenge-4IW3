@@ -1,12 +1,22 @@
-let gridUser = null
+let gridUser = null;
 document.addEventListener("DOMContentLoaded", function () {
   gridUser = new gridjs.Grid({
     columns: [
-      "Prénom",
-      "Nom",
-      "Rôles",
-      "Status",
-      "Actions",
+      {
+        name: "Prénom",
+      },
+      {
+        name: "Nom",
+      },
+      {
+        name: "Rôles",
+      },
+      {
+        name: "Status",
+      },
+      {
+        name: "Actions",
+      },
     ],
     server: {
       url: "/admin/user/api",
@@ -15,7 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
           return [
             user.name,
             user.lastName,
-            user.roles.includes('ROLE_ACCOUNTANT') ? 'Comptable' : user.roles.includes('ROLE_SOCIETY') ? 'Entreprise' : 'Utilisateur',
+            user.roles.includes("ROLE_ACCOUNTANT")
+              ? "Comptable"
+              : user.roles.includes("ROLE_SOCIETY")
+              ? "Entreprise"
+              : "Utilisateur",
             user.status ? "Validé" : "Invalidé",
             gridjs.html(`
             <div class="w-full mx-auto flex justify-center items-center gap-2">
@@ -23,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
         onclick="openUserShowModal(${user.id})"
       >
-        Voir l'Utilisateur
+        Consulter
       </button>
       <button
         class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
@@ -51,19 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     language: {
       search: {
-        placeholder: 'Rechercher...'
+        placeholder: "Rechercher...",
       },
-      noRecordsFound: 'Aucun résultat',
-      loading: 'Chargement...',
-      error: 'Une erreur est survenue',
+      noRecordsFound: "Aucun résultat",
+      loading: "Chargement...",
+      error: "Une erreur est survenue",
       pagination: {
-        previous: 'Précédent',
-        next: 'Suivant',
-        showing: 'Affichage',
-        results: () => 'Résultats',
-        of: 'de',
-        to: 'à'
-      }
+        previous: "Précédent",
+        next: "Suivant",
+        showing: "Affichage",
+        results: () => "Résultats",
+        of: "de",
+        to: "à",
+      },
     },
     style: {
       table: {
@@ -76,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       td: {
         "text-align": "center",
-
       },
     },
     sort: true,
@@ -84,10 +97,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadGridUser() {
-  gridUser.updateConfig({
-    // search: true,
-    pagination: {
-      limit: 5,
-    },
-  }).forceRender();
+  gridUser
+    .updateConfig({
+      // search: true,
+      pagination: {
+        limit: 5,
+      },
+    })
+    .forceRender();
 }

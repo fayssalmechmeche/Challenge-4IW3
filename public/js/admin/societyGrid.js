@@ -6,11 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
         name: "Nom de société",
         formatter: (cell) => gridjs.html(`<b>${cell}</b>`),
       },
-      ,
-      "Adresse",
-      "Téléphone",
-      "Email",
-      "Actions",
+      {
+        name: "Adresse",
+      },
+      {
+        name: "Téléphone",
+      },
+      {
+        name: "Email",
+      },
+      {
+        name: "Actions",
+      },
     ],
     server: {
       url: "/admin/society/api",
@@ -23,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
           gridjs.html(`
           <div class="w-full mx-auto flex justify-center items-center gap-2">
       <button
-        class="text-white w-40 font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-1 py-2"
+        class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
       >
         <a class="text-decoration-none" href="/admin/society/show/${society.id}"
-          >Voir la Société</a
+          >Consulter</a
         >
       </button>
       <button
@@ -61,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       td: {
         "text-align": "center",
-
       },
     },
     sort: true,
@@ -98,7 +104,6 @@ function loadGridSociety() {
   gridSociety
     .updateConfig({
       // search: true,
-
     })
     .forceRender();
 }

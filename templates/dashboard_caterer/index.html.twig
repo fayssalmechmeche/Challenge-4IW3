@@ -50,26 +50,16 @@
 		<!-- card-info -->
 		{% include 'components/card-info.twig' with {
 		description: 'Prévision pour ce mois :',
-		amount:'+ ' ~ amountDevisMonth.totalDuePrice ~ ' €',
-		trend: {
-			background: 'bg-bg-light-green',
-			color: 'text-light-green',
-			icon: 'trending_up',
-			prefix: '+',
-			percentage: '15%'
-		}
+		amount:'+ ' ~ amountDevisMonth ~ ' €',
+		percentage: differenceLastAndCurrentMonth|number_format(0)
+		
 		} %}
 		<!-- card-info -->
 		{% include 'components/card-info.twig' with {
-    	description: 'Montant en attente :',
-    	amount: '+ ' ~ amountDevisPendingMonth.totalDuePrice ~ ' €',
-    	trend: {
-			background: 'bg-bg-light-red',
-			color: 'text-light-red',
-			icon: 'trending_down',
-			prefix: '-',
-			percentage: '8%'
-    	}
+    	description: 'Devis en attente :',
+    	amount: '+ ' ~ amountDevisPendingMonth ~ ' €',
+    	percentage: -1
+    	
 		} %}
 		<!-- card-info -->
 		{% include 'components/card-info.twig' with {

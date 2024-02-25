@@ -54,7 +54,7 @@ class DevisRepository extends ServiceEntityRepository
         $startDate = new \DateTime('first day of this month');
         $endDate = new \DateTime('last day of this month');
 
-        return $this->createQueryBuilder('d')
+        $result = $this->createQueryBuilder('d')
             ->select('SUM(d.totalDuePrice) as totalDuePrice')
             ->andWhere('d.paymentStatus = :status')
             ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
@@ -65,6 +65,8 @@ class DevisRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery()
             ->getOneOrNullResult();
+        return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
+        
     }
 
     public function findAmountDevisForCurrentMonth(\App\Entity\User $user)
@@ -72,7 +74,7 @@ class DevisRepository extends ServiceEntityRepository
         $startDate = new \DateTime('first day of this month');
         $endDate = new \DateTime('last day of this month');
 
-        return $this->createQueryBuilder('d')
+        $result = $this->createQueryBuilder('d')
             ->select('SUM(d.totalDuePrice) as totalDuePrice')
             ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
             ->andWhere('d.user = :user')
@@ -81,7 +83,26 @@ class DevisRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery()
             ->getOneOrNullResult();
+        return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
     }
+
+    public function findAmountDevisForPreviousMonth(\App\Entity\User $user)
+{
+    $startDate = new \DateTime('first day of last month');
+    $endDate = new \DateTime('last day of last month');
+
+    $result = $this->createQueryBuilder('d')
+        ->select('SUM(d.totalDuePrice) as totalDuePrice')
+        ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
+        ->andWhere('d.user = :user')
+        ->setParameter('startDate', $startDate)
+        ->setParameter('endDate', $endDate)
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
+}
 
 
     public function findAmountInvoicePaid(\App\Entity\User $user)
