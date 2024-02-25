@@ -21,9 +21,9 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Devis::class, orphanRemoval: true)]
     private Collection $devis;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'customers')]
+    #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    private ?Society $society;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(groups: ["individual"])]
@@ -92,14 +92,14 @@ class Customer
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getSociety(): ?Society
     {
-        return $this->user;
+        return $this->society;
     }
 
-    public function setUser(?User $user): self
+    public function setSociety(?Society $society): self
     {
-        $this->user = $user;
+        $this->society = $society;
         return $this;
     }
 

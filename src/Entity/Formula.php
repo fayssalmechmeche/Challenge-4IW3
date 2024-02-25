@@ -24,24 +24,24 @@ class Formula
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'formulas')]
+    #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'formulas')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    private ?Society $society;
 
     /**
-     * @return User|null
+     * @return Society|null
      */
-    public function getUser(): ?User
+    public function getSociety(): ?Society
     {
-        return $this->user;
+        return $this->society;
     }
 
     /**
-     * @param User|null $user
+     * @param Society|null $society
      */
-    public function setUser(?User $user): void
+    public function setSociety(?Society $society): void
     {
-        $this->user = $user;
+        $this->society = $society;
     }
 
 

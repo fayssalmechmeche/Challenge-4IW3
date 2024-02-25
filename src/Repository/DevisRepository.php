@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Devis;
-use App\Entity\User;
+use App\Entity\Society;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,12 +22,12 @@ class DevisRepository extends ServiceEntityRepository
         parent::__construct($registry, Devis::class);
     }
 
-    public function findLastDevisNumberForUser(\App\Entity\User $user): ?string
+    public function findLastDevisNumberForSociety(\App\Entity\Society $society): ?string
     {
 
         $lastDevis = $this->createQueryBuilder('d')
-            ->where('d.user = :user')
-            ->setParameter('user', $user)
+            ->where('d.society = :society')
+            ->setParameter('society', $society)
             ->orderBy('d.createdAt', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
@@ -38,12 +38,12 @@ class DevisRepository extends ServiceEntityRepository
         return $lastDevis ? $lastDevis->getDevisNumber() : null;
     }
 
-    public function findPendingByUser($user)
+    public function findPendingByUser($society)
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.user = :user')
+            ->andWhere('d.society = :society')
             ->andWhere('d.paymentStatus = :status')
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->setParameter('status', 'PENDING')
             ->getQuery()
             ->getResult();

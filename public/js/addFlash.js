@@ -1,4 +1,3 @@
-
 const addFlash = (type, message) => {
     console.log('lol');
     let backgroundColor;

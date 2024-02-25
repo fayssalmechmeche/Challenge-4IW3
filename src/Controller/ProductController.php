@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Formula;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,10 +24,10 @@ class ProductController extends AbstractController
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
-        $user = $this->getUser();
+        $society = $this->getSociety();
 
-        if ($user) {
-            $products = $productRepository->findBy(['user' => $user]);
+        if ($society) {
+            $products = $productRepository->findBy(['society' => $society]);
         } else {
             $products = [];
         }
@@ -38,10 +39,10 @@ class ProductController extends AbstractController
     #[Route('/api', name: 'api_product_index', methods: ['GET'])]
     public function apiIndex(ProductRepository $productRepository): Response
     {
-        $user = $this->getUser();
+        $society = $this->getSociety();
 
-        if ($user) {
-            $products = $productRepository->findBy(['user' => $user]);
+        if ($society) {
+            $products = $productRepository->findBy(['society' => $society]);
         } else {
             $products = [];
         }
@@ -70,11 +71,15 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $productName = ucfirst($form->get('name')->getData());
             $product->setName($productName);
-            $product->setUser($this->getUser());
+            $product->setSociety($this->getSociety());
             $entityManager->persist($product);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Le nouveau client a été créé avec succès.');
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }elseif ($form->isSubmitted() && !$form->isValid()) {
+            // Nouvelle condition pour gérer les soumissions de formulaire non valides
+            $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+            return $this->redirectToRoute('app_product_index');
         }
 
         return $this->render('product/new.html.twig', [
@@ -104,8 +109,12 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager->flush();
-
+            $this->addFlash('success', 'Le produit a été modifié avec succès.');
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }elseif ($form->isSubmitted() && !$form->isValid()) {
+            // Nouvelle condition pour gérer les soumissions de formulaire non valides
+            $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+            return $this->redirectToRoute('app_product_index');
         }
 
         return $this->render('product/edit.html.twig', [
@@ -119,7 +128,7 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete_product', $request->request->get('_token'))) {
+
             // Vérifiez si le produit est utilisé dans une formule
             if (!$product->getProductFormulas()->isEmpty()) {
                 $this->addFlash('error', 'Ce produit est utilisé dans une formule. Supprimez d\'abord la formule liée.');
@@ -132,7 +141,18 @@ class ProductController extends AbstractController
 
             $entityManager->remove($product);
             $entityManager->flush();
-        }
+
+        $this->addFlash('success', 'Le produit a bien été supprimé.');
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    public function getSociety()
+    {
+        // Exemple de récupération de l'utilisateur courant et de sa société
+        $user = $this->getUser(); // Supposons que `getUser()` retourne l'utilisateur courant
+        if ($user) {
+            return $user->getSociety(); // Supposons que l'utilisateur a une méthode `getSociety()`
+        }
+        return null; // ou gérer autrement si l'utilisateur n'est pas connecté ou n'a pas de société
     }
 }

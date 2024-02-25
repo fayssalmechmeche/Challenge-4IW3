@@ -23,8 +23,14 @@
 				</div>
 				<div class="society-info mt-15px p-5px">
 					<h2 class="text-lg mb-3 font-semibold">Le nom de la société</h2>
+					<p class="text-15px">Nom :
+						{{ userName }}</p>
 					<p class="text-15px">Mail :
 						{{ userEmail }}</p>
+					<p class="text-15px">Téléphone :
+						{{ userPhone }}</p>
+					<p class="text-15px">Adresse :
+						{{ userAddress }}</p>
 				</div>
 			</div>
 			<div class="top-r w-1/2">
@@ -33,10 +39,11 @@
 					<div class="devis-info">
 						<p class="text-15px leading-none my-1">Numéro de devis:
 							{{ devisNumber }}</p>
-						<p class="text-15px leading-none my-1">Date:
+						<p class="text-15px leading-none my-1">Date de création du devis :
 							{{ "now"|date("d/m/Y") }}</p>
 						<p class="text-15px leading-none my-1">
-							Validité du devis: 3 Mois
+							{{ form_label(form.dateValidite) }}
+							{{ form_widget(form.dateValidite, {'attr': {'class': 'rounded-xl w-36 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'}}) }}
 						</p>
 					</div>
 				</div>
@@ -73,7 +80,7 @@
 						{% endfor %}
 					</select>
 					<div class="flex justify-start items-center mt-2">
-						<input class="rounded-xl w-36 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form" type="number" id="productQuantity" placeholder="Quantité">
+						<input class="rounded-xl w-36 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form" type="number" id="productQuantity" placeholder="Quantité" min="0">
 						<button class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2 flex items-center gap-2 ml-auto" id="addProductButton" type="button">Ajouter<span class="material-symbols-outlined">
 								add_circle
 							</span>
@@ -88,7 +95,7 @@
 						{% endfor %}
 					</select>
 					<div class="flex justify-start items-center mt-2">
-						<input class="rounded-xl w-36 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form" type="number" id="formulaQuantity" placeholder="Quantité">
+						<input class="rounded-xl w-36 h-10 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form" type="number" id="formulaQuantity" placeholder="Quantité" min="0">
 						<button class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2 flex items-center gap-2 ml-auto" id="addFormulaButton" type="button">Ajouter<span class="material-symbols-outlined">
 								add_circle
 							</span>
@@ -113,8 +120,7 @@
             <h2 class="text-lg font-semibold">Conditions de paiement:</h2>
               <p class="mt-5 text-lg">
                 Paiement d'un acompte de  {{ form_widget(form.depositPercentage, {'attr': {'class': 'form-control w-9', 'id': 'devis_depositPercentage'}}) }}
-                {{ form_errors(form.depositPercentage) }}% du prix total TTC à la commande 70% à
-                la livraison
+                {{ form_errors(form.depositPercentage) }}% du prix total TTC.
               </p>
 
             </div>
@@ -126,7 +132,7 @@
               {{ form_label(form.totalPrice, 'Total HT:', {'label_attr': {'class': 'text-base font-semibold'}}) }}
               <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
                 <p class="text-lg text-right">
-                  {{ form_widget(form.totalPrice, {'attr': {'class': 'custom-class-for-total-price bg-the-grey-2 w-1/2'}}) }} €
+                  {{ form_widget(form.totalPrice, {'attr': {'class': 'custom-class-for-total-price bg-the-grey-2 w-1/2'}}) }}
                 </p>
               </div>
             </div>
