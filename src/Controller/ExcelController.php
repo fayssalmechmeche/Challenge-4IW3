@@ -23,7 +23,7 @@ class ExcelController extends AbstractController
     #[Route('/generate/xlsx', name: 'app_devis_generate_xlsx', methods: ['POST'])]
     public function generateXlsx(DevisExcelService $DevisExcelService, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getUser()->getSociety()]);
 
         if ($request->isXmlHttpRequest()) {
             return  $DevisExcelService->generateXlsx($devis);
@@ -38,7 +38,7 @@ class ExcelController extends AbstractController
     #[Route('/generate/pdf', name: 'app_devis_generate_pdf', methods: ['POST'])]
     public function generatePdf(DevisExcelService $DevisExcelService, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getUser()->getSociety()]);
         if ($request->isXmlHttpRequest()) {
             return  $DevisExcelService->generatePDF($devis);
         } else {
@@ -52,7 +52,7 @@ class ExcelController extends AbstractController
     #[Route('/generate/product/xlsx', name: 'excel_devis_product_xlsx')]
     public function generateExcelDevisProduct(DevisProductExcelService $devisProductExcelService, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getUser()->getSociety()]);
         $tabDevisProduct = [];
         foreach ($devis as $devis) {
             $devisProduct = $entityManager->getRepository(DevisProduct::class)->findBy(['devis' => $devis]);
@@ -73,7 +73,7 @@ class ExcelController extends AbstractController
     #[Route('/generate/product/pdf', name: 'excel_devis_product_pdf')]
     public function generatePdfDevisProduct(DevisProductExcelService $devisProductExcelService, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getUser()->getSociety()]);
         $tabDevisProduct = [];
         foreach ($devis as $devis) {
             $devisProduct = $entityManager->getRepository(DevisProduct::class)->findBy(['devis' => $devis]);
@@ -94,7 +94,7 @@ class ExcelController extends AbstractController
     #[Route('/generate/formula/xlsx', name: 'excel_devis_formula_xlsx')]
     public function generateExcelDevisFormula(devisFormulaExcelService $devisFormulaExcelService, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getUser()->getSociety()]);
         $tabDevisProduct = [];
         foreach ($devis as $devis) {
             $devisProduct = $entityManager->getRepository(DevisFormula::class)->findBy(['devis' => $devis]);
@@ -115,7 +115,7 @@ class ExcelController extends AbstractController
     #[Route('/generate/formula/pdf', name: 'excel_devis_formula_pdf')]
     public function generatePdfDevisFormula(DevisFormulaExcelService $devisFormulaExcelService, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $devis = $entityManager->getRepository(Devis::class)->findBy(['user' => $this->getUser()]);
+        $devis = $entityManager->getRepository(Devis::class)->findBy(['society' => $this->getUser()->getSociety()]);
         $tabDevisProduct = [];
         foreach ($devis as $devis) {
             $devisProduct = $entityManager->getRepository(DevisFormula::class)->findBy(['devis' => $devis]);
