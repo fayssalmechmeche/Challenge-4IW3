@@ -146,7 +146,7 @@ class AdminUserController extends AbstractController
                 || isset($data['admin_user[name]']) && $data['admin_user[name]'] == ""
                 || isset($data['admin_user[lastName]']) && $data['admin_user[lastName]'] == ""
                 || isset($data['admin_user[society]']) && $data['admin_user[society]'] == ""
-                || isset($data['admin_user[roles][]']) && $data['admin_user[roles][]'] == ""
+                || isset($data["admin_user[roles][]"]) && $data["admin_user[roles][]"] == ""
             ) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -154,7 +154,7 @@ class AdminUserController extends AbstractController
                     'message' => "Tous les champs sont obligatoires"
                 ));
             }
-            if (!isset($data['admin_user']['roles']) || $data['admin_user']['roles'] == "" || empty($data['admin_user']['roles']) || !$data['admin_user']['roles']) {
+            if (!isset($data["admin_user[roles][]"]) || $data["admin_user[roles][]"] == "" || empty($data["admin_user[roles][]"]) || !$data["admin_user[roles][]"]) {
                 return new JsonResponse(array(
                     'code' => 401,
                     'success' => false,
@@ -225,7 +225,7 @@ class AdminUserController extends AbstractController
                 || isset($data['admin_user[name]']) && $data['admin_user[name]'] == ""
                 || isset($data['admin_user[lastName]']) && $data['admin_user[lastName]'] == ""
                 || isset($data['admin_user[society]']) && $data['admin_user[society]'] == ""
-                || isset($data['admin_user[roles][]']) && $data['admin_user[roles][]'] == ""
+                || isset($data["admin_user[roles][]"]) && $data["admin_user[roles][]"] == ""
             ) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -247,13 +247,14 @@ class AdminUserController extends AbstractController
                     'message' => "Token invalid"
                 ));
             }
-            if (!isset($data['admin_user']['roles']) || $data['admin_user']['roles'] == "" || empty($data['admin_user']['roles']) || !$data['admin_user']['roles']) {
+            if (!isset($data["admin_user[roles][]"]) || $data["admin_user[roles][]"] == "" || empty($data["admin_user[roles][]"]) || !$data["admin_user[roles][]"]) {
                 return new JsonResponse(array(
                     'code' => 401,
                     'success' => false,
                     'message' => "Le rôle est obligatoire"
                 ));
             }
+
 
             if ($data['admin_user[roles][]'] == ROLE_ADMIN) {
                 return new JsonResponse(array(
@@ -309,7 +310,7 @@ class AdminUserController extends AbstractController
         $lastName = $data['admin_user[lastName]'] ?? null;
         $email = $data['admin_user[email]'] ?? null;
         $society = $data['admin_user[society]'] ?? null;
-        $roles = $data['admin_user[roles][]'] ?? null;
+        $roles = $data["admin_user[roles][]"] ?? null;
 
         $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
         if (!$society) {
