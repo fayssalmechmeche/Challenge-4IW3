@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\DevisProduct;
+use App\Entity\Society;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,41 +22,41 @@ class DevisProductRepository extends ServiceEntityRepository
         parent::__construct($registry, DevisProduct::class);
     }
 
-    public function findMostSoldProductByUser(\App\Entity\User $user)
+    public function findMostSoldProductBySociety(Society $society)
     {
         return $this->createQueryBuilder('dp')
             ->select('p.name', 'SUM(dp.quantity) as totalQuantity', 'SUM(dp.price) as totalSpending')
             ->innerJoin('dp.product', 'p')
             ->where('dp.devis IN (
                 SELECT d.id FROM App\Entity\Devis d
-                WHERE d.user = :userId
+                WHERE d.society = :societyId
             )')
             ->groupBy('p.id')
             ->orderBy('totalQuantity', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('userId', ['user' => $user->getId()])
+            ->setParameter('societyId', ['society' => $society->getId()])
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findLessSoldProductByUser(\App\Entity\User $user)
+    public function findLessSoldProductBySociety(Society $society)
     {
         return $this->createQueryBuilder('dp')
             ->select('p.name', 'SUM(dp.quantity) as totalQuantity', 'SUM(dp.price) as totalSpending')
             ->innerJoin('dp.product', 'p')
             ->where('dp.devis IN (
                 SELECT d.id FROM App\Entity\Devis d
-                WHERE d.user = :userId
+                WHERE d.society = :societyId
             )')
             ->groupBy('p.id')
             ->orderBy('totalQuantity', 'ASC')
             ->setMaxResults(1)
-            ->setParameter('userId', ['user' => $user->getId()])
+            ->setParameter('societyId', ['society' => $society->getId()])
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findAllOrderProductByUser(\App\Entity\User $user)
+    public function findAllOrderProductBySociety(Society $society)
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -65,19 +66,19 @@ class DevisProductRepository extends ServiceEntityRepository
             RIGHT JOIN product p ON dp.product_id = p.id
             WHERE dp.devis_id IN (
                 SELECT d.id FROM Devis d
-                WHERE d.user_id = :userId
+                WHERE d.society_id = :societyId
             )
             GROUP BY p.id
             ORDER BY totalQuantity ASC;
         ';
 
-        $resultSet = $conn->executeQuery($sql, ['userId' => $user->getId()]);
+        $resultSet = $conn->executeQuery($sql, ['societyId' => $society->getId()]);
 
         return $resultSet->fetchAllAssociative();
 
     }
 
-    public function findAllOrderCustomerByUser(\App\Entity\User $user)
+    public function findAllOrderCustomerBySociety(Society $society)
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -87,13 +88,13 @@ class DevisProductRepository extends ServiceEntityRepository
             RIGHT JOIN product p ON dp.product_id = p.id
             WHERE dp.devis_id IN (
                 SELECT d.id FROM Devis d
-                WHERE d.user_id = :userId
+                WHERE d.society_id = :societyId
             )
             GROUP BY p.id
             ORDER BY totalQuantity ASC;
         ';
 
-        $resultSet = $conn->executeQuery($sql, ['userId' => $user->getId()]);
+        $resultSet = $conn->executeQuery($sql, ['societyId' => $society->getId()]);
 
         return $resultSet->fetchAllAssociative();
 

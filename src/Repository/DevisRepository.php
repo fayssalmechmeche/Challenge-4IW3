@@ -49,7 +49,7 @@ class DevisRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAmountDevisPendingForCurrentMonth(\App\Entity\User $user)
+    public function findAmountDevisPendingForCurrentMonth(Society $society)
     {
         $startDate = new \DateTime('first day of this month');
         $endDate = new \DateTime('last day of this month');
@@ -58,18 +58,18 @@ class DevisRepository extends ServiceEntityRepository
             ->select('SUM(d.totalDuePrice) as totalDuePrice')
             ->andWhere('d.paymentStatus = :status')
             ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
-            ->andWhere('d.user = :user')
+            ->andWhere('d.society = :society')
             ->setParameter('status', 'PENDING')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
         return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
         
     }
 
-    public function findAmountDevisForCurrentMonth(\App\Entity\User $user)
+    public function findAmountDevisForCurrentMonth(Society $society)
     {
         $startDate = new \DateTime('first day of this month');
         $endDate = new \DateTime('last day of this month');
@@ -77,16 +77,16 @@ class DevisRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('d')
             ->select('SUM(d.totalDuePrice) as totalDuePrice')
             ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
-            ->andWhere('d.user = :user')
+            ->andWhere('d.society = :society')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
         return $result['totalDuePrice'] ? $result['totalDuePrice'] : 0;
     }
 
-    public function findAmountDevisForPreviousMonth(\App\Entity\User $user)
+    public function findAmountDevisForPreviousMonth(Society $society)
     {
         $startDate = new \DateTime('first day of last month');
         $endDate = new \DateTime('last day of last month');
@@ -94,10 +94,10 @@ class DevisRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('d')
             ->select('SUM(d.totalDuePrice) as totalDuePrice')
             ->andWhere('d.createdAt BETWEEN :startDate AND :endDate')
-            ->andWhere('d.user = :user')
+            ->andWhere('d.society = :society')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -105,78 +105,78 @@ class DevisRepository extends ServiceEntityRepository
     }
 
 
-    public function findAmountInvoicePaid(\App\Entity\User $user)
+    public function findAmountInvoicePaid(Society $society)
     {
         return $this->createQueryBuilder('d')
-            ->select('SUM(i.totalPrice) as totalReceived')
+            ->select('SUM(i.totalPrice) as totalReceived')  //TODO TotalDuePrice int
             ->innerJoin('d.invoices', 'i')
             ->where("i.paymentStatus = 'PAID'")
-            ->andWhere('d.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('d.society = :society')
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findInvoicePending(\App\Entity\User $user)
+    public function findInvoicePending(Society $society)
     {
         return $this->createQueryBuilder('d')
             ->select('COUNT(i.id) as totalPending')
             ->innerJoin('d.invoices', 'i')
             ->where("i.paymentStatus = 'PENDING'")
-            ->andWhere('d.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('d.society = :society')
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findDevisPending(\App\Entity\User $user)
+    public function findDevisPending(Society $society)
     {
         return $this->createQueryBuilder('d')
             ->select('COUNT(d.id) as totalPending')
             ->where("d.paymentStatus = 'PENDING'")
-            ->andWhere('d.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('d.society = :society')
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findCustomerWithHighestTotalOrdersAndHisTotalSpending(\App\Entity\User $user)
+    public function findCustomerWithHighestTotalOrdersAndHisTotalSpending(Society $society)
     {
         return $this->createQueryBuilder('d')
             ->select('c.name', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
             ->innerJoin('d.customer', 'c')
-            ->where('d.user = :user')
+            ->where('d.society = :society')
             ->groupBy('c.id')
             ->orderBy('totalOrders', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findCustomerWithLowestTotalOrdersAndHisTotalSpending(\App\Entity\User $user)
+    public function findCustomerWithLowestTotalOrdersAndHisTotalSpending(Society $society)
     {
         return $this->createQueryBuilder('d')
             ->select('c.name', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
             ->innerJoin('d.customer', 'c')
-            ->where('d.user = :user')
+            ->where('d.society = :society')
             ->groupBy('c.id')
             ->orderBy('totalOrders', 'ASC')
             ->setMaxResults(1)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    public function findAllCustomerWithOrdersAndTotalDuePrice(\App\Entity\User $user)
+    public function findAllCustomerWithOrdersAndTotalDuePrice(Society $society)
     {
         return $this->createQueryBuilder('d')
             ->select('c.name', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
             ->innerJoin('d.customer', 'c')
-            ->where('d.user = :user')
+            ->where('d.society = :society')
             ->groupBy('c.id')
             ->orderBy('totalSpending', 'DESC')
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getResult();
     }

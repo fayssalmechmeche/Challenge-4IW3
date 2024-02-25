@@ -23,8 +23,8 @@ class DashboardCatererController extends AbstractController
     {
         $customerID = $this->getUser()->getSociety()->getStripeId();
 
-        $user = $this->getUser();
-        $devis = $devisRepository->findBy(['user' => $user]);//TODO Society
+        $society = $this->getUser()->getSociety();
+        $devis = $devisRepository->findBy(['society' => $society]);
         $totalPriceByMonth = [];
 
         //Calcul du totalDuePrice des devis par mois
@@ -43,36 +43,35 @@ class DashboardCatererController extends AbstractController
             return $dateA - $dateB;
         });
 
-        $amountDevisMonth = $devisRepository->findAmountDevisForCurrentMonth($user);     
-        $amountDevisPreviousMonth = $devisRepository->findAmountDevisForPreviousMonth($user);
+        $amountDevisMonth = $devisRepository->findAmountDevisForCurrentMonth($society);     
+        $amountDevisPreviousMonth = $devisRepository->findAmountDevisForPreviousMonth($society);
 
         if ($amountDevisPreviousMonth != 0) {
-            $differenceLastAndCurrentMonthDevis =  ($amountDevisMonth - $amountDevisPreviousMonth) / $amountDevisPreviousMonth * 100 ;
+            $differenceLastAndCurrentMonthDevis =  ($amountDevisMonth / $amountDevisPreviousMonth) * 100 ;
         } else {
             $differenceLastAndCurrentMonthDevis = 0;
         }
 
-        $NbNewCustomersMonth = $customerRepository->findNewCustomersForCurrentMonth($user);     
-        $NbNewCustomersPreviousMonth = $customerRepository->findNewCustomersForPreviousMonth($user);
-
+        $NbNewCustomersMonth = $customerRepository->findNewCustomersForCurrentMonth($society);     
+        $NbNewCustomersPreviousMonth = $customerRepository->findNewCustomersForPreviousMonth($society);
+        
         if ($NbNewCustomersPreviousMonth != 0) {
-            $differenceLastAndCurrentMonthCustomers =  ($NbNewCustomersMonth - $NbNewCustomersPreviousMonth) / $NbNewCustomersPreviousMonth * 100 ;
+            $differenceLastAndCurrentMonthCustomers =  ($NbNewCustomersMonth / $NbNewCustomersPreviousMonth) * 100 ;
         } else {
             $differenceLastAndCurrentMonthCustomers = 0;
         }
-
+        
         return $this->render('dashboard_caterer/index.html.twig', [
             'controller_name' => 'DashboardCatererController',
             'balance' => $stripeService->getBalance($customerID),
-            'lastInvoicePaid' => $invoiceRepository->findLastInvoiceAmountForUser($user),
-            'totalBalance' => $devisRepository->findAmountInvoicePaid($user),
+            'lastInvoicePaid' => $invoiceRepository->findLastInvoiceAmountForSociety($society),
+            'totalBalance' => $devisRepository->findAmountInvoicePaid($society),
             'amountDevisMonth' => $amountDevisMonth,
             'differenceLastAndCurrentMonthDevis' => $differenceLastAndCurrentMonthDevis,
-            // 'amountDevisPendingMonth' => $devisRepository->findAmountDevisPendingForCurrentMonth($user),
             'NbNewCustomersMonth' => $NbNewCustomersMonth,
             'differenceLastAndCurrentMonthCustomers' => $differenceLastAndCurrentMonthCustomers,
-            'nbDevisPending' => $devisRepository->findDevisPending($user),
-            'nbInvoicePending' => $devisRepository->findInvoicePending($user),
+            'nbDevisPending' => $devisRepository->findDevisPending($society),
+            'nbInvoicePending' => $devisRepository->findInvoicePending($society),
             'totalPriceByMonth' => $totalPriceByMonth, 
         ]);
     }

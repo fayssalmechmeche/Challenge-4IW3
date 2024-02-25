@@ -23,8 +23,8 @@ class AccountantController extends AbstractController
     ): Response
     {
 
-        $user = $this->getUser();
-        $devis = $devisRepository->findBy(['user' => $user]);//TODO Society
+        $society = $this->getUser()->getSociety();
+        $devis = $devisRepository->findBy(['society' => $society]);
         $totalPriceDevisByMonth = [];
 
         //Calcul du totalDuePrice des devis par mois
@@ -43,7 +43,9 @@ class AccountantController extends AbstractController
             return $dateA - $dateB;
         });
 
-        $invoice = $invoiceRepository->findBy(['paymentStatus' => 'PAID', 'user' => $user]);//TODO Society
+
+        // dd($invoiceRepository->findAllInvoiceAmountForSociety($society));
+        $invoice = $invoiceRepository->findAllInvoiceAmountForSociety($society);//TODO Society
         $totalPriceByMonth = [];
 
         //Calcul du totalDuePrice des factures par mois
@@ -63,14 +65,14 @@ class AccountantController extends AbstractController
         });
         
         return $this->render('accountant/index.html.twig', [
-            'devis' => $devisRepository->findBy(['user' => $user]),
-            'customers' => $devisRepository->findAllCustomerWithOrdersAndTotalDuePrice($user),
-            'products' => $devisProductRepository->findAllOrderProductByUser($user),
-            'nameMostSellProduct' => $devisProductRepository->findMostSoldProductByUser($user),
-            'nameLessSellProduct' => $devisProductRepository->findLessSoldProductByUser($user),
-            'customerWithHighestSpending' => $devisRepository->findCustomerWithHighestTotalOrdersAndHisTotalSpending($user),
-            'customerWithLowestSpending' => $devisRepository->findCustomerWithLowestTotalOrdersAndHisTotalSpending($user),
-            'totalBalance' => $devisRepository->findAmountInvoicePaid($user),
+            'devis' => $devisRepository->findBy(['society' => $society]),
+            'customers' => $devisRepository->findAllCustomerWithOrdersAndTotalDuePrice($society),
+            'products' => $devisProductRepository->findAllOrderProductBySociety($society),
+            'nameMostSellProduct' => $devisProductRepository->findMostSoldProductBySociety($society),
+            'nameLessSellProduct' => $devisProductRepository->findLessSoldProductBySociety($society),
+            'customerWithHighestSpending' => $devisRepository->findCustomerWithHighestTotalOrdersAndHisTotalSpending($society),
+            'customerWithLowestSpending' => $devisRepository->findCustomerWithLowestTotalOrdersAndHisTotalSpending($society),
+            'totalBalance' => $devisRepository->findAmountInvoicePaid($society),
             'totalPriceByMonth' => $totalPriceByMonth,
         ]);
     }

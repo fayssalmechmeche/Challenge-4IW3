@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Customer;
+use App\Entity\Society;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,7 +22,7 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
-    public function findNewCustomersForCurrentMonth(\App\Entity\User $user)
+    public function findNewCustomersForCurrentMonth(Society $society)
     {
         $startDate = new \DateTime('first day of this month');
         $endDate = new \DateTime('last day of this month');
@@ -29,16 +30,16 @@ class CustomerRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as totalCustomers')
             ->andWhere('c.createdAt BETWEEN :startDate AND :endDate')
-            ->andWhere('c.user = :user')
+            ->andWhere('c.society = :society')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
         return $result['totalCustomers'] ? $result['totalCustomers'] : 0;
     }
 
-    public function findNewCustomersForPreviousMonth(\App\Entity\User $user)
+    public function findNewCustomersForPreviousMonth(Society $society)
     {
         $startDate = new \DateTime('first day of last month');
         $endDate = new \DateTime('last day of last month');
@@ -46,10 +47,10 @@ class CustomerRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as totalCustomers')
             ->andWhere('c.createdAt BETWEEN :startDate AND :endDate')
-            ->andWhere('c.user = :user')
+            ->andWhere('c.society = :society')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->setParameter('user', $user)
+            ->setParameter('society', $society)
             ->getQuery()
             ->getOneOrNullResult();
 
