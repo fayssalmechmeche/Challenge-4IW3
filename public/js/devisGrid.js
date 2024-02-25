@@ -5,15 +5,12 @@ document.addEventListener("DOMContentLoaded", function () {
       then: (data) =>
         data.map((devis) => [
           devis.customer,
-          devis.totalPrice.toLocaleString("fr-FR", {
-            style: "currency",
-            currency: "EUR",
-          }),
+          devis.devisNumber,
           devis.totalDuePrice.toLocaleString("fr-FR", {
             style: "currency",
             currency: "EUR",
           }),
-          devis.paymentStatus,
+            getStatusLabel(devis.paymentStatus),
           devis.createdAt ? new Date(devis.createdAt).toLocaleDateString() : "",
           gridjs.html(`
                 <div class="w-full mx-auto flex justify-center items-center gap-2">
@@ -50,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         name: 'Client',
         
       },
-      "Prix Total",
+      "Numéro du devis",
       "Total Dû",
       "Statut",
       "Créé Le",
@@ -98,3 +95,18 @@ document.addEventListener("DOMContentLoaded", function () {
       );
   });
 });
+
+console.log('est-ce que ça marche sdfsdfsd?')
+
+function getStatusLabel(paymentStatus) {
+    switch (paymentStatus) {
+        case "PAID":
+            return "Payé";
+        case "DELAYED":
+            return "En retard";
+        case "PENDING":
+            return "En attente";
+        default:
+            return paymentStatus;
+    }
+}

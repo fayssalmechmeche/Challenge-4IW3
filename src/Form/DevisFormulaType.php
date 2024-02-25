@@ -16,14 +16,14 @@ class DevisFormulaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $user = $options['user'];
+        $society = $options['society'];
         $builder
             ->add('formula', EntityType::class, [
                 'class' => Formula::class,
-                'query_builder' => function (FormulaRepository $fr) use ($user) {
+                'query_builder' => function (FormulaRepository $fr) use ($society) {
                     return $fr->createQueryBuilder('f')
-                        ->where('f.user = :user')
-                        ->setParameter('user', $user);
+                        ->where('f.society = :society')
+                        ->setParameter('society', $society);
                 },
                 'attr' => ['hidden' => true],
                 'choice_label' => 'name',
@@ -43,7 +43,7 @@ class DevisFormulaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DevisFormula::class,
-            'user' => null,
+            'society' => null,
         ]);
     }
 }

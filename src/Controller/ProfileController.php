@@ -73,7 +73,6 @@ class ProfileController extends AbstractController
             $societyData = $societyForm->getData();
             $errors = [];
 
-
             if (empty($societyData->getName())) {
                 $errors[] = "Le nom de la société ne peut pas être vide.";
             } elseif (strlen($societyData->getName()) < 2 || strlen($societyData->getName()) > 100) {

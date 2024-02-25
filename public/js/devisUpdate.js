@@ -328,7 +328,7 @@ function handleDevisFormSubmit(event) {
     devisForm.appendChild(hiddenJsonInput);
     console.log("ici", devisForm);
     // Soumettez le formulaire
-    // devisForm.submit();
+     devisForm.submit();
 }
 
 function initDevisGrid(existingDevisItems) {

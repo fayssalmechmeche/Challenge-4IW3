@@ -24,9 +24,7 @@ class Product
     #[ORM\Column(type: "string")]
     private ?string $productCategory = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Society $society = null;
+
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductFormula::class, orphanRemoval: true)]
     private Collection $productFormulas;
@@ -34,25 +32,19 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: DevisProduct::class)]
     private Collection $devisProducts;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'products')]
+    #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    private ?Society $society;
 
     /**
-     * @return User|null
+     * @return Society|null
      */
-    public function getUser(): ?User
+    public function getSociety(): ?Society
     {
-        return $this->user;
+        return $this->society;
     }
 
-    /**
-     * @param User|null $user
-     */
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
-    }
+
 
     public function __construct()
     {
@@ -101,10 +93,7 @@ class Product
         return $this;
     }
 
-    public function getSociety(): ?Society
-    {
-        return $this->society;
-    }
+
 
     public function setSociety(?Society $society): static
     {

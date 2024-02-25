@@ -77,27 +77,30 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisFormula::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $devisFormulas;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
+    #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    private ?Society $society;
 
     #[ORM\Column(type: "float", nullable: true)]
     private ?float $depositPercentage = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateValidite = null;
+
     /**
-     * @return User|null
+     * @return Society|null
      */
-    public function getUser(): ?User
+    public function getSociety(): ?Society
     {
-        return $this->user;
+        return $this->society;
     }
 
     /**
-     * @param User|null $user
+     * @param Society|null $society
      */
-    public function setUser(?User $user): void
+    public function setSociety(?Society $society): void
     {
-        $this->user = $user;
+        $this->society = $society;
     }
 
     public function __construct()
@@ -211,6 +214,26 @@ class Devis
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dateValidite
+     */
+    public function getDateValidite(): ?\DateTimeInterface
+    {
+        return $this->dateValidite;
+    }
+
+    /**
+     * Set the value of dateValidite
+     *
+     * @return  self
+     */
+    public function setDateValidite(?\DateTimeInterface $dateValidite): self
+    {
+        $this->dateValidite = $dateValidite;
 
         return $this;
     }
@@ -385,4 +408,17 @@ class Devis
 
         return $this;
     }
+
+    /**
+     * Met à jour le statut de paiement à DELAYED si la date actuelle dépasse la date de validité.
+     */
+    public function updatePaymentStatusBasedOnValidity(): void
+    {
+        $today = new \DateTime(); // Obtient la date d'aujourd'hui
+        // Vérifie si la date de validité est dépassée et si le statut de paiement n'est ni DELAYED ni PAYED
+        if ($this->dateValidite < $today && $this->paymentStatus !== PaymentStatus::Paid) {
+            $this->paymentStatus = PaymentStatus::Delayed;
+        }
+    }
+
 }
