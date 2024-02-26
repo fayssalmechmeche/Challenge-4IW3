@@ -91,26 +91,10 @@
     <div class="w-4/5 h-full mx-auto">
       <h2 class="text-3xl sm:text-5xl md:text-6xl font-bold text-black my-10 dark:text-white">Une plateforme révolutionnaire</h2>
       <div class="w-full flex-wrap flex justify-around items-center gap-8">
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon1.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Un gain de temps</h3>
-          <p class="text-xl font-normal dark:text-white">Bénéficiez d'un gain de temps notable grâce à notre système automatisé qui simplifie la création de factures et devis, libérant du temps pour vos activités principales.</p>
-        </div>
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon2.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Une organisation infaillible</h3>
-          <p class="text-xl font-normal dark:text-white">Choisissez une gestion transparente et structurée de vos factures et devis, assurant une clarté et une organisations optimales pour toutes vos transactions.</p>
-        </div>
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon3.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Un professionnalisme renforcé</h3>
-          <p class="text-xl font-normal dark:text-white">Renforcez votre professionnalisme avec des factures et devis élégants et personnalisés, reflétant l'excellence de votre marque et de vos services.</p>
-        </div>
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon4.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Un suivi de vos performances</h3>
-          <p class="text-xl font-normal dark:text-white">Suivez vos performances de près avec des analyses détaillées de vos facturations et devis, facilitant une gestion plus précise et des décisions éclairées.</p>
-        </div>
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon1.svg', title: 'Un gain de temps', description: "Bénéficiez d'un gain de temps notable grâce à notre système automatisé qui simplifie la création de factures et devis, libérant du temps pour vos activités principales." } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon2.svg', title: 'Une organisation infaillible', description: 'Choisissez une gestion transparente et structurée de vos factures et devis, assurant une clarté et une organisations optimales pour toutes vos transactions.' } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon3.svg', title: 'Un professionnalisme renforcé', description: "Renforcez votre professionnalisme avec des factures et devis élégants et personnalisés, reflétant l'excellence de votre marque et de vos services." } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon4.svg', title: 'Un suivi de vos performances', description: 'Suivez vos performances de près avec des analyses détaillées de vos facturations et devis, facilitant une gestion plus précise et des décisions éclairées.' } %}
       </div>
       <button class="border border-solid border-nav-btn text-nav-btn px-10 py-3 rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-10"><a class="text-decoration-none text-2xl" href="http://">En savoir plus ></a></button>
     </div>
@@ -156,7 +140,7 @@
     </div>
     <p class="text-center dark:text-white">2022 @TestTest. All rights reserved. -- Privacy Policy - Terms of Services</p>
   </footer>
-  {% include 'components/dark_mode.html.twig'%}
+  {% include 'components/dark_mode.html.twig' %}
 {% endblock %}
 {% block javascripts %}
   {{ encore_entry_script_tags('app') }}
