@@ -1,7 +1,23 @@
 let gridUser = null;
 document.addEventListener("DOMContentLoaded", function () {
   gridUser = new gridjs.Grid({
-    columns: ["Prénom", "Nom", "Rôles", "Status", "Actions"],
+    columns: [
+      {
+        name: "Prénom",
+      },
+      {
+        name: "Nom",
+      },
+      {
+        name: "Rôles",
+      },
+      {
+        name: "Status",
+      },
+      {
+        name: "Actions",
+      },
+    ],
     server: {
       url: "/user/api",
       then: (data) =>
@@ -13,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
               ? "Comptable"
               : user.roles.includes("ROLE_SOCIETY")
               ? "Entreprise"
+              : user.roles.includes("ROLE_HEAD")
+              ? "Chef d'entreprise"
               : "Utilisateur",
             user.status ? "Validé" : "Invalidé",
             gridjs.html(`

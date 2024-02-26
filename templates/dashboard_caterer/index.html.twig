@@ -1,59 +1,96 @@
 {% extends 'base_caterer.html.twig' %}
 {% block title %}
-  Dahsboard ^^
+	Dahsboard ^^
 {% endblock %}
 
 {% block content %}
-  <h1 class="px-5 text-5xl mt-2 mb-10 dark:text-white">Mon dashboard</h1>
+	<h1 class="px-5 text-5xl mt-2 mb-10 dark:text-white">Mon dashboard</h1>
 
-  <!-- first block -->
-  <div class="px-5 md:w-ds-block mx-auto md:h-72 flex md:justify-between md:items-center md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
-    <!-- sold block -->
-    <div class="relative px-10 w-550px h-72 flex justify-between items-center bg-white rounded-3xl shadow-xl">
-      <div class="flex flex-col items-start gap-3">
-        <h2 class="text-3xl font-bold">Solde total</h2>
-        <span id="last-deal" class="text-2xl text-[#4FD18B] font-bold">+ $28,55</span>
-        <p class="text-grey-p text-base">Dernière transaction</p>
-        <div class="flex justify-start items-center">
-          <button class="px-8 py-3 bg-progress-bar-1 text-white text-sm font-bold rounded-btn-rounded tracking-wider uppercase hover:bg-white hover:text-progress-bar-1 hover:border-progress-bar-1 border border-solid border-progress-bar-1 transition-all duration-300 ease-in-out">Détails</button>
-          <button class="px-8 py-3 ml-1 border border-solid border-progress-bar-1 text-progress-bar-1 text-sm font-bold rounded-btn-rounded tracking-wider uppercase hover:bg-progress-bar-1 hover:text-white transition-all duration-300 ease-in-out">Modifier</button>
-        </div>
-      </div>
-      <div class="flex flex-col items-center z-10">
-        <h2 class="text-4xl font-bold text-white">200.58€</h2>
-        <p class="text-grey-p text-base tracking-widest">Votre portefeuille</p>
-      </div>
-      <!-- background -->
-      <div class="bg-progress-bar-1 h-full w-56 rounded-s-155px rounded-e-3xl absolute top-0 right-0"></div>
-    </div>
-    <!-- Chart Block -->
-    <div class="md:ml-10 relative px-10 w-550px h-72 flex justify-between items-center bg-white rounded-3xl shadow-xl"></div>
-  </div>
-  <!-- second block -->
-  <div class="px-5 md:w-ds-block mx-auto md:h-36 flex md:justify-between md:items-center my-10 md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
-    <!-- card-info -->
-    {% include 'components/card-info.twig' with { description: 'Revenu total', amount: '$ 18532.52', trend: { background: 'bg-bg-light-green', color: 'text-light-green', icon: 'trending_up', prefix: '+', percentage: '15%' } } %}
-    <!-- card-info -->
-    {% include 'components/card-info.twig' with { description: 'Total des économies', amount: '$ 137.43', trend: { background: 'bg-bg-light-red', color: 'text-light-red', icon: 'trending_down', prefix: '-', percentage: '8%' } } %}
-    <!-- card-info -->
-    {% include 'components/card-info.twig' with { description: 'Dépense totale', amount: '$ 5000.00', trend: { background: 'bg-bg-light-green', color: 'text-light-green', icon: 'trending_up', prefix: '+', percentage: '15%' } } %}
-    <!-- card-info -->
-    {% include 'components/card-info.twig' with { description: 'Dépense totale', amount: '$ 5000.00', trend: { background: 'bg-bg-light-green', color: 'text-light-green', icon: 'trending_up', prefix: '+', percentage: '15%' } } %}
-  </div>
-  <!-- third block -->
-  <div class="px-5 md:w-ds-block mx-auto md:h-96 flex md:justify-between md:items-center mb-12 md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
-    <!-- grid.js -->
-    <div class="w-550px h-96 flex justify-between items-start rounded-3xl shadow-xl overflow-scroll" id="dashboard-grid"></div>
-    <!-- card-blue -->
-    <div class="relative md:ml-10 w-550px h-96 flex justify-center items-center rounded-3xl shadow-xl">
-      <img class="absolute top-0 bottom-0 h-full object-cover rounded-3xl" src="{{ asset('images/dashboard/carte-bg.svg') }}" alt="carte blue image" />
-      <img class="w-500px flex justify-between items-center rounded-3xl shadow-xl z-30 backdrop-blur-3xl" src="{{ asset('images/dashboard/carte-front.svg') }}" alt="carte blue image" />
-    </div>
-  </div>
+	<!-- first block -->
+	<div
+		class="px-5 md:w-ds-block mx-auto md:h-72 flex md:justify-between md:items-center md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
+		<!-- sold block -->
+		<div class="relative px-10 w-550px h-72 flex justify-between items-center bg-white rounded-3xl shadow-xl">
+			<div class="flex flex-col items-start gap-3">
+				<h2 class="text-3xl font-bold">Solde total</h2>
+				<span id="last-deal" class="text-2xl text-[#4FD18B] font-bold">
+					{{ lastInvoicePaid ? '+' ~ lastInvoicePaid|number_format(2, ',', '.') ~ '€' : 'Aucune' }}
+				</span>
+				<p class="text-grey-p text-base">Dernière transaction</p>
+				<div class="flex justify-start items-center">
+					<button class="px-8 py-3 bg-progress-bar-1 text-white text-sm font-bold rounded-btn-rounded tracking-wider uppercase hover:bg-white hover:text-progress-bar-1 hover:border-progress-bar-1 border border-solid border-progress-bar-1 transition-all duration-300 ease-in-out">
+						Dépôt
+					</button>
+					<button class="px-8 py-3 ml-1 border border-solid border-progress-bar-1 text-progress-bar-1 text-sm font-bold rounded-btn-rounded tracking-wider uppercase hover:bg-progress-bar-1 hover:text-white transition-all duration-300 ease-in-out">
+						Retrait
+					</button>
+				</div>
+			</div>
+			<div class="flex flex-col items-center z-10">
+				<h2 class="text-4xl font-bold text-white">{{totalBalance.totalReceived|number_format(2, ',', '.')}}€</h2>
+				<p class="text-grey-p text-base tracking-widest">Votre portefeuille</p>
+			</div>
+			<!-- background -->
+			<div class="bg-progress-bar-1 h-full w-56 rounded-s-155px rounded-e-3xl absolute top-0 right-0"></div>
+		</div>
+		<!-- Chart Block -->
+		<div class="md:ml-10 relative px-10 w-550px h-72 flex flex-col justify-center items-center bg-white rounded-3xl shadow-xl">
+			<p class="text-grey-p text-base">Montant devis par mois (en €) :</p>
+			<canvas id="chartCA">
+				<p>Chart CA</p>
+			</canvas>
+		</div>
+	</div>
+	<!-- second block -->
+	<div
+		class="px-5 md:w-ds-block mx-auto md:h-36 flex md:justify-between md:items-center my-10 md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
+		<!-- card-info -->
+		{% include 'components/card-info.twig' with {
+		description: 'Prévision pour ce mois :',
+		amount:'+ ' ~ amountDevisMonth ~ ' €',
+		percentage: differenceLastAndCurrentMonthDevis|number_format(0)
+		
+	} %}
+		<!-- card-info -->
+		{% include 'components/card-info.twig' with {
+    	description: 'Nouveaux acquis :',
+    	amount: '+ ' ~ NbNewCustomersMonth ~ ' clients',
+    	percentage: differenceLastAndCurrentMonthCustomers
+    	
+	} %}
+		<!-- card-info -->
+		{% include 'components/card-info.twig' with {
+		description: 'En attente :',
+		amount: nbDevisPending.totalPending  ~ ' devis',
+		redirectUrl: 'app_devis_index'
+	} %}
+		<!-- card-info -->
+		{% include 'components/card-info.twig' with {
+		description: 'En attente :',
+		amount: nbInvoicePending.totalPending ~ ' factures',
+		redirectUrl: 'app_invoice_index'
+	} %}
+	</div>
+	<!-- third block -->
+	<div
+		class="px-5 md:w-ds-block mx-auto md:h-96 flex md:justify-between md:items-center mb-12 md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
+		<!-- grid.js -->
+		<div class="w-550px h-96 flex justify-between items-start rounded-3xl shadow-xl overflow-scroll" id="dashboard-grid"></div>
+		<!-- card-blue -->
+		<div class="relative md:ml-10 w-550px h-96 flex justify-center items-center rounded-3xl shadow-xl">
+			<img class="absolute top-0 bottom-0 h-full object-cover rounded-3xl" src="{{ asset('images/dashboard/carte-bg.svg') }}" alt="carte blue image"/>
+			<img class="w-500px flex justify-between items-center rounded-3xl shadow-xl z-30 backdrop-blur-3xl" src="{{ asset('images/dashboard/carte-front.svg') }}" alt="carte blue image"/>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-  {{ parent() }}
-  <script src="{{ asset('js/dashboardGrid.js') }}"></script>
-  <script src="{{ asset('js/dashboard.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('js/dashboardGrid.js') }}"></script>
+	<script src="{{ asset('js/dashboard.js') }}"></script>
+	<script>
+		let labelChartCA = [{% for month, totalPrice in totalPriceByMonth %}'{{ month }}',{% endfor %}];
+let dataChartCA = [{% for totalPrice in totalPriceByMonth %}{{ totalPrice }},{% endfor %}];
+	</script>
+	<script src="{{ asset('js/accountant.js') }}"></.script>
 {% endblock %}

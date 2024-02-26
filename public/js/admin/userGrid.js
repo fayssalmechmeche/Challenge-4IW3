@@ -1,7 +1,23 @@
 let gridUser = null;
 document.addEventListener("DOMContentLoaded", function () {
   gridUser = new gridjs.Grid({
-    columns: ["Prénom", "Nom", "Rôles", "Status", "Actions"],
+    columns: [
+      {
+        name: "Prénom",
+      },
+      {
+        name: "Nom",
+      },
+      {
+        name: "Rôles",
+      },
+      {
+        name: "Status",
+      },
+      {
+        name: "Actions",
+      },
+    ],
     server: {
       url: "/admin/user/api",
       then: (data) =>
@@ -13,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
               ? "Comptable"
               : user.roles.includes("ROLE_SOCIETY")
               ? "Entreprise"
+              : user.roles.includes("ROLE_HEAD")
+              ? "Chef d'entreprise"
               : "Utilisateur",
             user.status ? "Validé" : "Invalidé",
             gridjs.html(`
@@ -21,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
         onclick="openUserShowModal(${user.id})"
       >
-        Voir l'Utilisateur
+        Consulter
       </button>
       <button
         class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
@@ -50,7 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
     language: {
       search: {
         placeholder: "Rechercher...",
+        placeholder: "Rechercher...",
       },
+      noRecordsFound: "Aucun résultat",
+      loading: "Chargement...",
+      error: "Une erreur est survenue",
       noRecordsFound: "Aucun résultat",
       loading: "Chargement...",
       error: "Une erreur est survenue",
@@ -61,6 +83,19 @@ document.addEventListener("DOMContentLoaded", function () {
         results: () => "Résultats",
         of: "de",
         to: "à",
+      },
+    },
+    style: {
+      table: {
+        border: "none",
+      },
+      th: {
+        "background-color": "#d4d4d4",
+        color: "#000",
+        "text-align": "center",
+      },
+      td: {
+        "text-align": "center",
       },
     },
     sort: true,
@@ -90,7 +125,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   waitForGridToRender().then(() => {
     // Le tableau est maintenant rendu, appliquez vos modifications ici
-    document.querySelector("#tabUserGridJs .gridjs-wrapper").classList.add("dark:border-t-0");
+    document
+      .querySelector("#tabUserGridJs .gridjs-wrapper")
+      .classList.add("dark:border-t-0");
     document
       .querySelector("#tabUserGridJs .gridjs-search-input")
       .classList.add(
@@ -104,6 +141,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadGridUser() {
+  gridUser
+    .updateConfig({
+      // search: true,
+      pagination: {
+        limit: 5,
+      },
+    })
+    .forceRender();
   gridUser
     .updateConfig({
       // search: true,
