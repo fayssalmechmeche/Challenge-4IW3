@@ -57,3 +57,5 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /migrations/
+
+/public/images/society/

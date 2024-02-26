@@ -42,6 +42,9 @@ class Society
     #[ORM\OneToMany(mappedBy: 'society', targetEntity: Product::class)]
     private Collection $devis;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logo = null;
+
 
     public function __construct()
     {
@@ -213,6 +216,18 @@ class Society
     public function setStripeId(?string $stripeId): static
     {
         $this->stripeId = $stripeId;
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): static
+    {
+        $this->logo = $logo;
 
         return $this;
     }
