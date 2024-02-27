@@ -21,11 +21,6 @@ class Product
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\Column(type: "string")]
-    private ?string $productCategory = null;
-
-
-
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductFormula::class, orphanRemoval: true)]
     private Collection $productFormulas;
 
@@ -35,6 +30,9 @@ class Product
     #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Society $society;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $category = null;
 
     /**
      * @return Society|null
@@ -80,19 +78,6 @@ class Product
 
         return $this;
     }
-
-    public function getProductCategory(): ?string
-    {
-        return $this->productCategory;
-    }
-
-    public function setProductCategory(?string $productCategory): self
-    {
-        $this->productCategory = $productCategory;
-
-        return $this;
-    }
-
 
 
     public function setSociety(?Society $society): static
@@ -158,6 +143,18 @@ class Product
                 $devisProduct->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

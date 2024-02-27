@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Formula;
 use App\Form\ProductType;
@@ -49,11 +50,12 @@ class ProductController extends AbstractController
 
         $data = [];
         foreach ($products as $product) {
+            $categoryName = $product->getCategory() ? $product->getCategory()->getName() : 'Aucune';
             $data[] = [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
-                'productCategory' => $product->getProductCategory(),
+                'category' => $categoryName,
             ];
         }
 
@@ -64,8 +66,10 @@ class ProductController extends AbstractController
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getSociety();
+
         $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, ['society' => $society]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,7 +78,7 @@ class ProductController extends AbstractController
             $product->setSociety($this->getSociety());
             $entityManager->persist($product);
             $entityManager->flush();
-            $this->addFlash('success', 'Le nouveau client a été créé avec succès.');
+            $this->addFlash('success', 'Le nouveau produit a été créé avec succès.');
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }elseif ($form->isSubmitted() && !$form->isValid()) {
             // Nouvelle condition pour gérer les soumissions de formulaire non valides
@@ -103,7 +107,8 @@ class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ProductType::class, $product);
+        $society = $this->getSociety();
+        $form = $this->createForm(ProductType::class, $product, ['society' => $society]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

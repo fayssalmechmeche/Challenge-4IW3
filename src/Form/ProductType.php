@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Society;
+use App\Repository\CategoryRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,6 +19,7 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $society = $options['society'];
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom du produit',
@@ -39,12 +42,16 @@ class ProductType extends AbstractType
                     'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
             ])
-            ->add('productCategory', ChoiceType::class, [
-                'choices' => [
-                    'Entrée' => 'entrée',
-                    'Plat' => 'plat',
-                    'Dessert' => 'dessert',
-                ],
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'query_builder' => function (CategoryRepository $cr) use ($society) {
+                    return $cr->createQueryBuilder('c')
+                        ->where('c.society = :society')
+                        ->setParameter('society', $society);
+                },
+                'placeholder' => 'Aucune catégorie',
+                'required' => false,
                 'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
@@ -59,6 +66,7 @@ class ProductType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
+            'society' => null,
         ]);
     }
 }

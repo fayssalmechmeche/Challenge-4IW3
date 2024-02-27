@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Category{% endblock %}
+{% block title %}Créer une Catégorie{% endblock %}
 
 {% block body %}
-    <h1>Create new Category</h1>
+    {% set modal_id = 'newCategoryModalId' %}
+	{% set modal_content_id = 'newCategoryModalContentId' %}
 
-    {{ include('category/_form.html.twig') }}
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
+	<!-- Close Button -->
+	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('newCategoryModalId', 'newCategoryModalContentId')">
+		Fermer
+	</button>
+
+	<!-- Contenu de notre modal ici  -->
+	<h2 class="text-3xl mb-5 dark:text-white">Créer une nouvelle Catégorie</h2>
+
+	{{ include('category/_form.html.twig') }}
 {% endblock %}
