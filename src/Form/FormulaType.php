@@ -17,12 +17,13 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class FormulaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $user = $options['user'];
+        $society = $options['society'];
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la formule',
@@ -42,10 +43,10 @@ class FormulaType extends AbstractType
                 'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'mapped' => false,
-                'query_builder' => function (ProductRepository $pr) use ($user) {
+                'query_builder' => function (ProductRepository $pr) use ($society) {
                     return $pr->createQueryBuilder('p')
-                        ->where('p.user = :user')
-                        ->setParameter('user', $user);
+                        ->where('p.society = :society')
+                        ->setParameter('society', $society);
                 },
                 'choice_attr' => function (Product $product) {
                     return ['data-price' => $product->getPrice()];
@@ -62,7 +63,7 @@ class FormulaType extends AbstractType
                 'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [
-                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
+                    'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form hidden'
                 ],
             ])
             ->add('productFormulasData', CollectionType::class, [
@@ -81,6 +82,11 @@ class FormulaType extends AbstractType
                     'id' => 'formula_price',
                     'class' => 'rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ Prix de la formule ne peut pas être vide.',
+                    ]),
+                ],
             ])
             ->add('adjustPrice', CheckboxType::class, [
                 'label' => 'Ajuster le prix',
@@ -96,7 +102,7 @@ class FormulaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Formula::class,
-            'user' => null,
+            'society' => null,
         ]);
     }
 }

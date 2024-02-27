@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\DevisProduct;
+use App\Entity\Society;
 use App\Repository\ProductRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +17,7 @@ class DevisProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $user = $options['user'];
+        $society = $options['society'];
         $builder
             ->add('product', EntityType::class, [
                 'class' => Product::class,
@@ -26,10 +27,10 @@ class DevisProductType extends AbstractType
                 'choice_attr' => function($product, $key, $value) {
                     return ['data-price' => 'test'];
                 },
-                'query_builder' => function (ProductRepository $pr) use ($user) {
+                'query_builder' => function (ProductRepository $pr) use ($society) {
                     return $pr->createQueryBuilder('p')
-                        ->where('p.user = :user')
-                        ->setParameter('user', $user);
+                        ->where('p.society = :society')
+                        ->setParameter('society', $society);
                 },
 
             ])
@@ -47,7 +48,7 @@ class DevisProductType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DevisProduct::class,
-            'user' => null,
+            'society' => null,
         ]);
     }
 }

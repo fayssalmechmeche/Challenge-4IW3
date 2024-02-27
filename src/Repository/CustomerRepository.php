@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Customer;
+use App\Entity\Society;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,41 @@ class CustomerRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);
+    }
+
+    public function findNewCustomersForCurrentMonth(Society $society)
+    {
+        $startDate = new \DateTime('first day of this month');
+        $endDate = new \DateTime('last day of this month');
+
+        $result = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as totalCustomers')
+            ->andWhere('c.createdAt BETWEEN :startDate AND :endDate')
+            ->andWhere('c.society = :society')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('society', $society)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $result['totalCustomers'] ? $result['totalCustomers'] : 0;
+    }
+
+    public function findNewCustomersForPreviousMonth(Society $society)
+    {
+        $startDate = new \DateTime('first day of last month');
+        $endDate = new \DateTime('last day of last month');
+
+        $result = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as totalCustomers')
+            ->andWhere('c.createdAt BETWEEN :startDate AND :endDate')
+            ->andWhere('c.society = :society')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('society', $society)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result['totalCustomers'] ? $result['totalCustomers'] : 0;
     }
 
 //    /**

@@ -10,11 +10,7 @@
 		<!-- Conteneur pour le tableau Grid.js -->
 		<div id="product-table"></div>
 	</div>
-	{% for message in app.flashes('error') %}
-		<div class="alert alert-danger">
-			{{ message }}
-		</div>
-	{% endfor %}
+
 
 	<!-- Modal pour la création d'un nouveau produit -->
 	{% set dynamicContent %}
@@ -50,6 +46,7 @@
 	<script>
 		var csrfToken = '{{ csrf_token('delete_product') }}';
 	</script>
+	<script src="{{ asset('js/addFlash.js') }}"></script>
 	<script src="{{ asset('js/productGrid.js') }}"></script>
 	<script src="{{ asset('js/product.js') }}"></script>
 

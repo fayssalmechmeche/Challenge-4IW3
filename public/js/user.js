@@ -137,6 +137,10 @@ function editUser(id) {
   })
     .then((response) => response.json())
     .then((responseData) => {
+      addFlash(
+        responseData.success ? "success" : "danger",
+        responseData.message
+      );
       loadGridUser();
     })
     .catch((error) => {

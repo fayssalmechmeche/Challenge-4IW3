@@ -207,12 +207,16 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email');
         }
         $token = $this->resetPasswordRequestRepository->findOneBy(['user' => $user]);
+        if ($token) {
+            $this->entityManager->remove($token);
+            $this->entityManager->flush();
+        }
 
-        $token ?  $resetToken = $token->getHashedToken() : $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+        $resetToken = $this->resetPasswordHelper->generateResetToken($user);
 
         if ($isReset === true) {
             $link = $this->generateUrl('app_reset_password', [
-                'token' => $token ? $resetToken = $token->getHashedToken() : $resetToken->getToken(),
+                'token' => $resetToken->getToken()
             ], UrlGeneratorInterface::ABSOLUTE_URL);
             $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_FORGET_PASSWORD, [
                 'confirmation_link' => $link,
@@ -221,7 +225,7 @@ class ResetPasswordController extends AbstractController
             ]);
         } else {
             $link = $this->generateUrl('app_confirm_account', [
-                'token' => $token ? $resetToken = $token->getHashedToken() : $resetToken->getToken(),
+                'token' => $resetToken->getToken(),
             ], UrlGeneratorInterface::ABSOLUTE_URL);
             $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_REGISTER, [
                 'confirmation_link' => $link,

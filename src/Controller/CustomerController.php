@@ -19,8 +19,8 @@ class CustomerController extends AbstractController
     #[Route('/', name: 'app_customer_index', methods: ['GET', 'POST'])]
     public function index(CustomerRepository $customerRepository): Response
     {
-        $user = $this->getUser();
-        $customers = $customerRepository->findBy(['user' => $user]);
+        $society = $this->getSociety();
+        $customers = $customerRepository->findBy(['society' => $society]);
         return $this->render('customer/index.html.twig', [
             'customers' => $customers,
         ]);
@@ -29,10 +29,10 @@ class CustomerController extends AbstractController
     #[Route('/api', name: 'api_customer_index', methods: ['GET'])]
     public function apiIndex(CustomerRepository $customerRepository): Response
     {
-        $user = $this->getUser();
+        $society = $this->getSociety();
 
-        if ($user) {
-            $customers = $customerRepository->findBy(['user' => $user]);
+        if ($society) {
+            $customers = $customerRepository->findBy(['society' => $society]);
         } else {
             $customers = [];
         }
@@ -95,15 +95,16 @@ class CustomerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->extracted($customer);
-
-            $customer->setUser($this->getUser());
-
+            $customer->setSociety($this->getSociety());
             $entityManager->persist($customer);
             $entityManager->flush();
 
             $this->addFlash('success', 'Le nouveau client a été créé avec succès.');
-
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            // Nouvelle condition pour gérer les soumissions de formulaire non valides
+            $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+            return $this->redirectToRoute('app_customer_index');
         }
 
         return $this->render('customer/new.html.twig', [
@@ -131,7 +132,12 @@ class CustomerController extends AbstractController
             $this->extracted($customer);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le client a été modifié avec succès.');
             return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        }elseif ($form->isSubmitted() && !$form->isValid()) {
+
+            $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+            return $this->redirectToRoute('app_customer_index');
         }
 
         return $this->render('customer/edit.html.twig', [
@@ -154,7 +160,7 @@ class CustomerController extends AbstractController
             $entityManager->remove($customer);
             $entityManager->flush();
         }
-
+        $this->addFlash('success', 'Le client a bien été supprimé.');
         return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -179,5 +185,15 @@ class CustomerController extends AbstractController
         $customer->setStreetName($this->capitalizeFirstLetter($customer->getStreetName()));
         $customer->setCity($this->capitalizeFirstLetter($customer->getCity()));
         $customer->setEmail(strtolower($customer->getEmail()));
+    }
+
+    public function getSociety()
+    {
+        // Exemple de récupération de l'utilisateur courant et de sa société
+        $user = $this->getUser(); // Supposons que `getUser()` retourne l'utilisateur courant
+        if ($user) {
+            return $user->getSociety(); // Supposons que l'utilisateur a une méthode `getSociety()`
+        }
+        return null; // ou gérer autrement si l'utilisateur n'est pas connecté ou n'a pas de société
     }
 }

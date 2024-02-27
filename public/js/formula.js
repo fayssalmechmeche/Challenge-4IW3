@@ -101,6 +101,7 @@ function openFormulaCreateModal() {
         initializeProductGridCreate();
       }
       toggleModal("newModalId", "newModalModalContentId");
+      sheeesh();
 
       // $('#formulaCreateModal').on('shown.bs.modal', function() {
       //     if (!productGridInstance) {
@@ -472,3 +473,56 @@ function addClassToElement() {
     formulaDiv.classList.add("flex", "flex-wrap", "gap-y-5", "gap-x-10");
   }
 }
+
+function sheeesh() {
+  const form = document.querySelector('form.w-full');
+  document.getElementById("save-button").addEventListener("click", function(event) {
+    event.preventDefault(); // Empêche le comportement par défaut du bouton (envoi du formulaire)
+    // Ajoutez ici votre logique JavaScript supplémentaire si nécessaire
+    let isValid = true;
+    let messages = [];
+
+    // Récupération des éléments input cachés pour les produits
+    const productInputs = document.querySelectorAll('input[type="hidden"][name^="formula[productFormulas]["][name$="][product]"]');
+
+    let hasProducts = false; // Supposons d'abord qu'aucun produit n'est présent
+
+// Vérifiez si au moins un input caché a une valeur (ID de produit)
+    for (let input of productInputs) {
+      if (input.value) {
+        hasProducts = true;
+        break; // Sortez de la boucle dès qu'un produit est trouvé
+      }
+    }
+
+// Validation de la présence de produits
+    if (!hasProducts) {
+      messages.push('Vous devez mettre des produits dans la formule');
+      isValid = false;
+    }
+
+
+    // Affichage des messages d'erreur ou soumission du formulaire
+    if (!isValid) {
+      messages.forEach(message => {
+        Toastify({
+          text: message,
+          duration: 6000,
+          close: true,
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)",
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+        }).showToast();
+      });
+    } else {
+      console.log('Validation réussie, soumission du formulaire.');
+      form.submit(); // Soumettre le formulaire si tout est valide
+    }
+
+  });
+}
+
+
+
+console.log('script chaffsdfsdfsdfrgé');

@@ -16,10 +16,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/user')]
+#[IsGranted('ROLE_HEAD')]
 class UserController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManagerInterface)
@@ -65,6 +67,27 @@ class UserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
             $data = json_decode($content, true);
+            if (
+                isset($data['admin_user[email]']) && $data['admin_user[email]'] == ""
+                || isset($data['admin_user[name]']) && $data['admin_user[name]'] == ""
+                || isset($data['admin_user[lastName]']) && $data['admin_user[lastName]'] == ""
+                || isset($data['admin_user[society]']) && $data['admin_user[society]'] == ""
+                || isset($data["admin_user[roles][]"]) && $data["admin_user[roles][]"] == ""
+            ) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Tous les champs sont obligatoires"
+                ));
+            }
+
+            if (!isset($data["admin_user[roles][]"]) || $data["admin_user[roles][]"] == "" || empty($data["admin_user[roles][]"]) || !$data["admin_user[roles][]"]) {
+                return new JsonResponse(array(
+                    'code' => 401,
+                    'success' => false,
+                    'message' => "Le rôle est obligatoire"
+                ));
+            }
             if (!$this->isCsrfTokenValid("admin_user", $data['admin_user[_token]'])) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -121,6 +144,27 @@ class UserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
             $data = json_decode($content, true);
+            if (
+                isset($data['admin_user[email]']) && $data['admin_user[email]'] == ""
+                || isset($data['admin_user[name]']) && $data['admin_user[name]'] == ""
+                || isset($data['admin_user[lastName]']) && $data['admin_user[lastName]'] == ""
+                || isset($data['admin_user[society]']) && $data['admin_user[society]'] == ""
+                || isset($data["admin_user[roles][]"]) && $data["admin_user[roles][]"] == ""
+            ) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Tous les champs sont obligatoires"
+                ));
+            }
+
+            if (!isset($data["admin_user[roles][]"]) || $data["admin_user[roles][]"] == "" || empty($data["admin_user[roles][]"]) || !$data["admin_user[roles][]"]) {
+                return new JsonResponse(array(
+                    'code' => 401,
+                    'success' => false,
+                    'message' => "Le rôle est obligatoire"
+                ));
+            }
             if (!$this->isCsrfTokenValid("admin_user", $data['admin_user[_token]'])) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -128,6 +172,7 @@ class UserController extends AbstractController
                     'message' => "Token invalid"
                 ));
             }
+
             $this->_setDataUser($user, $data, true);
             return new JsonResponse(array(
                 'code' => 200,
