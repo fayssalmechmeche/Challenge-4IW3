@@ -6,16 +6,16 @@ use App\Entity\User;
 use App\Entity\Society;
 use App\Security\EmailVerifier;
 use App\Service\MailjetService;
+use const App\Entity\ROLE_HEAD;
 use const App\Entity\ROLE_ADMIN;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use const App\Entity\ROLE_SOCIETY;
+
+use Symfony\Component\Mime\Address;
 use App\Service\Stripe\StripeHelper;
 use App\Service\Stripe\StripeService;
-
-use const App\Entity\ROLE_SOCIETY;
-use Symfony\Component\Mime\Address;
 use const App\Entity\ROLE_ACCOUNTANT;
-use const App\Entity\ROLE_HEAD;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -27,6 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -85,8 +86,22 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $token = uniqid();
-
             $society = new Society();
+
+            $fileName = $form->get('societyForm')->get('logo')->getData();
+            if ($fileName) {
+                $originalFilename = pathinfo($fileName->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $fileName->guessExtension();
+                try {
+                    $fileName->move(
+                        $this->getParameter('society_logo_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', "Une erreur est survenue lors de l'upload de l'image");
+                }
+                $society->setLogo($newFilename);
+            }
             $society->setName($form->get('societyForm')->get('name')->getData());
             $society->setAddress($form->get('societyForm')->get('address')->getData());
             $society->setPhone($form->get('societyForm')->get('phone')->getData());
@@ -117,6 +132,8 @@ class RegistrationController extends AbstractController
             ]);
             $this->addFlash('success', "Nous vous avons envoyé une confirmation d'inscription par email");
             return $this->redirectToRoute('app_login');
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('danger', "Un des champs n'est pas valide dans le formulaire d'inscription");
         }
 
         return $this->render('registration/register.html.twig', [

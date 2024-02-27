@@ -45,6 +45,9 @@ class Society
     #[ORM\OneToMany(mappedBy: 'society', targetEntity: Category::class)]
     private Collection $categories;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logo = null;
+
 
     public function __construct()
     {
@@ -247,6 +250,18 @@ class Society
                 $category->setSociety(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): static
+    {
+        $this->logo = $logo;
 
         return $this;
     }
