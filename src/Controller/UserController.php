@@ -158,6 +158,23 @@ class UserController extends AbstractController
                 ));
             }
 
+
+            $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $data['admin_user[email]']]);
+            if ($isUserExist && $isUserExist->getId() != $user->getId()) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "L'e-mail est déja utilisé"
+                ));
+            }
+            if (ROLE_HEAD === $data["admin_user[roles][]"] || ROLE_ADMIN === $data["admin_user[roles][]"]) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Vous ne pouvez pas attribuer le rôle chef ou admin"
+                ));
+            }
+
             if (!isset($data["admin_user[roles][]"]) || $data["admin_user[roles][]"] == "" || empty($data["admin_user[roles][]"]) || !$data["admin_user[roles][]"]) {
                 return new JsonResponse(array(
                     'code' => 401,
@@ -201,24 +218,9 @@ class UserController extends AbstractController
         $user->setCreatedAt(new \DateTime());
         $user->setSociety($this->getUser()->getSociety());
         $user->setRoles([$roles]);
-
-        $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $email]);
-        if ($isUserExist && $isUserExist->getId() != $user->getId()) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "L'e-mail est déja pris"
-            ));
+        if ($edit) {
+            $user->setUpdatedAt(new \DateTime());
         }
-
-        if (ROLE_HEAD === $roles) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "Vous ne pouvez pas attribuer le rôle chef"
-            ));
-        }
-
         $this->entityManagerInterface->persist($user);
         $this->entityManagerInterface->flush();
     }
