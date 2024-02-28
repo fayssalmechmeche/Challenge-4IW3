@@ -29,10 +29,10 @@
         <div class="flex flex-col xl:hidden justify-center items-center">
           {% if app.user %}
             <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('profile_edit') }}">Compte</a></button>
-			<button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Dashboard</a></button>
+			      <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Dashboard</a></button>
           {% else %}
             <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_register') }}">Inscription</a></button>
-            <button class="border border-solid border-nav-btn text-nav-btn px-9 py-5 rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Connexion</a></button>
+            <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Connexion</a></button>
           {% endif %}
         </div>
       </div>

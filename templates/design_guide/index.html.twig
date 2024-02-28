@@ -168,13 +168,13 @@
               <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Design Guide</a>
               <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
               <div class="flex flex-col xl:hidden justify-center items-center">
-                <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="#">Inscription</a></button>
-                <button class="border border-solid border-nav-btn text-nav-btn px-9 py-5 rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="#">Connexion</a></button>
+               <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_register') }}">Inscription</a></button>
+               <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Connexion</a></button>
               </div>
             </div>
             <div class="hidden xl:flex justify-between items-center">
-              <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="#">Inscription</a></button>
-              <button class="border border-solid border-nav-btn text-nav-btn px-9 py-3 rounded-xl ml-5 hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out"><a class="text-decoration-none" href="#">Connexion</a></button>
+               <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('app_register') }}">Inscription</a></button>
+               <button class="bg-nav-btn text-white px-9 py-3 ml-2 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('app_login') }}">Connexion</a></button>
             </div>
           </nav>
         </div>
@@ -206,12 +206,14 @@
               <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Design Guide</a>
               <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
               <div class="flex flex-col xl:hidden justify-center items-center">
-                <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="#">Mon compte</a></button>
+               <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('profile_edit') }}">Compte</a></button>
+			         <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Dashboard</a></button>
               </div>
             </div>
 
             <div class="hidden xl:flex justify-between items-center">
-              <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="#">Mon compte</a></button>
+              <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('profile_edit') }}">Compte</a></button>
+		          <button class="bg-nav-btn text-white px-9 py-3 ml-2 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('app_login') }}">Dashboard</a></button>
             </div>
           </nav>
         </header>
