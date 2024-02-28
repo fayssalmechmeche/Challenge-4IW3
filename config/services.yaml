@@ -7,6 +7,7 @@ parameters:
     pdf_directory: "%kernel.project_dir%/public/pdf/"
     images_directory: "%kernel.project_dir%/public/images/products"
     formulas_images_directory: "%kernel.project_dir%/public/images/formulas"
+    society_logo_directory: "%kernel.project_dir%/public/images/society"
     mailjet_private: "%env(MAILJET_PRIVATE)%"
     mailjet_public: "%env(MAILJET_PUBLIC)%"
     stripe_secret_key: "%env(STRIPE_SECRET)%"

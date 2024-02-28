@@ -25,7 +25,7 @@ module.exports = {
         "card-grey": "#8A92A6",
         "progress-bar-1": "#3A57E8",
         "progress-bar-2": "#08B1BA",
-        'content-bg': "#EFF1F6",
+        "content-bg": "#EFF1F6",
         "grey-p": "#A1A0BD",
         "light-red": "#D14F4F",
         "bg-light-red": "#F5DCDC",

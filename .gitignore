@@ -57,3 +57,10 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /migrations/
+
+# Ignore le répertoire /public/images/society/
+/public/images/society/*
+
+# Sauf le fichier placeholder.webp
+!/public/images/society/placeholder.webp
+

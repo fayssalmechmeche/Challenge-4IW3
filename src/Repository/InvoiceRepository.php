@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Invoice;
+use App\Entity\Society;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,6 +35,36 @@ class InvoiceRepository extends ServiceEntityRepository
             return "wouf";
         }
         return $lastInvoice ? $lastInvoice->getInvoiceNumber() : null;
+    }
+
+    public function findLastInvoiceAmountForSociety(Society $society): ?string
+    {
+
+        $lastInvoice = $this->createQueryBuilder('i')
+            ->join('i.user', 'u')
+            ->where('u.society = :society')
+            ->andWhere('i.paymentStatus = :status')
+            ->setParameter('status', 'PAID')
+            ->setParameter('society', $society)
+            ->orderBy('i.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $lastInvoice ? $lastInvoice->getTotalDuePrice() : null;
+    }
+
+    public function findAllInvoiceAmountForSociety(Society $society): ?array
+    {
+
+        return $this->createQueryBuilder('i')
+            ->join('i.user', 'u')
+            ->where('u.society = :society')
+            ->andWhere('i.paymentStatus = :status')
+            ->setParameter('status', 'PAID')
+            ->setParameter('society', $society)
+            ->orderBy('i.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     // Vous pouvez ajouter des méthodes personnalisées ici si nécessaire

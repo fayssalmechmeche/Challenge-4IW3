@@ -1,4 +1,4 @@
-let gridUser = null
+let gridUser = null;
 document.addEventListener("DOMContentLoaded", function () {
   let id = document.getElementById("tabUserGridJs").getAttribute("data-id");
   gridUser = new gridjs.Grid({
@@ -7,10 +7,18 @@ document.addEventListener("DOMContentLoaded", function () {
         name: "Prénom",
         formatter: (cell) => gridjs.html(`<b>${cell}</b>`),
       },
-      "Nom",
-      "Rôles",
-      "Status",
-      "Actions",
+      {
+        name: "Nom",
+      },
+      {
+        name: "Rôles",
+      },
+      {
+        name: "Status",
+      },
+      {
+        name: "Actions",
+      },
     ],
     server: {
       url: "/admin/user/api/" + id,
@@ -20,11 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
           user.lastName,
           user.roles.includes("ROLE_ACCOUNTANT")
             ? "Comptable"
-            : user.roles.includes("ROLE_USER")
-              ? "Utilisateur"
-              : user.roles.includes("ROLE_SOCIETY")
-                ? "Entreprise"
-                : user.roles.join(", "),
+            : user.roles.includes("ROLE_SOCIETY")
+            ? "Entreprise"
+            : user.roles.includes("ROLE_HEAD")
+            ? "Chef d'entreprise"
+            : "Utilisateur",
           user.status ? "Validé" : "Invalidé",
           gridjs.html(`
           <div class="w-full mx-auto flex justify-center items-center gap-2">
@@ -83,14 +91,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadGridUser() {
-  gridUser.updateConfig({
-    search: true,
-    pagination: {
-      limit: 5,
-    },
-  }).forceRender();
+  gridUser
+    .updateConfig({
+      search: true,
+      pagination: {
+        limit: 5,
+      },
+    })
+    .forceRender();
 }
-
 
 const waitForGridToRender = () => {
   return new Promise((resolve) => {

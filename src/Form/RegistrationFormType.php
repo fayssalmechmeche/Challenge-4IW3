@@ -65,14 +65,6 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('societyForm', SocietyType::class, [
                 'mapped' => false,
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Veuillez accepter les conditions',
-                    ]),
-                ],
             ]);
     }
 
