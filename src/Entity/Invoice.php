@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,6 +21,7 @@ enum InvoiceStatus: string
     case Paid = "PAID";
     case Refused = "REFUSED";
     case Partial = "PARTIAL";
+    case Delayed = "DELAYED";
     case Refunded = "REFUNDED";
     case Canceled = "CANCELED";
 }
@@ -33,7 +35,7 @@ class Invoice
     private ?int $id = null;
 
     #[ORM\Column(type: "string", enumType: InvoiceStatus::class, nullable: true)]
-    private InvoiceStatus $paymentStatus;
+    private InvoiceStatus $invoiceStatus;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
@@ -66,9 +68,9 @@ class Invoice
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $paymentDueTime = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'devis')]
+    #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    private ?Society $society;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
@@ -76,20 +78,29 @@ class Invoice
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $token = null;
 
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateValidite = null;
+    public function __construct()
     {
-        return $this->user;
+
+        $this->invoiceStatus = InvoiceStatus::Pending;
+
     }
 
     /**
-     * @param User|null $user
+     * @return Society|null
      */
-    public function setUser(?User $user): void
+    public function getSociety(): ?Society
     {
-        $this->user = $user;
+        return $this->society;
+    }
+
+    /**
+     * @param Society|null $society
+     */
+    public function setSociety(?Society $society): void
+    {
+        $this->society = $society;
     }
 
     public function getId(): ?int
@@ -157,14 +168,21 @@ class Invoice
         return $this;
     }
 
-    public function getPaymentStatus(): InvoiceStatus
+    public function getInvoiceStatus(): InvoiceStatus
     {
-        return $this->paymentStatus;
+        return $this->invoiceStatus;
     }
-
     public function setPaymentStatus($paymentStatus): self
     {
         $this->paymentStatus = $paymentStatus;
+
+        return $this;
+    }
+
+
+    public function setInvoiceStatus($invoiceStatus): self
+    {
+        $this->invoiceStatus = $invoiceStatus;
 
         return $this;
     }
@@ -185,6 +203,26 @@ class Invoice
     public function getTotalDuePrice(): ?string
     {
         return $this->totalDuePrice;
+    }
+
+    /**
+     * Get the value of dateValidite
+     */
+    public function getDateValidite(): ?\DateTimeInterface
+    {
+        return $this->dateValidite;
+    }
+
+    /**
+     * Set the value of dateValidite
+     *
+     * @return  self
+     */
+    public function setDateValidite(?\DateTimeInterface $dateValidite): self
+    {
+        $this->dateValidite = $dateValidite;
+
+        return $this;
     }
 
     public function setTotalDuePrice(string $totalDuePrice): static
@@ -252,5 +290,18 @@ class Invoice
         $this->invoiceType = $invoiceType;
 
         return $this;
+    }
+
+    /**
+     * Met à jour le statut de paiement à DELAYED si la date actuelle dépasse la date de validité.
+     */
+    public function updateInvoiceStatusBasedOnValidity(): void
+    {
+        $today = new \DateTime(); // Obtient la date d'aujourd'hui
+        // Vérifie si la date de validité est dépassée et si le statut de paiement n'est ni DELAYED ni PAYED
+        if ($this->dateValidite < $today && $this->invoiceStatus !== InvoiceStatus::Paid) {
+            $this->invoiceStatus = InvoiceStatus::Delayed;
+
+        }
     }
 }

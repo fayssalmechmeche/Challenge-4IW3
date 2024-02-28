@@ -93,21 +93,26 @@ document.addEventListener('DOMContentLoaded', function() {
 document.querySelector('.valid-invoice').addEventListener('click', function() {
     const invoiceDataElement = document.querySelector('#invoiceData');
     const devisId = invoiceDataElement.getAttribute('data-devis-id');
-    const invoiceNumber = invoiceDataElement.getAttribute('data-invoice-number');
+    var inputDate = document.getElementById('dateValidite');
+
+// Écouter l'événement 'change' pour détecter quand l'utilisateur sélectionne une date
+    inputDate.addEventListener('change', function() {
+        // Récupérer la valeur de l'input
+        var selectedDate = inputDate.value;
+
+        // Afficher la valeur dans la console ou l'utiliser selon vos besoins
+        console.log(selectedDate);
+    });
+    var dateBeforeFetch = inputDate.value;
+    console.log('dateBeforeFetch')
+
 
     // Préparation de l'objet JSON à envoyer
     const invoiceData = {
-        devisId: devisId,
-        invoiceNumber: invoiceNumber,
-        paymentStatus: 'PENDING',
-        taxe: invoiceDataElement.getAttribute('data-taxe'), // Valeur fictive pour la taxe
-        totalPrice: invoiceDataElement.getAttribute('data-total-price'), // Valeur fictive pour le prix total
-        totalDuePrice: invoiceDataElement.getAttribute('data-total-due-price'), // Valeur fictive pour le total dû
-        remise: '0', // Valeur fictive pour la remise
-        paymentDueTime: '2024-02-20T08:00:00', // Date fictive d'échéance de paiement
+        dateValidite: dateBeforeFetch,
     };
-    console.log(invoiceData,typeof(invoiceData.paymentStatus));
-    fetch('/invoice/new/ajax', {
+
+    fetch('invoice/new', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -130,7 +135,7 @@ document.querySelector('.valid-invoice').addEventListener('click', function() {
 });
 
 
-console.log("empty men");
+console.log("emfdfdf en");
 
 
 

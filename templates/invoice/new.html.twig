@@ -13,7 +13,7 @@
 		</span>
 		<form method="POST">
 			<button id="" class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500 valid-invoice ">Valider la facture</button>
-		</form>
+
 	</nav>
 	<div class="Generator font-roboto w-A4w  bg-white my-5 mx-auto p-5 border border-solid border-gray-300 shadow-md">
 		<div class="top h-auto w-full flex justify-between items-start">
@@ -38,7 +38,8 @@
 						<p class="text-15px leading-none my-1">Date:
 							{{ "now"|date("d/m/Y") }}</p>
 						<p class="text-15px leading-none my-1">
-							Validité de la facture: 3 Mois
+							<input type="date" id="dateValidite" name="dateValidite" class="some-custom-class" min="{{ "now"|date("Y-m-d") }}">
+							</form>
 						</p>
 					</div>
 				</div>

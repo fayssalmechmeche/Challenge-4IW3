@@ -97,9 +97,7 @@ function openFormulaCreateModal() {
 
       initializeFormElements(modalBody);
       initializeCheckbox(); // Initialiser la checkbox ici
-      if (!productGridInstance) {
-        initializeProductGridCreate();
-      }
+
       toggleModal("newModalId", "newModalModalContentId");
       sheeesh();
 
@@ -387,7 +385,7 @@ function openFormulaEditModal(formulaId) {
       if (!productGridInstance) {
         initializeProductGridCreate(); // Initialise un Grid.js vide
       }
-
+    //update
       toggleModal("formulaEditModal", "formulaEditModalContentId");
     })
     .catch((error) => {
@@ -525,4 +523,4 @@ function sheeesh() {
 
 
 
-console.log('script chaffsdfsdfsdfrgé');
+console.log('scriptfdgdfg c');
