@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Hello DefaultController!
+  AstroShe
 {% endblock %}
 
 {% block body %}
@@ -24,7 +24,7 @@
       <div id="menu" class="z-50 flex flex-col xl:flex-row h-auto w-full xl:w-1/2 xl:flex xl:justify-center items-center absolute xl:relative left-0 xl:top-0 bg-white dark:bg-dark-bg xl:bg-transparent top-[-1000px] hidden">
         <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease" href="#">Accueil</a>
         <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Prix</a>
-        <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">FAQ</a>
+        <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="{{ path('design-guide') }}">Design Guide</a>
         <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
         <div class="flex flex-col xl:hidden justify-center items-center">
           {% if app.user %}
@@ -83,7 +83,6 @@
         <span class="text-nav-btn font-bold text-2xl">Maximiser votre productivité</span>
         <h2 class="text-[64px] leading-[80px] font-bold text-black dark:text-white my-10">Faites simplement et rapidement.</h2>
         <p class="text-black text-2xl mb-10 dark:text-white">Avec une gestion de devis et de facturation qui s'adapte a vos besoins, vous pouvez planifier, suivre et superviser toutes vos transactions financières.</p>
-
         <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="#">Découvrir</a></button>
       </div>
     </div>
@@ -93,26 +92,10 @@
     <div class="w-4/5 h-full mx-auto">
       <h2 class="text-3xl sm:text-5xl md:text-6xl font-bold text-black my-10 dark:text-white">Une plateforme révolutionnaire</h2>
       <div class="w-full flex-wrap flex justify-around items-center gap-8">
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon1.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Un gain de temps</h3>
-          <p class="text-xl font-normal dark:text-white">Bénéficiez d'un gain de temps notable grâce à notre système automatisé qui simplifie la création de factures et devis, libérant du temps pour vos activités principales.</p>
-        </div>
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon2.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Une organisation infaillible</h3>
-          <p class="text-xl font-normal dark:text-white">Choisissez une gestion transparente et structurée de vos factures et devis, assurant une clarté et une organisations optimales pour toutes vos transactions.</p>
-        </div>
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon3.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Un professionnalisme renforcé</h3>
-          <p class="text-xl font-normal dark:text-white">Renforcez votre professionnalisme avec des factures et devis élégants et personnalisés, reflétant l'excellence de votre marque et de vos services.</p>
-        </div>
-        <div class="w-full lg:w-2/5 h-96 rounded-3xl bg-white dark:bg-dark-card shadow-md p-5 flex flex-col justify-around items-start">
-          <img class="w-16 h-16 my-3" src="{{ asset('images/landingPage/icon4.svg') }}" alt="icon" />
-          <h3 class="text-3xl font-medium text-black dark:text-white">Un suivi de vos performances</h3>
-          <p class="text-xl font-normal dark:text-white">Suivez vos performances de près avec des analyses détaillées de vos facturations et devis, facilitant une gestion plus précise et des décisions éclairées.</p>
-        </div>
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon1.svg', title: 'Un gain de temps', description: "Bénéficiez d'un gain de temps notable grâce à notre système automatisé qui simplifie la création de factures et devis, libérant du temps pour vos activités principales." } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon2.svg', title: 'Une organisation infaillible', description: 'Choisissez une gestion transparente et structurée de vos factures et devis, assurant une clarté et une organisations optimales pour toutes vos transactions.' } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon3.svg', title: 'Un professionnalisme renforcé', description: "Renforcez votre professionnalisme avec des factures et devis élégants et personnalisés, reflétant l'excellence de votre marque et de vos services." } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon4.svg', title: 'Un suivi de vos performances', description: 'Suivez vos performances de près avec des analyses détaillées de vos facturations et devis, facilitant une gestion plus précise et des décisions éclairées.' } %}
       </div>
       <button class="border border-solid border-nav-btn text-nav-btn px-10 py-3 rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-10"><a class="text-decoration-none text-2xl" href="http://">En savoir plus ></a></button>
     </div>
@@ -121,13 +104,14 @@
   <footer class="w-full h-full bg-nav-bg font-roboto py-1 border-t border-b border-the-grey dark:border-dark-bg dark:bg-dark-bg">
     <div class="w-4/5 mx-auto h-auto flex flex-col md:flex-row justify-start md:justify-around items-start md:items-center my-20">
       <div class="w-full md:w-1/4 flex flex-col justify-start items-start mb-10 md:mb-0">
-        <div class="logo z-10">
-          <img src="{{ asset('images/landingPage/logo.svg') }}" alt="logo" />
+        <div class="logo z-10 pr-5 py-5">
+          <img class="dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo" />
+          <img class="hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo" />
         </div>
         <p class="dark:text-white">Votre outil de gestion de devis et de facturation numéro 1 pour une efficacité accrue.</p>
         <div class="mt-2">
           <h5 class="text-xl font-bold dark:text-white">Contact</h5>
-          <a href="mailto:testtest@gmail.com" class="dark:text-white">testtest@gmail.com</a>
+          <a href="mailto:testtest@gmail.com" class="dark:text-white">support-astroshe@gmail.com</a>
         </div>
       </div>
       <div class="w-full md:w-1/2 flex flex-col sm:flex-row justify-around items-start">
@@ -149,7 +133,7 @@
           <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Dashboard</a>
         </div>
         <div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
-          <h5 class="text-xl font-bold">Resources</h5>
+          <h5 class="text-xl font-bold dark:text-white">Resources</h5>
           <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Quick Start</a>
           <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Libraries</a>
           <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">API Documentation</a>
