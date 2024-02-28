@@ -93,6 +93,11 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $product->getSociety()->getId()) {
+            return $this->redirectToRoute('app_product_index');
+        }
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
@@ -103,6 +108,11 @@ class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $product->getSociety()->getId()) {
+            return $this->redirectToRoute('app_product_index');
+        }
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -128,6 +138,10 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $product->getSociety()->getId()) {
+            return $this->redirectToRoute('app_product_index');
+        }
 
             // Vérifiez si le produit est utilisé dans une formule
             if (!$product->getProductFormulas()->isEmpty()) {

@@ -53,6 +53,11 @@ class CustomerController extends AbstractController
     #[Route('/api/{id}', name: 'api_customer_details', methods: ['GET'])]
     public function apiCustomerDetails(Customer $customer): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $customer->getSociety()->getId()) {
+            return $this->redirectToRoute('app_customer_index');
+        }
+
         $devisCounts = [
             'pending' => 0,
             'paid' => 0,
@@ -117,6 +122,11 @@ class CustomerController extends AbstractController
     #[Route('/{id}', name: 'app_customer_show', methods: ['GET'])]
     public function show(Customer $customer): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $customer->getSociety()->getId()) {
+            return $this->redirectToRoute('app_customer_index');
+        }
+
         return $this->render('customer/show.html.twig', [
             'customer' => $customer,
         ]);
@@ -125,6 +135,11 @@ class CustomerController extends AbstractController
     #[Route('/{id}/edit', name: 'app_customer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $customer->getSociety()->getId()) {
+            return $this->redirectToRoute('app_customer_index');
+        }
+
         $form = $this->createForm(CustomerType::class, $customer);
         $form->handleRequest($request);
 
@@ -150,6 +165,11 @@ class CustomerController extends AbstractController
     #[Route('/{id}', name: 'app_customer_delete', methods: ['POST'])]
     public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $customer->getSociety()->getId()) {
+            return $this->redirectToRoute('app_customer_index');
+        }
+        
         if ($this->isCsrfTokenValid('delete_customer', $request->request->get('_token'))) {
             // Vérifiez si le client est utilisé dans un devis
             if (!$customer->getDevis()->isEmpty()) {
