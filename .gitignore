@@ -58,4 +58,9 @@ yarn-error.log
 
 /migrations/
 
-/public/images/society/
+# Ignore le répertoire /public/images/society/
+/public/images/society/*
+
+# Sauf le fichier placeholder.webp
+!/public/images/society/placeholder.webp
+
