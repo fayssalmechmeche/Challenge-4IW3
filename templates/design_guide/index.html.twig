@@ -1,0 +1,416 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Design Guide
+{% endblock %}
+
+{% block body %}
+  <div class="mx-auto px-8 py-8 bg-content-bg dark:bg-dark-bg">
+    <h1 class="text-5xl font-bold mb-9 dark:text-white">Design Guide de notre application</h1>
+    <p class="text-2xl dark:text-white">Ceci est le design système de notre application de gestion destinée au traiteur.</p>
+    <p class="text-2xl dark:text-white">Vous trouverez tous les éléments liés au style de notre application.</p>
+
+    <section class="my-8">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Couleurs</h2>
+      <div class="flex flex-wrap justify-start gap-2 items-center rounded-2xl bg-white dark:bg-dark-section p-3">
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-regal-blue rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">regal-blue</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-the-grey rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">the-grey</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-the-grey-2 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">the-grey-2</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-light-dark rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">light-dark</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-devis-bg rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">devis-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-landing-bg rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">landing-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-button-blue rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">button-blue</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-button-yellow rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">button-yellow</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-button-blue-hover rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">button-blue-hover</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-bg rounded-lg border border-solid border-black"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-menu rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-menu</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-btn rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-btn</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-card-grey rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">card-grey</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-progress-bar-1 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">progress-bar-1</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-progress-bar-2 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">progress-bar-2</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-content-bg rounded-lg border border-solid border-black"></div>
+          <p class="text-center text-lg font-bold dark:text-white">content-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-grey-p rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">grey-p</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-light-red rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">light-red</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-bg-light-red rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">bg-light-red</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-light-green rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">light-green</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-bg-light-green rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">bg-light-green</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-nav-bar-black rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">nav-bar-black</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-dark-bg rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">dark-bg</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-dark-section rounded-lg border border-solid dark:border-white"></div>
+          <p class="text-center text-lg font-bold dark:text-white">dark-section</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-dark-card rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">dark-card</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-gradient-1 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">gradient-1</p>
+        </div>
+        <div class="w-40 flex justify-start items-center flex-col">
+          <div class="w-24 h-24 bg-gradient-2 rounded-lg"></div>
+          <p class="text-center text-lg font-bold dark:text-white">gradient-2</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Typographie</h2>
+      <div class="ml-5 flex justify-start items-start flex-col gap-5">
+        <h1 class="text-4xl font-bold dark:text-white">Title (h1)</h1>
+        <h2 class="text-3xl dark:text-white">Title (h2)</h2>
+        <p class="font-medium dark:text-white">Text normal</p>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Bouton</h2>
+      <div class="flex justify-start items-start flex-col">
+        <button class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Bouton principal</button>
+        <button class="text-white font-medium bg-orange-400 hover:bg-orange-600 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Bouton de modification</button>
+        <button class="border border-solid border-nav-btn text-nav-btn rounded-xl hover:bg-nav-btn hover:text-white transition-all duration-300 ease-out my-3 px-3 py-2">Bouton alternatif</button>
+        <button class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Bouton de fermeture</button>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Navbar</h2>
+      <div class="dark:bg-dark-section h-fit p-1">
+        <div class="bg-nav-bg w-full h-28 font-roboto dark:bg-dark-bg">
+          <nav class="w-4/5 h-full mx-auto flex justify-between items-center">
+            <!-- logo -->
+            <div class="logo z-10">
+              <img class="dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo" />
+              <img class="hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo" />
+            </div>
+            <!-- Bouton menu burger -->
+            <button id="burger" class="xl:hidden block z-10">
+              <!-- Icône du menu burger -->
+              <span class="burger-bar block relative w-9 h-1 bg-black mb-3 dark:bg-white"></span>
+              <span class="burger-bar block relative w-9 h-1 bg-black mb-3 dark:bg-white"></span>
+              <span class="burger-bar block relative w-9 h-1 bg-black mb-3 dark:bg-white"></span>
+            </button>
+
+            <!-- Menu de navigation -->
+            <div id="menu" class="z-50 flex flex-col xl:flex-row h-auto w-full xl:w-1/2 xl:flex xl:justify-center items-center absolute xl:relative left-0 xl:top-0 bg-white dark:bg-dark-bg xl:bg-transparent top-[-1000px] hidden">
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease" href="#">Accueil</a>
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Prix</a>
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Design Guide</a>
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
+              <div class="flex flex-col xl:hidden justify-center items-center">
+               <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_register') }}">Inscription</a></button>
+               <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Connexion</a></button>
+              </div>
+            </div>
+            <div class="hidden xl:flex justify-between items-center">
+               <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('app_register') }}">Inscription</a></button>
+               <button class="bg-nav-btn text-white px-9 py-3 ml-2 rounded-xl hover:bg-transparent hover:border hover:border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('app_login') }}">Connexion</a></button>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Navbar (Log In)</h2>
+      <div class="dark:bg-dark-section h-fit p-1">
+        <header class="bg-nav-bg w-full h-28 font-roboto dark:bg-dark-bg">
+          <nav class="w-4/5 h-full mx-auto flex justify-between items-center">
+            <!-- logo -->
+            <div class="logo z-10">
+              <img class="dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo" />
+              <img class="hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo" />
+            </div>
+            <!-- Bouton menu burger -->
+            <button id="burger" class="xl:hidden block z-10">
+              <!-- Icône du menu burger -->
+              <span class="burger-bar block relative w-9 h-1 bg-black mb-3 dark:bg-white"></span>
+              <span class="burger-bar block relative w-9 h-1 bg-black mb-3 dark:bg-white"></span>
+              <span class="burger-bar block relative w-9 h-1 bg-black mb-3 dark:bg-white"></span>
+            </button>
+
+            <!-- Menu de navigation -->
+            <div id="menu" class="z-50 flex flex-col xl:flex-row h-auto w-full xl:w-1/2 xl:flex xl:justify-center items-center absolute xl:relative left-0 xl:top-0 bg-white dark:bg-dark-bg xl:bg-transparent top-[-1000px] hidden">
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease" href="#">Accueil</a>
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Prix</a>
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Design Guide</a>
+              <a class="text-decoration-none text-5xl xl:text-lg text-nav-menu dark:text-white font-semibold hover:bg-nav-btn hover:text-white mx-1 my-3 xl:my-0 px-9 py-3 rounded-xl transition-all duration-300 ease-out" href="#">Contact</a>
+              <div class="flex flex-col xl:hidden justify-center items-center">
+               <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('profile_edit') }}">Compte</a></button>
+			         <button class="bg-nav-btn text-white px-9 py-5 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out my-5 xl:my-2"><a class="text-decoration-none text-5xl xl:text-lg" href="{{ path('app_login') }}">Dashboard</a></button>
+              </div>
+            </div>
+
+            <div class="hidden xl:flex justify-between items-center">
+              <button class="bg-nav-btn text-white px-9 py-3 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('profile_edit') }}">Compte</a></button>
+		          <button class="bg-nav-btn text-white px-9 py-3 ml-2 rounded-xl hover:bg-transparent border border-solid hover:border-nav-btn hover:text-nav-btn transition-all duration-300 ease-out"><a class="text-decoration-none" href="{{ path('app_login') }}">Dashboard</a></button>
+            </div>
+          </nav>
+        </header>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Display Dot</h2>
+      <div class="flex justify-start items-center flex-col my-20">
+        <div class="relative landing-img w-full xl:my-0 xl:w-2/5 rounded-xl">
+          <img class="mx-auto z-10 relative" src="{{ asset('images/landingPage/landing-img.svg') }}" alt="landing page image" />
+          <img class="z-0 absolute top-[-70px] right-[-15px] md:right-[150px] xl:right-[-50px]" src="{{ asset('images/landingPage/Group 11.svg') }}" alt="landing page image" />
+          <img class="z-0 absolute bottom-[-70px] left-[-15px] md:left-[150px] xl:left-0" src="{{ asset('images/landingPage/Group 12.svg') }}" alt="landing page image" />
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Bannière</h2>
+      <div class="w-4/5 h-[234px] mx-auto bg-gradient-to-r from-[#011936] to-[#012F63] rounded-[24px] mt-[50px] flex items-center justify-center px-5">
+        <h2 class="text-white text-3xl md:text-5xl leading-[60px] font-bold w-[900px] text-center">Gérez vos devis et vos facturations au même endroit.</h2>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Benefits Card</h2>
+      <div class="ml-5 flex justify-center items-center gap-5 flex-wrap">
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon1.svg', title: 'Un gain de temps', description: "Bénéficiez d'un gain de temps notable grâce à notre système automatisé qui simplifie la création de factures et devis, libérant du temps pour vos activités principales." } %}
+        {% include 'components/benefits_card.html.twig' with { icon_path: 'images/landingPage/icon2.svg', title: 'Une organisation infaillible', description: 'Choisissez une gestion transparente et structurée de vos factures et devis, assurant une clarté et une organisations optimales pour toutes vos transactions.' } %}
+      </div>
+    </section>
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Display Diamond</h2>
+      <div class="ml-5 mt-32 flex justify-center items-center gap-5">
+        <div class="relative w-full xl:w-1/2 rounded-xl">
+          <img class="mx-auto w-4/5 z-10 relative border border-solid border-black rounded-3xl" src="{{ asset('images/landingPage/Dashboard.svg') }}" alt="landing page image" />
+          <img class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="{{ asset('images/landingPage/Rectangle-dashboard.svg') }}" alt="landing page image" />
+        </div>
+      </div>
+    </section>
+    <section class="pt-10 mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Footer</h2>
+      <div class="ml-5 flex justify-center items-center gap-5 dark:bg-dark-section p-1">
+        <footer class="w-full h-full bg-nav-bg font-roboto py-1 border-t border-b border-the-grey dark:border-dark-bg dark:bg-dark-bg">
+          <div class="w-4/5 mx-auto h-auto flex flex-col md:flex-row justify-start md:justify-around items-start md:items-center my-20">
+            <div class="w-full md:w-1/4 flex flex-col justify-start items-start mb-10 md:mb-0">
+              <div class="logo z-10 pr-5 py-5">
+                <img class="dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo" />
+                <img class="hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo" />
+              </div>
+              <p class="dark:text-white">Votre outil de gestion de devis et de facturation numéro 1 pour une efficacité accrue.</p>
+              <div class="mt-2">
+                <h5 class="text-xl font-bold dark:text-white">Contact</h5>
+                <a href="mailto:testtest@gmail.com" class="dark:text-white">support-astroshe@gmail.com</a>
+              </div>
+            </div>
+            <div class="w-full md:w-1/2 flex flex-col sm:flex-row justify-around items-start">
+              <div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
+                <h5 class="text-xl font-bold dark:text-white">Company</h5>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">About</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Team</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">FAQs</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Blogs</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Career</a>
+              </div>
+              <div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
+                <h5 class="text-xl font-bold dark:text-white">Product</h5>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Tasks</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Docs</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Goals</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Chat</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Whiteboard</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Dashboard</a>
+              </div>
+              <div class="w-full sm:h-1/4 flex flex-col items-center sm:items-start mb-10 sm:mb-0">
+                <h5 class="text-xl font-bold dark:text-white">Resources</h5>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Quick Start</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">Libraries</a>
+                <a class="text-decoration-none text-lg dark:text-white text-nav-menu hover:text-nav-btn mx-1 transition-all duration-300 ease" href="#">API Documentation</a>
+              </div>
+            </div>
+          </div>
+          <p class="text-center dark:text-white">2022 @TestTest. All rights reserved. -- Privacy Policy - Terms of Services</p>
+        </footer>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Grid JS</h2>
+      <div class="ml-5 flex justify-center items-center gap-5 dark:bg-dark-section">
+       <!-- grid.js -->
+    <div class="w-full h-fit flex justify-between items-start rounded-3xl shadow-xl overflow-scroll" id="design-guide-grid"></div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Modal</h2>
+      <div class="ml-5 flex justify-start items-center gap-5">
+        	<!-- Modal  -->
+          		<button onclick="openTestModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Ouvrir la Modal</button>
+
+
+          {% set dynamicContent %}
+          <div>
+            <p>Contenu construit directement dans Twig.</p>
+          </div>
+          {% endset %}
+
+          {% include 'components/modal.html.twig' with {
+                'modal_id': 'testModalId',
+                'modal_content_id': 'testModalContentId',
+                'content': dynamicContent
+            } %}
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Navbar</h2>
+      <div class="ml-5 w-full h-screen flex justify-start items-center gap-5 bg-blue-500 dark:bg-dark-bg relative">
+        	{% include 'navbar_designGuide.html.twig' %}
+      </div>
+
+     <section class="mt-10 mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Display Sold</h2>
+      <div class="ml-5 flex justify-center items-center gap-5">
+        	 <!-- sold block -->
+    <div class="relative px-10 w-550px h-72 flex justify-between items-center bg-white dark:bg-dark-card rounded-3xl shadow-xl">
+      <div class="flex flex-col items-start gap-3">
+        <h2 class="text-3xl font-bold dark:text-white">Solde total</h2>
+        <span id="last-deal" class="text-2xl text-[#4FD18B] font-bold">+ $28,55</span>
+        <p class="text-grey-p text-base dark:text-white">Dernière transaction</p>
+        <div class="flex justify-start items-center">
+          <button class="px-8 py-3 bg-progress-bar-1 text-white text-sm font-bold rounded-btn-rounded tracking-wider uppercase hover:bg-white hover:text-progress-bar-1 hover:border-progress-bar-1 border border-solid border-progress-bar-1 transition-all duration-300 ease-in-out">Détails</button>
+          <button class="px-8 py-3 ml-1 border border-solid border-progress-bar-1 text-progress-bar-1 text-sm font-bold rounded-btn-rounded tracking-wider uppercase hover:bg-progress-bar-1 hover:text-white transition-all duration-300 ease-in-out">Modifier</button>
+        </div>
+      </div>
+      <div class="flex flex-col items-center z-10">
+        <h2 class="text-4xl font-bold text-white">200.58€</h2>
+        <p class="text-grey-p text-base tracking-widest">Votre portefeuille</p>
+      </div>
+      <!-- background -->
+      <div class="bg-progress-bar-1 h-full w-56 rounded-s-155px rounded-e-3xl absolute top-0 right-0"></div>
+    </div>
+      </div>
+    </section>
+
+    </section>
+    
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Card Info</h2>
+      
+      <div class="ml-5 px-5 md:w-ds-block mx-auto md:h-36 flex md:justify-between md:items-center my-10 md:flex-row flex-col justify-start items-center gap-10 md:gap-0">
+          <!-- card-info -->
+          {% include 'components/card-info.twig' with { description: 'Revenu total', amount: '$ 18532.52', trend: { background: 'bg-bg-light-green', color: 'text-light-green', icon: 'trending_up', prefix: '+', percentage: '15%' } } %}
+          <!-- card-info -->
+          {% include 'components/card-info.twig' with { description: 'Total des économies', amount: '$ 137.43', trend: { background: 'bg-bg-light-red', color: 'text-light-red', icon: 'trending_down', prefix: '-', percentage: '8%' } } %}
+          <!-- card-info -->
+          {% include 'components/card-info.twig' with { description: 'Dépense totale', amount: '$ 5000.00', trend: { background: 'bg-bg-light-green', color: 'text-light-green', icon: 'trending_up', prefix: '+', percentage: '15%' } } %}
+          <!-- card-info -->
+          {% include 'components/card-info.twig' with { description: 'Dépense totale', amount: '$ 5000.00', trend: { background: 'bg-bg-light-green', color: 'text-light-green', icon: 'trending_up', prefix: '+', percentage: '15%' } } %}
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Blue Card</h2>
+      <div class="ml-5 flex justify-center items-center gap-5">
+       <!-- card-blue -->
+    <div class="relative md:ml-10 w-550px h-96 flex justify-center items-center rounded-3xl shadow-xl">
+      <img class="absolute top-0 bottom-0 h-full object-cover rounded-3xl" src="{{ asset('images/dashboard/carte-bg.svg') }}" alt="carte blue image" />
+      <img class="w-500px flex justify-between items-center rounded-3xl shadow-xl z-30 backdrop-blur-3xl" src="{{ asset('images/dashboard/carte-front.svg') }}" alt="carte blue image" />
+    </div>
+      </div>
+    </section>
+    
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-5 dark:text-white">Admin Card</h2>
+        {# First block #}
+  <section id="InfoCards" class="mt-5 sm:mt-0 w-full mx-auto md:h-36 flex my-1 md:flex-row flex-col justify-start items-center gap-3">
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { id:'cardNumberLength', bgColor: 'bg-blue-200', color: 'text-blue-500', icon: 'account_circle', count: 5, description: 'Nombre utilisateurs' } %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { id:'cardUserVerfied', bgColor: 'bg-green-200', color: 'text-green-500', icon: 'verified_user', count: 7, description: 'Utilisateurs vérifiés' } %}
+    {# card-admin #}
+    {% include 'components/admin_card.twig' with { id:'cardUserNotVerfied', bgColor: 'bg-red-200', color: 'text-red-500', icon: 'no_accounts', count: 10, description: 'Utilisateurs non vérifiés' } %}
+  </section>
+    </section>
+
+
+    <!-- Ajoutez d'autres sections  -->
+  </div>
+
+  {% include 'components/dark_mode.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+  {{ encore_entry_script_tags('app') }}
+  <script src="{{ asset('js/darkMode.js') }}"></script>
+  <script src="{{ asset('js/designGuide.js') }}"></script>
+  <script src="{{ asset('js/designGuideGrid.js') }}"></script>
+  <script src="{{ asset('js/landingPage.js') }}"></script>
+{% endblock %}

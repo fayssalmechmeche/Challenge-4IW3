@@ -15,4 +15,12 @@ class DefaultController extends AbstractController
             'controller_name' => 'index',
         ]);
     }
+
+    #[Route('/design-guide', name: 'design-guide')]
+    public function designGuide(): Response
+    {
+        return $this->render('design_guide/index.html.twig', [
+            'controller_name' => 'index',
+        ]);
+    }
 }

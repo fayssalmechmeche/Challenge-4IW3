@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\ProfileFormType;
+use App\Form\Admin\SocietyType;
 use App\Form\ProfileSocietyFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Form\ProfileFormType;
 
 class ProfileController extends AbstractController
 {
@@ -53,6 +56,8 @@ class ProfileController extends AbstractController
             }
             if (empty($userData->getEmail())) {
                 $errors[] = "L'email ne peut pas être vide.";
+            } elseif ($entityManager->getRepository(User::class)->findOneBy(['email' => $userData->getEmail()]) !== $user) {
+                $errors[] = "L'adresse email n'est pas valide.";
             } elseif (!filter_var($userData->getEmail(), FILTER_VALIDATE_EMAIL)) {
                 $errors[] = "L'adresse email n'est pas valide.";
             }
@@ -73,6 +78,20 @@ class ProfileController extends AbstractController
             $societyData = $societyForm->getData();
             $errors = [];
 
+            $fileName = $societyForm->get('logo')->getData();
+            if ($fileName) {
+                $originalFilename = pathinfo($fileName->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $fileName->guessExtension();
+                try {
+                    $fileName->move(
+                        $this->getParameter('society_logo_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', "Une erreur est survenue lors de l'upload de l'image");
+                }
+                $society->setLogo($newFilename);
+            }
             if (empty($societyData->getName())) {
                 $errors[] = "Le nom de la société ne peut pas être vide.";
             } elseif (strlen($societyData->getName()) < 2 || strlen($societyData->getName()) > 100) {

@@ -92,15 +92,11 @@
 						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 					</div>
 					<div class="w-full">
-						<label class="mb-1 block text-base font-medium" for="imageSociety">
-							Image de la société
-						</label>
-						<input class="h-8 w-full text-base drop-shadow-xl invalid:text-pink-600" type="file" name="imageSociety" id="imageSociety" placeholder="L'image de votre société" accept=".png,.jpeg,.jpg"/>
+						{{ form_label(registrationForm.societyForm.logo,'Siret de la société',{'label_attr':{'class':'mb-1 block text-base font-medium'}}) }}
+						{{ form_widget(registrationForm.societyForm.logo,{'attr':{'class':'h-8 w-full rounded-md border-2 p-1 text-base drop-shadow-lg border-white focus:border-blue-500 focus:outline-none invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500'}}) }}
+						<div class="text-red-500">{{ form_errors(registrationForm.societyForm.logo,{'attr' :{'class' :'text-red'}}) }}</div>
 					</div>
-					<div class="w-full">
-						{{ form_label(registrationForm.agreeTerms,"Accepter les conditions d'utilisation",{'label_attr' : {'class':'mb-0 mr-2 text-xs text-start'}}) }}
-						{{ form_widget(registrationForm.agreeTerms,{'attr':{'class':''}}) }}
-					</div>
+					
 					<div class="flex w-full items-center justify-between">
 						<button class="focus:shadow-outline h-11 w-[60%] rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 focus:outline-none" type="button" onclick="nextPage()">
 							Etape précédante
