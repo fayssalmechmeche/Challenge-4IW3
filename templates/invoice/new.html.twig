@@ -19,7 +19,8 @@
 		<div class="top h-auto w-full flex justify-between items-start">
 			<div class="society w-1/2 flex justify-center items-start flex-col">
 				<div class="logoName">
-					<img class="w-36 h-36 border border-solid border-gray-300" src="./0d4ae847-6828-4179-892b-35ca46596170.webp" alt="logo"/>
+					<img class="w-36 h-36 border border-solid border-gray-300" src="{{ asset('images/society/'~ society.logo ?? 'placeholder.webp') }}
+" alt="logo"/>
 				</div>
 				<div class="society-info mt-15px p-5px">
 					<div data-devis-id="{{ invoice.devis.id }}"></div>
@@ -73,7 +74,14 @@
 
 			</div>
 
-			<div id="wrapper-invoice" data-devis-id="{{ invoice.devis.id }}" class="h-56"></div>
+			{% if app.request.query.get('deposit') == "true" %}
+				<p>
+					Facture pour payer l'acompte du devis numéro {{ devis.devisNumber }}
+				</p>
+			{% else %}
+				<div id="wrapper-invoice" data-devis-id="{{ invoice.devis.id }}" class="h-56"></div>
+			{% endif %}
+
 			<div class="mid w-full h-auto flex justify-between items-start">
 				<div class="condition mt-12 flex justify-start items-start flex-col w-70%"></div>
 
@@ -113,11 +121,17 @@
 				</div>
 				<div class="total-sub-container flex justify-start items-center m-0">
 
-					<h3 class="text-base font-semibold">Acompte à payer</h3>
-					<div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
-						<p class="text-lg text-right">{{ app.request.query.get('deposit') == "true" ? depositAmount : "0" }}
-							€</p>
-					</div>
+					{% if app.request.query.get('deposit') == "true" %}
+						<h3 class="text-base font-semibold">
+							Acompte à payer
+						</h3>
+						<div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+							<p class="text-lg text-right">
+								{{ depositAmount }} €
+							</p>
+						</div>
+					{% endif %}
+
 				</div>
 
 

@@ -180,6 +180,8 @@ class InvoiceController extends AbstractController
             'taxeValue' => $taxeValue,
             'depositAmount' => $depositAmount,
             'newTotalDuePrice' => $new,
+            'society' => $society,
+            'devis' => $devis
 
 
         ]);
@@ -222,8 +224,27 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_show', methods: ['GET'])]
     public function show(Invoice $invoice): Response
     {
+        $society = $this->getSociety();
+        $devis = $invoice->getDevis();
+        $invoiceNumber = $invoice->getInvoiceNumber();
+        $totalTTC = $invoice->getTotalDuePrice();
+        $totalHT = $invoice->getTotalPrice();
+        $taxe = $devis->getTaxe();
+        $new = $totalTTC;
+        $userEmail = $society ? $society->getEmail() : '';
+        $depositAmount = ($devis->getTotalPrice() * ($devis->getDepositPercentage() / 100)) + ($taxe * ($devis->getDepositPercentage() / 100));
+
         return $this->render('invoice/show.html.twig', [
             'invoice' => $invoice,
+            'userEmail' => $userEmail,
+            'invoiceNumber' => $invoiceNumber,
+            'totalTTC' => $totalTTC,
+            'totalHT' => $totalHT,
+            'taxeValue' => $taxe,
+            'depositAmount' => $depositAmount,
+            'newTotalDuePrice' => $new,
+            'society' => $society,
+            'devis' => $devis
         ]);
     }
 

@@ -165,6 +165,7 @@ class DevisController extends AbstractController
       'products' => $products,
       'formulas' => $formulas,
       'devisNumber' => $newDevisNumber,
+        'society' => $society
     ]);
   }
 
@@ -213,6 +214,7 @@ class DevisController extends AbstractController
       'userEmail' => $societyEmail,
       'products' => $productsArray,
       'formulas' => $formulasArray,
+        'society' => $society
     ]);
   }
 
@@ -312,6 +314,7 @@ class DevisController extends AbstractController
       'products' => $products,
       'formulas' => $formulas,
       'devisItems' => $devisItems,
+        'society' => $society
     ]);
   }
 
