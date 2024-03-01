@@ -165,8 +165,6 @@ class InvoiceController extends AbstractController
                     'invoice_link' => $deposit == "true" ? $this->generateUrl('checkout_index', ['token' => $invoice->getToken(), 'deposit' => true], UrlGeneratorInterface::ABSOLUTE_URL) : $this->generateUrl('checkout_index', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL)
                 ]
             );
-
-
             $this->addFlash('success', 'La facture a été créée avec succès et est en attente de paiement par le client.');
             return $this->redirectToRoute('app_invoice_index');
         }

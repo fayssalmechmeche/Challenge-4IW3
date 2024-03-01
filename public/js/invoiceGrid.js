@@ -146,4 +146,4 @@ function preventNavigation(event) {
     event.preventDefault();
 }
 
-console.log("seaaatttt");
+console.log("st");
