@@ -66,6 +66,7 @@
 
 {% block javascripts %}
 	{{ parent() }}
+	<script src="{{ asset('js/addFlash.js') }}"></script>
 	<script src="{{ asset('js/invoice.js') }}"></script>
 	<script src="{{ asset('js/invoiceGrid.js') }}"></script>
 {% endblock %}
