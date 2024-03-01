@@ -1,19 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_caterer.html.twig' %}
 
-{% block title %}Invoice index
+{% block title %}Factures index
 {% endblock %}
 
-{% block body %}
+{% block content %}
+
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white p-3 dark:bg-dark-section">
+		<h1 class='text-4xl font-bold mb-3 dark:text-white'>Gestions des Factures</h1>
+		<button onclick="openInvoiceCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
+		Créer une nouvelle facture
+		</button>
+
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="invoice-table"></div>
+	</div>
+
+
+
 
 	{% set dynamicContent %}
 	<div>
 		<p>Contenu construit directement dans Twig.</p>
 	</div>
 	{% endset %}
-
-	<!-- Bouton pour ouvrir le modal de création d'une facture -->
-	<button onclick="openInvoiceCreateModal()">Créer une nouvelle facture</button>
-
 
 	<!-- Modal pour les détails du client -->
 	{% include 'components/modal_invoice.html.twig' with {
@@ -23,45 +32,25 @@
     } %}
 
 
-	<h1>Invoice index</h1>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th>idDevis</th>
-				<th>InvoiceNumber</th>
-				<th>TotalDuePrice</th>
-				<th>PaymentStatus</th>
-				<th>CreatedAt</th>
-				<th>PaymentDueTime</th>
-				<th>actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for invoice in invoices %}
-				<tr>
-					<td>{{ invoice.devis.id }}</td>
-					<td>{{ invoice.invoiceNumber }}</td>
-					<td>{{ invoice.totalDuePrice }}
-						€</td>
-					<td>{{ invoice.translatedStatus }}</td>
-					<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-					<td>{{ invoice.paymentDueTime ? invoice.paymentDueTime|date('Y-m-d H:i:s') : '' }}</td>
-					<td>
-						<a href="{{ path('app_invoice_show', {'id': invoice.id}) }}">show</a>
-						{{ include('invoice/_delete_form.html.twig') }}
-
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="13">no records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
 	<a href="{{ path('app_invoice_new') }}">Create new</a>
+
+
+{# data for the js #}
+	<div style="display: none;" id="invoiceData">
+    {% for invoice in invoices %}
+        <input type="hidden" class="invoice-id" value="{{ invoice.devis.id }}" />
+        <input type="hidden" class="invoice-number" value="{{ invoice.invoiceNumber }}" />
+        <input type="hidden" class="total-due-price" value="{{ invoice.totalDuePrice }}" />
+        <input type="hidden" class="translated-status" value="{{ invoice.translatedStatus }}" />
+        <input type="hidden" class="created-at" value="{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}" />
+        <input type="hidden" class="payment-due-time" value="{{ invoice.paymentDueTime ? invoice.paymentDueTime|date('Y-m-d H:i:s') : '' }}" />
+    {% else %}
+        <p>Aucune facture trouvée</p>
+    {% endfor %}
+</div>
+
+
+
 {% endblock %}
 
 {% block javascripts %}
@@ -69,4 +58,8 @@
 	<script src="{{ asset('js/addFlash.js') }}"></script>
 	<script src="{{ asset('js/invoice.js') }}"></script>
 	<script src="{{ asset('js/invoiceGrid.js') }}"></script>
+	<script>
+		var csrfToken = '{{ csrf_token('delete_devis') }}';
+	</script>
 {% endblock %}
+

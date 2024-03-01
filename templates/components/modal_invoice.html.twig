@@ -2,7 +2,7 @@
 <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" id="{{ modal_id }}"></div>
 
 <!-- Modal -->
-<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-modal-height px-9 py-5 border w-modal-width2 shadow-lg rounded-3xl bg-white overflow-y-auto hidden" id="{{ modal_content_id }}">
+<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 border-white dark:border-dark-section bg-white dark:bg-dark-section max-h-modal-height px-9 py-5 border w-modal-width2 shadow-lg rounded-3xl  overflow-y-auto hidden" id="{{ modal_content_id }}">
     <!-- Close Button -->
     <button class="absolute top-3 right-3 text-gray-700 font-medium bg-transparent hover:bg-gray-200 transition-all duration-300 ease-out rounded-lg p-2" onclick="toggleModal('invoiceCreateModal', 'invoiceCreateModalContent')">
         <!-- Use an X icon or similar for close button -->
@@ -11,30 +11,30 @@
         </svg>
     </button>
     <div id="sectionToHide2">
-    <h1>Séléctionner le Devis concerné par la facture </h1>
+    <h1 class="dark:text-white">Séléctionner le Devis concerné par la facture </h1>
         <!-- Conteneur pour le tableau Grid.js -->
         <div id="devis-table"></div>
 </div>
     <div id="sectionToHide" class="hidden">
-<h1 class="text-xl text-red-gray-900">Sélectionner un type de facture</h1>
+<h1 class="text-xl text-red-gray-900 dark:text-white">Sélectionner un type de facture</h1>
         <input type="hidden" id="selected-devis-id">
 
         <!-- Mise à jour de l'élément H2 pour utiliser un ID -->
-        <h2 id="devis-selection-display">Devis sélectionné : </h2>
+        <h2 id="devis-selection-display" class="dark:text-white">Devis sélectionné : </h2>
     <div class="flex flex-wrap justify-center mb-5 gap-10">
     <!-- Container for Cards -->
-        <div id="depositInvoiceSection" class="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-1/2.5">
+        <div id="depositInvoiceSection" class="relative flex flex-col mt-6 text-gray-700 bg-white dark:bg-dark-card shadow-md bg-clip-border rounded-xl w-1/2.5">
             <div class="p-6">
-                <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900 dark:text-white">
                     Facture pour l'accompte
                 </h5>
-                <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+                <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit dark:text-white">
                     Créez facilement et rapidement une facture pour l'accompte de votre devis en un simple clic.
                 </p>
                 <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" id="{{ modal_id }}"></div>
 
                 <!-- Modal -->
-                <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-modal-height px-9 py-5 border w-modal-width2 shadow-lg rounded-3xl bg-white overflow-y-auto hidden" id="{{ modal_content_id }}">
+                <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-modal-height px-9 py-5 border w-modal-width2 shadow-lg rounded-3xl bg-white overflow-y-auto hidden dark:bg-dark-card " id="{{ modal_content_id }}">
                     <!-- Close Button -->
                     <button class="absolute top-3 right-3 text-gray-700 font-medium bg-transparent hover:bg-gray-200 transition-all duration-300 ease-out rounded-lg p-2" onclick="toggleModal('invoiceCreateModal', 'invoiceCreateModalContent')">
                         <!-- Use an X icon or similar for close button -->
@@ -42,25 +42,25 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
-                    <div id="sectionToHide2">
+                    <div id="sectionToHide2 dark:text-white">
                         <h1>Séléctionner le Devis concerné par la facture </h1>
                         <!-- Conteneur pour le tableau Grid.js -->
                         <div id="devis-table"></div>
                     </div>
                     <div id="sectionToHide" class="hidden">
-                        <h1 class="text-xl text-red-gray-900">Sélectionner un type de facture</h1>
+                        <h1 class="text-xl text-red-gray-900 dark:text-white">Sélectionner un type de facture</h1>
                         <input type="hidden" id="selected-devis-id">
 
                         <!-- Mise à jour de l'élément H2 pour utiliser un ID -->
-                        <h2 id="devis-selection-display">Devis sélectionné : </h2>
+                        <h2 id="devis-selection-display dark:text-white">Devis sélectionné : </h2>
                         <div class="flex flex-wrap justify-center mb-5 gap-10">
                             <!-- Container for Cards -->
                             <div  class="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-1/2.5" >
                                 <div class="p-6">
-                                    <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                                    <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900 dark:text-white">
                                         Facture pour l'accompte
                                     </h5>
-                                    <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+                                    <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit dark:text-white">
                                         Créez facilement et rapidement une facture pour l'accompte de votre devis en un simple clic.
                                     </p>
                                 </div>
@@ -68,10 +68,10 @@
 
                             <div class="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-1/2.5 ">
                                 <div class="p-6">
-                                    <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                                    <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900 dark:text-white">
                                         Facture pour les produits
                                     </h5>
-                                    <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+                                    <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit dark:text-white">
                                         Créez facilement et rapidement une facture pour l'ensemble de votre devis en un simple clic.
                                     </p>
                                 </div>
@@ -89,12 +89,12 @@
         </div>
 
 
-        <div id="allInvoiceSection" class="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-1/2.5 ">
+        <div id="allInvoiceSection" class="relative flex flex-col mt-6 text-gray-700 bg-white dark:bg-dark-card shadow-md bg-clip-border rounded-xl w-1/2.5 ">
             <div class="p-6">
-                <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900 dark:text-white">
                     Facture pour les produits
                 </h5>
-                <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+                <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit dark:text-white">
                     Créez facilement et rapidement une facture pour l'ensemble de votre devis en un simple clic.
                 </p>
             </div>

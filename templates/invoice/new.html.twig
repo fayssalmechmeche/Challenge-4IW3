@@ -7,14 +7,16 @@
 {% block body  %}
 
 
-	<nav class="flex justify-between w-full items-center py-3 px-5 h-14 bg-[#353535] ">
-		<span class="material-symbols-outlined  transition-all duration-300 text-white cursor-pointer hover:text-red-500">
-			<a href="{{ path('app_devis_index') }}">Retour à la liste</a>
-		</span>
-		<form method="POST">
-			<button id="" class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500 valid-invoice ">Valider la facture</button>
-
+   <nav class="flex justify-between w-full items-center py-3 px-5 bg-nav-bar-black">
+		<a class="transition-all duration-300 text-white cursor-pointer hover:text-red-500 flex items-center gap-1" href="{{ path('app_invoice_index') }}">
+			<span class="material-symbols-outlined">
+				arrow_circle_left</span>
+			Retour à la liste</a>
+            <form method="POST">
+		<button  class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500 valid-invoice">Valider la facture</button>
+            </form>
 	</nav>
+
 	<div class="Generator font-roboto w-A4w  bg-white my-5 mx-auto p-5 border border-solid border-gray-300 shadow-md">
 		<div class="top h-auto w-full flex justify-between items-start">
 			<div class="society w-1/2 flex justify-center items-start flex-col">
