@@ -84,7 +84,6 @@ class Invoice
     {
 
         $this->invoiceStatus = InvoiceStatus::Pending;
-
     }
 
     /**
@@ -172,13 +171,6 @@ class Invoice
     {
         return $this->invoiceStatus;
     }
-    public function setPaymentStatus($paymentStatus): self
-    {
-        $this->paymentStatus = $paymentStatus;
-
-        return $this;
-    }
-
 
     public function setInvoiceStatus($invoiceStatus): self
     {
@@ -301,7 +293,6 @@ class Invoice
         // Vérifie si la date de validité est dépassée et si le statut de paiement n'est ni DELAYED ni PAYED
         if ($this->dateValidite < $today && $this->invoiceStatus !== InvoiceStatus::Paid) {
             $this->invoiceStatus = InvoiceStatus::Delayed;
-
         }
     }
 }

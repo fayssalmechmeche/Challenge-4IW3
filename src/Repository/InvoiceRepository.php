@@ -41,9 +41,8 @@ class InvoiceRepository extends ServiceEntityRepository
     {
 
         $lastInvoice = $this->createQueryBuilder('i')
-            ->join('i.user', 'u')
-            ->where('u.society = :society')
-            ->andWhere('i.paymentStatus = :status')
+            ->where('i.society = :society')
+            ->andWhere('i.invoiceStatus = :status')
             ->setParameter('status', 'PAID')
             ->setParameter('society', $society)
             ->orderBy('i.createdAt', 'DESC')
@@ -57,9 +56,8 @@ class InvoiceRepository extends ServiceEntityRepository
     {
 
         return $this->createQueryBuilder('i')
-            ->join('i.user', 'u')
-            ->where('u.society = :society')
-            ->andWhere('i.paymentStatus = :status')
+            ->where('i.society = :society')
+            ->andWhere('i.invoiceStatus = :status')
             ->setParameter('status', 'PAID')
             ->setParameter('society', $society)
             ->orderBy('i.createdAt', 'DESC')

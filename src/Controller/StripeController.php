@@ -53,7 +53,7 @@ class StripeController extends AbstractController
             if ($session && $session->payment_status == "paid") {
                 // si oui on redirige vers la page de succes
                 // if status is paid, we update the invoice status
-                $invoice->setPaymentStatus(InvoiceStatus::Paid);
+                $invoice->setInvoiceStatus(InvoiceStatus::Paid);
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre facture a déjà été payée');
                 return $this->redirectToRoute('checkout_success', ['token' => $invoice->getToken()]);
@@ -163,11 +163,11 @@ class StripeController extends AbstractController
         if (!$invoice) {
             return $this->redirectToRoute('default_index');
         }
-        if ($invoice->getPaymentStatus() == InvoiceStatus::Paid) {
+        if ($invoice->setInvoiceStatus() == InvoiceStatus::Paid) {
             $this->addFlash('success', 'La facture a déjà été payée');
             return $this->redirectToRoute('checkout_success', ['token' => $invoice->getToken()]);
         }
-        $invoice->setPaymentStatus(InvoiceStatus::Paid);
+        $invoice->setInvoiceStatus(InvoiceStatus::Paid);
         $entityManager->flush();
         $this->addFlash('success', 'La facture a bien été payée');
         return $this->redirectToRoute('checkout_success', ['token' => $token]);
@@ -226,11 +226,11 @@ class StripeController extends AbstractController
                             return new JsonResponse([['error' => 'Invoice not found', 'status' => 403]]);
                         }
                         if ($event['data']['object']['metadata']['type'] == 'invoice') {
-                            $invoice->setPaymentStatus(InvoiceStatus::Paid);
+                            $invoice->setInvoiceStatus(InvoiceStatus::Paid);
                         } else {
                             $paymentDue = $invoice->getTotalDuePrice() - floatval($event['data']['object']['metadata']['price']);
                             $invoice->setTotalDuePrice($paymentDue);
-                            $invoice->setPaymentStatus(InvoiceStatus::Partial);
+                            $invoice->setInvoiceStatus(InvoiceStatus::Partial);
                         }
                     }
                     $entityManager->flush();
