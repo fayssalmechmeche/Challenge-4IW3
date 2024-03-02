@@ -83,6 +83,11 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
     public function show(Category $category): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $category->getSociety()->getId()) {
+            return $this->redirectToRoute('app_category_index');
+        }
+
         return $this->render('category/show.html.twig', [
             'category' => $category,
         ]);
@@ -91,6 +96,11 @@ class CategoryController extends AbstractController
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $category->getSociety()->getId()) {
+            return $this->redirectToRoute('app_category_index');
+        }
+
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
@@ -114,6 +124,11 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $category->getSociety()->getId()) {
+            return $this->redirectToRoute('app_category_index');
+        }
+        
         // Vérifiez si le catégorie est utilisé dans un produit
         if (!$category->getProducts()->isEmpty()) {
             $this->addFlash('error', 'Cette catégorie est utilisée dans un produit. Supprimez d\'abord le produit lié.');
