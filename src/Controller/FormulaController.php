@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/formula')]
@@ -72,7 +74,6 @@ class FormulaController extends AbstractController
 
             ];
         }
-
         $data = [
             'id' => $formula->getId(),
             'name' => $formula->getName(),
@@ -83,6 +84,35 @@ class FormulaController extends AbstractController
         return $this->render('formula/show.html.twig', [
             'data' => $data
         ]);
+    }
+
+    #[Route('/api/modify/{id}', name: 'api_modify_formula_details', methods: ['GET'])]
+    public function apiModifyFormulaDetails(EntityManagerInterface $entityManager, $id): JsonResponse
+    {
+        $formulaRepository = $entityManager->getRepository(Formula::class);
+        $formula = $formulaRepository->find($id);
+
+        if (!$formula) {
+            return new JsonResponse(['error' => 'Formula not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $productsData = [];
+        foreach ($formula->getProductFormulas() as $productFormula) {
+            $product = $productFormula->getProduct();
+            $productsData[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'quantity' => $productFormula->getQuantity(),
+                'price' => $product->getPrice(),
+            ];
+        }
+
+        $data = [
+            'id' => $formula->getId(),
+            'name' => $formula->getName(),
+            'products' => $productsData
+        ];
+        return new JsonResponse($data);
     }
 
     #[Route('/new', name: 'app_formula_new', methods: ['GET', 'POST'])]

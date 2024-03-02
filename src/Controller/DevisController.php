@@ -42,6 +42,7 @@ class DevisController extends AbstractController
   {
     $society = $this->getSociety(); // Récupère l'utilisateur connecté
 
+
     if ($society) {
       $devis = $devisRepository->findBy(['society' => $society]);
     } else {
@@ -169,6 +170,15 @@ class DevisController extends AbstractController
       // Nouvelle condition pour gérer les soumissions de formulaire non valides
       $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
       return $this->redirectToRoute('app_devis_index');
+      //dd($devis);
+      $entityManager->persist($devis);
+      $entityManager->flush();
+      $this->addFlash('success', 'Le devis a bien été crée.');
+      return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+    } elseif ($form->isSubmitted() && !$form->isValid()) {
+      // Nouvelle condition pour gérer les soumissions de formulaire non valides
+      $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+      return $this->redirectToRoute('app_devis_index');
     }
     return $this->render('devis/new.html.twig', [
       'devis' => $devis,
@@ -180,6 +190,7 @@ class DevisController extends AbstractController
       'products' => $products,
       'formulas' => $formulas,
       'devisNumber' => $newDevisNumber,
+      'society' => $society
     ]);
   }
 
@@ -192,7 +203,7 @@ class DevisController extends AbstractController
     $societyEmail = $society ? $society->getEmail() : '';
 
     if ($society->getId() != $devi->getSociety()->getId()) {
-        return $this->redirectToRoute('app_devis_index');
+      return $this->redirectToRoute('app_devis_index');
     }
 
     // Traitement des produits
@@ -232,6 +243,7 @@ class DevisController extends AbstractController
       'userEmail' => $societyEmail,
       'products' => $productsArray,
       'formulas' => $formulasArray,
+      'society' => $society
     ]);
   }
 
@@ -336,6 +348,7 @@ class DevisController extends AbstractController
       'products' => $products,
       'formulas' => $formulas,
       'devisItems' => $devisItems,
+      'society' => $society
     ]);
   }
 
@@ -380,7 +393,7 @@ class DevisController extends AbstractController
     if ($society->getId() != $devi->getSociety()->getId()) {
       return $this->redirectToRoute('app_devis_index');
     }
-    
+
     $productsCollection = $devi->getDevisProducts();
     $productsCollection->initialize();
 
