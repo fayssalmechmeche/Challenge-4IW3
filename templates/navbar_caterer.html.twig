@@ -2,7 +2,7 @@
 <div class="navbar-hidden-space w-open-nav h-screen"></div>
 <!-- Navbar -->
 <div
-	class="vertical-nav bg-white dark:bg-dark-section w-open-nav h-screen rounded-tr-2xl rounded-br-2xl flex flex-col justify-start items-start fixed top-0 left-0 shadow-md">
+	class="vertical-nav bg-white dark:bg-dark-section w-open-nav h-screen rounded-tr-2xl rounded-br-2xl flex flex-col justify-start items-start fixed top-0 left-0 shadow-md z-10">
 	<!-- Head -->
 	<div class="w-full flex justify-center items-center relative h-20">
 		<a href="{{ path('default_index') }}">
@@ -84,8 +84,7 @@
 			
 		
 		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_accountant' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_accountant') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_accountant' ? 'text-white' : 'text-gray-500' }} hover:text-white">
-
+			<a href="{{ path('app_accountant') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_accountant' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
 				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
 					finance
 				</span>
