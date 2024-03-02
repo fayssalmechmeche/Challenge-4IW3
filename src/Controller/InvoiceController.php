@@ -137,6 +137,7 @@ class InvoiceController extends AbstractController
         $new = $totalTTC;
 
         if ($request->isMethod('POST')) {
+
             $invoice->setInvoiceNumber($newInvoiceNumber);
             $invoice->setTaxe($taxeValue);
             $invoice->setTotalPrice(round($new));
@@ -152,6 +153,15 @@ class InvoiceController extends AbstractController
             $invoice->setCreatedAt($createdAt);
             $dateValidite = new DateTime($request->request->get('dateValidite'));
             $invoice->setDateValidite($dateValidite);
+            if (empty($dateValiditeValue)) {
+                // Ici, vous pouvez ajouter un message flash pour indiquer à l'utilisateur que la date de validité est requise
+                $this->addFlash('error', 'La date de validité est requise pour créer une facture.');
+
+                // Retourner à la vue sans exécuter le flush
+                return $this->redirectToRoute('app_invoice_index', [
+
+                ]);
+            }
             $entityManager->persist($invoice);
             $entityManager->flush();
 
@@ -246,23 +256,7 @@ class InvoiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_invoice_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(InvoiceType::class, $invoice);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('invoice/edit.html.twig', [
-            'invoice' => $invoice,
-            'form' => $form,
-        ]);
-    }
 
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
