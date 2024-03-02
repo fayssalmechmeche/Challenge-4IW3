@@ -12,9 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
       invoices[i + 5].value, // PaymentDueTime
       gridjs.html(`<div class="w-full mx-auto flex justify-center items-center flex-wrap gap-2">
       <a class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2" href='/invoice/${invoices[i].value}'>Consulter</a>
-       <form method="post" action="{{ path('app_invoice_delete', {'id': invoice.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-      <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ invoice.id) }}">
-      <button class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
+       <form method="POST" action="/invoice/${invoices[i].value}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+       <input type="hidden" name="_token" value="${csrfToken}" />
+       <button
+       type="submit" class="text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
       >Supprimer</button>
       </div>
   </form>`),

@@ -18,13 +18,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 #[Route('/invoice')]
 class InvoiceController extends AbstractController
+
 {
+    private CsrfTokenManagerInterface $csrfTokenManager;
+
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    {
+      $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[Route('/', name: 'app_invoice_index', methods: ['GET'])]
     public function index(InvoiceRepository $invoiceRepository, EntityManagerInterface $entityManager): Response
     {
@@ -48,9 +57,16 @@ class InvoiceController extends AbstractController
             $allInvoice = [];
         }
 
+
+        $csrfToken = $this->csrfTokenManager->getToken('delete_invoice')->getValue();
+
+
+
+
         // Retourne les factures filtrées à la vue
         return $this->render('invoice/index.html.twig', [
             'invoices' => $allInvoice,
+            'csrfToken' => $csrfToken
         ]);
     }
 
@@ -261,10 +277,10 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($invoice);
-            $entityManager->flush();
-        }
+        
+        $entityManager->remove($invoice);
+        $entityManager->flush();
+        
         $this->addFlash('success', 'La facture a bien été supprimé.');
         return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
     }
