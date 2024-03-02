@@ -85,19 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
         to: "à",
       },
     },
-    style: {
-      table: {
-        border: "none",
-      },
-      th: {
-        "background-color": "#d4d4d4",
-        color: "#000",
-        "text-align": "center",
-      },
-      td: {
-        "text-align": "center",
-      },
-    },
     sort: true,
     className: {
       th: "bg-white dark:bg-dark-bg text-black dark:text-white dark:border-dark-bg hover:bg-gray-200 dark:hover:bg-dark-card active:bg-gray-300 dark:active:bg-dark-card focus:bg-gray-300 dark:focus:bg-dark-card",

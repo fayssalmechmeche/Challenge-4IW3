@@ -129,6 +129,11 @@ class UserController extends AbstractController
     #[Route('/show/{id}', name: 'show')]
     public function show(User $user): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $user->getSociety()->getId()) {
+            return $this->redirectToRoute('app_user');
+        }
+
         return $this->render('admin/user/show.html.twig', [
             'user' => $user,
         ]);
@@ -137,6 +142,11 @@ class UserController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(User $user, Request $request): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $user->getSociety()->getId()) {
+            return $this->redirectToRoute('app_user');
+        }
+
         $form = $this->createForm(AdminUserType::class, $user, [
             'user' => $this->getUser()
         ]);
@@ -228,6 +238,11 @@ class UserController extends AbstractController
     #[Route('/delete/{id}/{token}', name: 'delete')]
     public function delete(User $user, string $token): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $user->getSociety()->getId()) {
+            return $this->redirectToRoute('app_user');
+        }
+        
         if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
 
             $tokens = $this->entityManagerInterface->getRepository(ResetPasswordRequest::class)->findBy(['user' => $user]);

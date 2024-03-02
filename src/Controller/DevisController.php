@@ -191,6 +191,10 @@ class DevisController extends AbstractController
     $society = $this->getSociety();
     $societyEmail = $society ? $society->getEmail() : '';
 
+    if ($society->getId() != $devi->getSociety()->getId()) {
+        return $this->redirectToRoute('app_devis_index');
+    }
+
     // Traitement des produits
     $productsCollection = $devi->getDevisProducts();
     $productsCollection->initialize();
@@ -236,7 +240,8 @@ class DevisController extends AbstractController
   public function getProductPrice($id, ProductRepository $productRepository): JsonResponse
   {
     $product = $productRepository->find($id);
-    if (!$product) {
+    $society = $this->getSociety();
+    if (!$product || $society->getId() != $product->getSociety()->getId()) {
       return new JsonResponse(['error' => 'Produit non trouvé'], 404);
     }
     return new JsonResponse(['price' => $product->getPrice()]);
@@ -246,7 +251,8 @@ class DevisController extends AbstractController
   public function getFormulaPrice($id, FormulaRepository $formulaRepository): JsonResponse
   {
     $formula = $formulaRepository->find($id);
-    if (!$formula) {
+    $society = $this->getSociety();
+    if (!$formula || $society->getId() != $formula->getSociety()->getId()) {
       return new JsonResponse(['error' => 'Formule non trouvée'], 404);
     }
     return new JsonResponse(['price' => $formula->getPrice()]);
@@ -256,6 +262,9 @@ class DevisController extends AbstractController
   public function edit(Request $request, Devis $devi, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository): Response
   {
     $society = $this->getSociety();
+    if ($society->getId() != $devi->getSociety()->getId()) {
+      return $this->redirectToRoute('app_devis_index');
+    }
 
     $societyName = $society ? $society->getName() : '';
     $societyEmail = $society ? $society->getEmail() : '';
@@ -335,6 +344,11 @@ class DevisController extends AbstractController
   #[Route('/{id}', name: 'app_devis_delete', methods: ['POST'])]
   public function delete(Request $request, Devis $devi, EntityManagerInterface $entityManager): Response
   {
+    $society = $this->getSociety();
+    if ($society->getId() != $devi->getSociety()->getId()) {
+      return $this->redirectToRoute('app_devis_index');
+    }
+
     if ($this->isCsrfTokenValid('delete_devis', $request->request->get('_token'))) {
       $entityManager->remove($devi);
       $entityManager->flush();
@@ -362,6 +376,11 @@ class DevisController extends AbstractController
   #[Route('/{id}/download', name: 'app_devis_download', methods: ['GET'])]
   public function download(Devis $devi): Response
   {
+    $society = $this->getSociety();
+    if ($society->getId() != $devi->getSociety()->getId()) {
+      return $this->redirectToRoute('app_devis_index');
+    }
+    
     $productsCollection = $devi->getDevisProducts();
     $productsCollection->initialize();
 
@@ -411,9 +430,9 @@ class DevisController extends AbstractController
     //Infos user
     $society = $this->getSociety();
     $societyEmail = $society ? $society->getEmail() : '';
-    $societySociety = $society->getSociety()?->getName();
-    $societyAdress = $society->getSociety()?->getAddress();
-    $societyPhoneNumber = $society->getSociety()?->getPhone();
+    $societySociety = $society?->getName();
+    $societyAdress = $society?->getAddress();
+    $societyPhoneNumber = $society?->getPhone();
 
 
 

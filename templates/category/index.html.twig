@@ -1,35 +1,51 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_caterer.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}Catégories
+{% endblock %}
 
-{% block body %}
-    <h1>Category index</h1>
+{% block content %}
+	<div class="mt-8 mx-auto min-h-90vh w-95% h-auto rounded-2xl bg-white dark:bg-dark-section p-3">
+		<h1 class='text-4xl font-bold mb-3 dark:text-white'>Liste des Catégories</h1>
+		<button onclick="openCategoryCreateModal()" class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">Créer une Nouvelle Catégorie</button>
+		<!-- Conteneur pour le tableau Grid.js -->
+		<div id="category-table"></div>
+	</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.name }}</td>
-                <td>
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_category_new') }}">Create new</a>
+	<!-- Modal pour la création d'une nouvelle Categorie -->
+	{% set dynamicContent %}
+	<div>
+		<p>Contenu construit directement dans Twig.</p>
+	</div>
+	{% endset %}
+
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'newCategoryModalId',
+        'modal_content_id': 'newCategoryModalContentId',
+        'content': dynamicContent
+    } %}
+
+    <!-- Modal pour la modification d'une Categorie -->
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'categoryEditModal',
+        'modal_content_id': 'categoryEditModalContent',
+        'content': dynamicContent
+    } %}
+
+    <!-- Modal pour les détails d'une Categorie -->
+	{% include 'components/modal.html.twig' with {
+        'modal_id': 'categorieDetailsModal',
+        'modal_content_id': 'categorieDetailsModalContentId',
+        'content': dynamicContent
+    } %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		var csrfToken = '{{ csrf_token('delete_category') }}';
+	</script>
+	<script src="{{ asset('js/addFlash.js') }}"></script>
+	<script src="{{ asset('js/categoryGrid.js') }}"></script>
+	<script src="{{ asset('js/category.js') }}"></script>
 {% endblock %}
