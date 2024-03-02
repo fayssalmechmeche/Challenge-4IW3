@@ -1,9 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
   let btn = document.querySelector("#dl-pdf");
-  btn.addEventListener("click", generatePDF);
+  let btnInvoice = document.querySelector("#dl-pdf-2");
+  if (btn) {
+    btn.addEventListener("click", function () {
+      generatePDF("devis");
+    });
+  }
+  if (btnInvoice) {
+    btnInvoice.addEventListener("click", function () {
+      generatePDF("invoice");
+    });
+  }
 });
 
-function generatePDF() {
+function generatePDF(type) {
   html2canvas(document.querySelector(".Generator"), {
     scale: 1.1, // Ajustez ce paramètre pour obtenir le meilleur résultat
     onclone: function (clonedDoc) {
@@ -114,9 +124,12 @@ function generatePDF() {
     }
     // Générer un horodatage pour le nom du fichier
     const timestamp = new Date().toISOString().replace(/[\W_]+/g, "");
-    pdf.save(`devis_${timestamp}.pdf`);
-
-
+    if (type === "devis") {
+      pdf.save(`devis_${timestamp}.pdf`);
+    }
+    if (type === "invoice") {
+      pdf.save(`invoice_${timestamp}.pdf`);
+    }
     // Ajouter le canvas à l'élément de prévisualisation dans le document HTML
     // const canvasPreview = document.getElementById("canvasPreview");
     // canvasPreview.appendChild(canvas);

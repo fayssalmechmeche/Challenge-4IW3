@@ -1,77 +1,192 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Initialisation de Grid.js
-    new gridjs.Grid({
-        server: {
-            url: '/invoice/api',
-            then: data => data.map(invoice => [
-                invoice.customer,
-                invoice.devisNumber,
-                invoice.createdAt ? new Date(invoice.createdAt).toLocaleDateString() : '',
-                gridjs.html(`
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialisation de Grid.js
+  new gridjs.Grid({
+    server: {
+      url: "/invoice/api",
+      then: (data) =>
+        data.map((invoice) => [
+          invoice.customer,
+          invoice.devisNumber,
+          invoice.createdAt
+            ? new Date(invoice.createdAt).toLocaleDateString()
+            : "",
+          gridjs.html(`
     <button class="text-white font-medium bg-nav-btn hover:bg-blue-800 transition-all duration-300 ease-out rounded-lg mb-3 px-3 py-2 modalswap" data-devis-id="${invoice.id}" data-devis-number="${invoice.devisNumber}" data-deposit-status="${invoice.depositStatus}">Test</button>
-`)
-            ])
-        },
-        columns: ['Client', 'Numéro du devis', 'Créé Le', 'Actions'],
-        search: true,
-        pagination: true,
-        sort: true,
-    }).render(document.getElementById('devis-table'));
-
-    document.getElementById('devis-table').addEventListener('click', function (event) {
-        var target = event.target;
-        while (target != null && !target.classList.contains('modalswap')) {
-            target = target.parentNode;
+`),
+        ]),
+    },
+    columns: ["Client", "Numéro du devis", "Créé Le", "Actions"],
+    search: true,
+    className: {
+        th: "bg-white dark:bg-dark-bg text-black dark:text-white dark:border-dark-bg hover:bg-gray-200 dark:hover:bg-dark-card active:bg-gray-300 dark:active:bg-dark-card focus:bg-gray-300 dark:focus:bg-dark-card",
+        td: "text-black bg-white dark:text-white dark:bg-dark-card dark:border-dark-section",
+        paginationSummary: "text-black dark:text-white",
+        sort: "bg-yellow-400",
+        filter: "dark:bg-dark-card dark:text-white",
+        footer: "dark:bg-dark-card dark:text-white dark:border-dark-bg",
+      },
+    pagination: true,
+    sort: true,
+  }).render(document.getElementById("devis-table"));
+  const waitForGridToRender = () => {
+    return new Promise((resolve) => {
+      const checkExist = setInterval(() => {
+        const wrapper = document.querySelector(
+          "#devis-table .gridjs-wrapper"
+        );
+        if (wrapper) {
+          clearInterval(checkExist);
+          resolve();
         }
+      }, 100); // vérifier toutes les 100 millisecondes
+    });
+  };
 
-        if (target && target.classList.contains('modalswap')) {
-            const devisId = target.getAttribute('data-devis-id');
-            const devisNumber = target.getAttribute('data-devis-number');
-            const depositStatus = target.getAttribute('data-deposit-status'); // Récupère le statut de l'acompte
+  waitForGridToRender().then(() => {
+    // Le tableau est maintenant rendu, appliquez vos modifications ici
+    document
+      .querySelector("#devis-table .gridjs-wrapper")
+      .classList.add("dark:border-t-0");
+    document
+      .querySelector("#devis-table .gridjs-search-input")
+      .classList.add(
+        "bg-white",
+        "dark:border-dark-bg",
+        "dark:bg-dark-bg",
+        "text-black",
+        "dark:text-white"
+      );
+  });
 
-            document.getElementById('selected-devis-id').value = devisId;
-            document.getElementById('sectionToHide2').classList.add('hidden');
-            document.getElementById('sectionToHide').classList.remove('hidden');
+  document
+    .getElementById("devis-table")
+    .addEventListener("click", function (event) {
+        resetInvoiceSections();
+      const depositInvoiceSection = document.getElementById(
+        "depositInvoiceSection"
+      );
+      const allInvoiceSection = document.getElementById("allInvoiceSection");
 
-            updateDevisSelectionDisplay(devisNumber);
+      var target = event.target;
+      while (target != null && !target.classList.contains("modalswap")) {
+        target = target.parentNode;
+      }
 
-            // Mise à jour des URLs pour tous les liens "Créer la facture"
-            document.querySelectorAll('.create-invoice-btn').forEach((link, index) => {
-                if (index === 0) {
-                    link.href = `/invoice/new?devisId=${devisId}&deposit=true`;
-                } else if (index === 1) {
-                    link.href = `/invoice/new?devisId=${devisId}&deposit=false`;
+      if (target && target.classList.contains("modalswap")) {
+        const devisId = target.getAttribute("data-devis-id");
+        const devisNumber = target.getAttribute("data-devis-number");
+        let stringDevisNumber = String(devisNumber);
+        const depositStatus = target.getAttribute("data-deposit-status"); // Récupère le statut de l'acompte
+
+        fetch("api/invoices")
+          .then((response) => response.json())
+          .then((data) => {
+            // Traitement des données, par exemple en filtrant les factures qui correspondent au devisNumber
+            const matchingInvoices = data.filter(
+              (invoice) => invoice.devisNumber === stringDevisNumber
+            );
+            if (matchingInvoices.length > 0) {
+              // Itérer sur les factures correspondantes pour vérifier leur type
+              matchingInvoices.forEach((invoice) => {
+                if (invoice.invoiceType === "STANDARD") {
+                  allInvoiceSection.style.filter = "brightness(50%)";
+                  allInvoiceSection.style.opacity = "0.5";
+                  let links = allInvoiceSection.querySelectorAll("a");
+                  links.forEach((link) => {
+                    link.removeAttribute("href");
+                  });
+                } else if (invoice.invoiceType === "DEPOSIT") {
+                  depositInvoiceSection.style.filter = "brightness(50%)";
+                  depositInvoiceSection.style.opacity = "0.5";
+                  let links = depositInvoiceSection.querySelectorAll("a");
+                  links.forEach((link) => {
+                    link.removeAttribute("href");
+                  });
+                } else {
+                  // Si le type de facture est autre que STANDARD ou DEPOSIT
+                  console.log(
+                    `La facture ${invoice.invoiceNumber} a un type inattendu: ${invoice.invoiceType}.`
+                  );
                 }
-            });
-
-            const depositInvoiceSection = document.getElementById('depositInvoiceSection');
-            console.log(depositInvoiceSection);
-            if (depositStatus === 'NON_EXISTANT' || depositStatus === 'GENERE') {
-                // Applique un effet d'assombrissement et réduit l'opacité
-                depositInvoiceSection.style.filter = 'brightness(50%)';
-                depositInvoiceSection.style.opacity = '0.5';
-                console.log("Effet d'assombrissement et opacité réduite appliqués");
-                // Trouver le lien dans la section et le désactiver
-                const link = depositInvoiceSection.querySelector('a');
-                link.classList.add('cursor-not-allowed');
-                link.addEventListener('click', function (event) {
-                    event.preventDefault(); // Empêche la navigation
-                });
+              });
             } else {
-                // Réinitialise les styles pour la luminosité et l'opacité normales
-                depositInvoiceSection.style.filter = '';
-                depositInvoiceSection.style.opacity = '1';
-                // Réactiver le lien
-                const link = depositInvoiceSection.querySelector('a');
-                link.classList.remove('cursor-not-allowed');
+              // Logique si aucune facture correspondante n'est trouvée
+              console.log("Aucune facture correspondante trouvée");
             }
+          })
+          .catch((error) =>
+            console.error("Erreur lors de la récupération des factures:", error)
+          );
+
+        document.getElementById("selected-devis-id").value = devisId;
+        document.getElementById("sectionToHide2").classList.add("hidden");
+        document.getElementById("sectionToHide").classList.remove("hidden");
+
+        updateDevisSelectionDisplay(devisNumber);
+
+        // Mise à jour des URLs pour tous les liens "Créer la facture"
+        document
+          .querySelectorAll(".create-invoice-btn")
+          .forEach((link, index) => {
+            if (index === 0) {
+              link.href = `/invoice/new?devisId=${devisId}&deposit=true`;
+            } else if (index === 1) {
+              link.href = `/invoice/new?devisId=${devisId}&deposit=false`;
+            }
+          });
+
+        console.log(depositInvoiceSection);
+        if (depositStatus === "NON_EXISTANT" || depositStatus === "GENERE") {
+          // Applique un effet d'assombrissement et réduit l'opacité
+          depositInvoiceSection.style.filter = "brightness(50%)";
+          depositInvoiceSection.style.opacity = "0.5";
+          console.log("Effet d'assombrissement et opacité réduite appliqués");
+          // Trouver le lien dans la section et le désactiver
+          const link = depositInvoiceSection.querySelector("a");
+          link.classList.add("cursor-not-allowed");
+          link.addEventListener("click", function (event) {
+            event.preventDefault(); // Empêche la navigation
+          });
+        } else {
+          // Réinitialise les styles pour la luminosité et l'opacité normales
+          depositInvoiceSection.style.filter = "";
+          depositInvoiceSection.style.opacity = "1";
+          // Réactiver le lien
+          const link = depositInvoiceSection.querySelector("a");
+          link.classList.remove("cursor-not-allowed");
         }
+      }
     });
 });
 
-
-
 function updateDevisSelectionDisplay(devisNumber) {
-    document.getElementById('devis-selection-display').textContent = `Devis sélectionné : Devis numéro ${devisNumber} du client X`;
+  document.getElementById(
+    "devis-selection-display"
+  ).textContent = `Devis sélectionné : Devis numéro ${devisNumber} du client X`;
 }
-console.log("sheeesdfsdfsdfh");
+
+
+function resetInvoiceSections() {
+    // Réinitialise les styles pour allInvoiceSection et depositInvoiceSection
+    [allInvoiceSection, depositInvoiceSection].forEach(section => {
+        section.style.filter = '';
+        section.style.opacity = '1';
+        // Supprime le gestionnaire d'événements sur les liens pour réactiver la navigation
+        const links = section.querySelectorAll('a');
+        links.forEach(link => {
+            link.classList.remove('cursor-not-allowed');
+        });
+    });
+}
+
+fetch("api/invoices")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+console.log("wad");
+
+function preventNavigation(event) {
+  event.preventDefault();
+}
+
+console.log("seaaatttt");

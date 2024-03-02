@@ -21,12 +21,12 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
-    public function findLastinvoiceNumberForUser(\App\Entity\User $user): ?string
+    public function findLastinvoiceNumberForUser(\App\Entity\Society $society): ?string
     {
 
         $lastInvoice = $this->createQueryBuilder('d')
-            ->where('d.user = :user')
-            ->setParameter('user', $user)
+            ->where('d.society = :society')
+            ->setParameter('society', $society)
             ->orderBy('d.createdAt', 'DESC')
             ->setMaxResults(1)
             ->getQuery()

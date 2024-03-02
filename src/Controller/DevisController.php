@@ -39,6 +39,7 @@ class DevisController extends AbstractController
   {
     $society = $this->getSociety(); // Récupère l'utilisateur connecté
 
+
     if ($society) {
       $devis = $devisRepository->findBy(['society' => $society]);
     } else {
@@ -143,6 +144,7 @@ class DevisController extends AbstractController
           }
         }
       }
+      //dd($devis);
         $entityManager->persist($devis);
         $entityManager->flush();
         $this->addFlash('success', 'Le devis a bien été crée.');
@@ -163,6 +165,7 @@ class DevisController extends AbstractController
       'products' => $products,
       'formulas' => $formulas,
       'devisNumber' => $newDevisNumber,
+        'society' => $society
     ]);
   }
 
@@ -215,6 +218,7 @@ class DevisController extends AbstractController
       'userEmail' => $societyEmail,
       'products' => $productsArray,
       'formulas' => $formulasArray,
+        'society' => $society
     ]);
   }
 
@@ -319,6 +323,7 @@ class DevisController extends AbstractController
       'products' => $products,
       'formulas' => $formulas,
       'devisItems' => $devisItems,
+        'society' => $society
     ]);
   }
 
