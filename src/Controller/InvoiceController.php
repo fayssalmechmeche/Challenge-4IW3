@@ -271,7 +271,7 @@ class InvoiceController extends AbstractController
             $entityManager->remove($invoice);
             $entityManager->flush();
         }
-
+        $this->addFlash('success', 'La facture a bien été supprimé.');
         return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
     }
 

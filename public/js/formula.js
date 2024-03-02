@@ -97,7 +97,9 @@ function openFormulaCreateModal() {
 
       initializeFormElements(modalBody);
       initializeCheckbox(); // Initialiser la checkbox ici
-
+      if (!productGridInstance) {
+        initializeProductGridCreate();
+      }
       toggleModal("newModalId", "newModalModalContentId");
       sheeesh();
 
@@ -289,6 +291,7 @@ function addHiddenInput(productId, quantity) {
 }
 
 function removeProductFromGrid(productId) {
+
   // Mettre à jour la configuration de la grille pour retirer la ligne
   productGridInstance
     .updateConfig({
@@ -304,8 +307,9 @@ function removeProductFromGrid(productId) {
   const container = document.getElementById("productDataContainer");
   if (container) {
     const inputsToRemove = container.querySelectorAll(
-      `[data-product-id="${productId}"]`
+      `input[data-product-id="${productId}"]`
     );
+    console.log(inputsToRemove)
     if (inputsToRemove.length > 0) {
       inputsToRemove.forEach((input) => container.removeChild(input));
     } else {
@@ -322,6 +326,7 @@ function removeProductFromGrid(productId) {
 function updateQuantity(inputElement) {
   const productId = inputElement.getAttribute("data-product-id");
   const newQuantity = inputElement.value;
+  console.log(inputElement)
 
   const rowData = productGridInstance.config.data.find(
     (row) => row[2] === productId
@@ -377,22 +382,60 @@ function updateTotalPrice() {
 
 function openFormulaEditModal(formulaId) {
   fetch(`/formula/${formulaId}/edit`)
-    .then((response) => response.text())
-    .then((html) => {
-      const modalBody = document.querySelector("#formulaEditModalContentId");
-      modalBody.innerHTML = html;
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok for edit form');
+        }
+        return response.text();
+      })
+      .then(html => {
+        const modalBody = document.querySelector("#formulaEditModalContentId");
+        modalBody.innerHTML = html;
 
-      if (!productGridInstance) {
-        initializeProductGridCreate(); // Initialise un Grid.js vide
-      }
-    //update
-      toggleModal("formulaEditModal", "formulaEditModalContentId");
-    })
-    .catch((error) => {
-      console.error("Error loading the edit form:", error);
-      alert("There was a problem loading the edit form. Please try again.");
-    });
+        if (!productGridInstance) {
+          initializeProductGridCreate(); // Initialise un Grid.js vide
+        }
+
+        toggleModal("formulaEditModal", "formulaEditModalContentId");
+      })
+      .catch(error => {
+        console.error("Error loading the edit form:", error);
+      })
+      .finally(() => {
+        fetch(`/formula/api/modify/${formulaId}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok for formula details');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log(data); // Affichage des données pour débogage
+              if (productGridInstance && data.products) {
+                // Mise à jour de l'instance Grid.js avec les nouvelles données
+                productGridInstance.updateConfig({
+                  data: data.products.map(product => [
+                    product.name,
+                    product.quantity,
+                    `${((product.price / 100) * product.quantity).toFixed(2)} €`,
+                      product.id
+                  ])
+                }).forceRender();
+
+                // Création des inputs cachés pour chaque produit récupéré
+                data.products.forEach(product => {
+                  addHiddenInput(product.id, product.quantity);
+                });
+              }
+            })
+            .catch(error => {
+              console.error("Error loading the formula details:", error);
+            });
+      });
 }
+
+
+
 
 function toggleModal(modalId, modalContentId) {
   addClassToElement();
@@ -481,7 +524,8 @@ function sheeesh() {
     let messages = [];
 
     // Récupération des éléments input cachés pour les produits
-    const productInputs = document.querySelectorAll('input[type="hidden"][name^="formula[productFormulas]["][name$="][product]"]');
+    const productInputs = document.querySelectorAll(`input[data-product-id="${productId}"]`
+    );
 
     let hasProducts = false; // Supposons d'abord qu'aucun produit n'est présent
 
@@ -523,4 +567,4 @@ function sheeesh() {
 
 
 
-console.log('scriptfdgdfg c');
+console.log('sfffdfdfi');
