@@ -106,6 +106,8 @@ function getStatusLabel(paymentStatus) {
             return "En retard";
         case "PENDING":
             return "En attente";
+        case "SIGNED":
+            return "Signé";
         default:
             return paymentStatus;
     }

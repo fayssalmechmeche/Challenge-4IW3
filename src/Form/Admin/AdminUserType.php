@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 use const App\Entity\ROLE_ACCOUNTANT;
+use const App\Entity\ROLE_HEAD;
 use const App\Entity\ROLE_SOCIETY;
 
 class AdminUserType extends AbstractType
@@ -35,6 +36,7 @@ class AdminUserType extends AbstractType
                 "choices" => [
                     'Entreprise' => ROLE_SOCIETY,
                     'Comptable' => ROLE_ACCOUNTANT,
+                    "Chef d'entreprise" => ROLE_HEAD
                 ],
                 'label' => 'Role',
                 'label_attr' => ['class' => 'font-medium dark:text-white'],

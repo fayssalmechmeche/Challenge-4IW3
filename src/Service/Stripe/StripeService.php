@@ -2,7 +2,7 @@
 
 namespace App\Service\Stripe;
 
-
+use App\Entity\Devis;
 use Stripe\Stripe;
 use Stripe\Customer;
 use App\Entity\Invoice;
@@ -111,6 +111,36 @@ class StripeService
                         'currency' => 'eur',
                         'unit_amount_decimal' =>  !$isDeposit ? $invoice->getTotalPrice() * 100 : ($invoice->getDevis()->getTotalPrice() * ($invoice->getDevis()->getDepositPercentage() / 100) * 100) + ($taxeValue * ($invoice->getDevis()->getDepositPercentage() / 100) * 100)
 
+                    ],
+                    'quantity' => 1,
+                ]
+            ],
+        ]);
+        return $session;
+    }
+
+    public function createPaymentIntentDevis(Devis $devis)
+    {
+        $session = $this->stripe->checkout->sessions->create([
+            'mode' => 'payment',
+            'success_url' => $this->urlGenerator->generate('checkout_success', ['token' => $devis->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' =>  $this->urlGenerator->generate('checkout_cancel', ['token' => $devis->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+            'invoice_creation' => ["enabled" => true],
+            'shipping_address_collection' => [
+                'allowed_countries' => ['FR'],
+            ],
+            'payment_method_types' => ['card'],
+            'metadata' => [
+                'type' => $devis->getToken(),
+            ],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'product_data' => [
+                            'name' => $devis->getDevisNumber(),
+                        ],
+                        'currency' => 'eur',
+                        'unit_amount_decimal' => 0,
                     ],
                     'quantity' => 1,
                 ]

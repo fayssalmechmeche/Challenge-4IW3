@@ -7,10 +7,13 @@ use App\Entity\Devis;
 use App\Entity\Society;
 use App\Form\DevisType;
 use App\Entity\DevisProduct;
+use App\Entity\InvoiceStatus;
+use App\Entity\PaymentStatus;
 use App\Repository\DevisRepository;
 use App\Repository\FormulaRepository;
 use App\Repository\ProductRepository;
 use App\Service\Excel\DevisExcelService;
+use App\Service\MailjetService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +24,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/devis')]
 #[IsGranted('ROLE_SOCIETY')]
@@ -47,16 +50,16 @@ class DevisController extends AbstractController
 
     $csrfToken = $this->csrfTokenManager->getToken('delete_devis')->getValue();
 
-      $devisRepository = $entityManager->getRepository(Devis::class);
-      $allDevis = $devisRepository->findAll();
+    $devisRepository = $entityManager->getRepository(Devis::class);
+    $allDevis = $devisRepository->findAll();
 
-      // Met à jour le statut de paiement si nécessaire
-      foreach ($allDevis as $devis) {
-          $devis->updatePaymentStatusBasedOnValidity();
-      }
+    // Met à jour le statut de paiement si nécessaire
+    foreach ($allDevis as $devis) {
+      $devis->updatePaymentStatusBasedOnValidity();
+    }
 
-      // Sauvegarde les modifications dans la base de données
-      $entityManager->flush();
+    // Sauvegarde les modifications dans la base de données
+    $entityManager->flush();
 
     return $this->render('devis/index.html.twig', [
       'devis' => $devis,
@@ -99,7 +102,7 @@ class DevisController extends AbstractController
 
 
   #[Route('/new', name: 'app_devis_new', methods: ['GET', 'POST'])]
-  public function new(Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository, DevisRepository $devisRepository): Response
+  public function new(MailjetService $mailjetService, Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository, FormulaRepository $formulaRepository, DevisRepository $devisRepository): Response
   {
     $devis = new Devis();
     $society = $this->getSociety();
@@ -122,6 +125,8 @@ class DevisController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
       $devis->setDevisNumber($newDevisNumber);
+      $devis->setToken(uniqid('devis_'));
+      $devis->setPaymentStatus(PaymentStatus::Pending);
       if (null !== $devis->getDepositPercentage()) {
         $devis->setDepositStatus(DepositStatus::Prevu);
       } else {
@@ -143,23 +148,35 @@ class DevisController extends AbstractController
           }
         }
       }
-        $entityManager->persist($devis);
-        $entityManager->flush();
-        $this->addFlash('success', 'Le devis a bien été crée.');
-        return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+      $entityManager->persist($devis);
+      $entityManager->flush();
 
-    }elseif ($form->isSubmitted() && !$form->isValid()) {
-        // Nouvelle condition pour gérer les soumissions de formulaire non valides
-        $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
-        return $this->redirectToRoute('app_devis_index');
+      $name = $devis->getCustomer()?->getName() . ' ' . $devis->getCustomer()->getLastName();
+      $mailjetService->sendEmail(
+        $devis->getCustomer()?->getEmail() ?? $societyEmail,
+        $name ?? $societyName,
+        MailjetService::TEMPLATE_DEVIS,
+        [
+          'society' => $societyName,
+          'firstName' => $devis->getCustomer()?->getName() ?? '',
+          'name' => $devis->getCustomer()?->getLastName() ?? '',
+          'link' => $this->generateUrl('checkout_devis', ['token' => $devis->getToken()], UrlGeneratorInterface::ABSOLUTE_URL)
+        ],
+      );
+      $this->addFlash('success', 'Le devis a bien été crée.');
+      return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+    } elseif ($form->isSubmitted() && !$form->isValid()) {
+      // Nouvelle condition pour gérer les soumissions de formulaire non valides
+      $this->addFlash('error', 'Le formulaire contient des erreurs, veuillez vérifier vos informations.');
+      return $this->redirectToRoute('app_devis_index');
     }
     return $this->render('devis/new.html.twig', [
       'devis' => $devis,
       'form' => $form->createView(),
       'userEmail' => $societyEmail,
       'userName' => $societyName,
-        'userPhone' => $societyPhone,
-        'userAddress' => $societyAdress,
+      'userPhone' => $societyPhone,
+      'userAddress' => $societyAdress,
       'products' => $products,
       'formulas' => $formulas,
       'devisNumber' => $newDevisNumber,
@@ -240,10 +257,10 @@ class DevisController extends AbstractController
   {
     $society = $this->getSociety();
 
-      $societyName = $society ? $society->getName() : '';
-      $societyEmail = $society ? $society->getEmail() : '';
-      $societyPhone = $society ? $society->getPhone() : '';
-      $societyAdress = $society ? $society->getAddress() : '';
+    $societyName = $society ? $society->getName() : '';
+    $societyEmail = $society ? $society->getEmail() : '';
+    $societyPhone = $society ? $society->getPhone() : '';
+    $societyAdress = $society ? $society->getAddress() : '';
 
     $products = $productRepository->findBy(['society' => $society]);
     $formulas = $formulaRepository->findBy(['society' => $society]);
@@ -287,25 +304,25 @@ class DevisController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        try {
+      try {
 
-            $entityManager->flush();
-            $this->addFlash('success', 'Le devis a été modifié.');
-            return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
-        } catch (\Exception $exception) {
-            // Logique de gestion des erreurs
-            $this->addFlash('error', 'Une erreur est survenue lors de la modification du devis. Veuillez réessayer.');
-            return $this->redirectToRoute('app_devis_index');
-        }
+        $entityManager->flush();
+        $this->addFlash('success', 'Le devis a été modifié.');
+        return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
+      } catch (\Exception $exception) {
+        // Logique de gestion des erreurs
+        $this->addFlash('error', 'Une erreur est survenue lors de la modification du devis. Veuillez réessayer.');
+        return $this->redirectToRoute('app_devis_index');
+      }
     }
 
     return $this->render('devis/edit.html.twig', [
       'devi' => $devi,
       'clientId' => $clientId,
-        'userEmail' => $societyEmail,
-        'userName' => $societyName,
-        'userPhone' => $societyPhone,
-        'userAddress' => $societyAdress,
+      'userEmail' => $societyEmail,
+      'userName' => $societyName,
+      'userPhone' => $societyPhone,
+      'userAddress' => $societyAdress,
       'form' => $form->createView(),
       'products' => $products,
       'formulas' => $formulas,
@@ -322,7 +339,7 @@ class DevisController extends AbstractController
       $entityManager->remove($devi);
       $entityManager->flush();
     }
-      $this->addFlash('success', 'Le devis a bien été supprimé.');
+    $this->addFlash('success', 'Le devis a bien été supprimé.');
     return $this->redirectToRoute('app_devis_index', [], Response::HTTP_SEE_OTHER);
   }
 
@@ -830,13 +847,13 @@ nav button:hover {
     }
   }
 
-    public function getSociety()
-    {
-        // Exemple de récupération de l'utilisateur courant et de sa société
-        $user = $this->getUser(); // Supposons que `getUser()` retourne l'utilisateur courant
-        if ($user) {
-            return $user->getSociety(); // Supposons que l'utilisateur a une méthode `getSociety()`
-        }
-        return null; // ou gérer autrement si l'utilisateur n'est pas connecté ou n'a pas de société
+  public function getSociety()
+  {
+    // Exemple de récupération de l'utilisateur courant et de sa société
+    $user = $this->getUser(); // Supposons que `getUser()` retourne l'utilisateur courant
+    if ($user) {
+      return $user->getSociety(); // Supposons que l'utilisateur a une méthode `getSociety()`
     }
+    return null; // ou gérer autrement si l'utilisateur n'est pas connecté ou n'a pas de société
+  }
 }

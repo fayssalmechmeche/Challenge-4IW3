@@ -38,7 +38,7 @@ class InvoiceController extends AbstractController
         $user = $this->getUser(); // Récupère l'utilisateur connecté
 
         if ($user) {
-            $devis = $devisRepository->findPendingByUser($user);
+            $devis = $devisRepository->findPendingByUser($user->getSociety());
         } else {
             return $this->json([]); // Retourne une réponse vide si aucun utilisateur n'est connecté
         }
@@ -92,7 +92,7 @@ class InvoiceController extends AbstractController
             $invoice->setTotalDuePrice(round($new));
             $invoice->setRemise(0);
             $invoice->setPaymentStatus(InvoiceStatus::Pending);
-            $invoice->setToken(uniqid());
+            $invoice->setToken(uniqid('invoice_'));
             $paymentDueTime = new DateTime('now + 10 days');
             $invoice->setPaymentDueTime($paymentDueTime);
             $createdAt = new DateTime();
@@ -102,7 +102,7 @@ class InvoiceController extends AbstractController
 
             $mailjetService->sendEmail(
                 $invoice->getDevis()->getCustomer()->getEmail(),
-                'Nouvelle facture créée',
+                $invoice->getDevis()->getCustomer()->getName(),
                 MailjetService::TEMPLATE_INVOICE_NO_DEPOSIT,
                 [
                     'firstName' => $invoice->getDevis()->getCustomer()->getName(),
