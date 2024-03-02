@@ -161,7 +161,7 @@ class InvoiceController extends AbstractController
             // Supposons que $deposit est une chaîne de caractères qui détermine le type de la facture
             $invoice->setInvoiceType($deposit == "true" ? InvoiceType::Deposit : InvoiceType::Invoice);
             $invoice->setRemise(0);
-            $invoice->setPaymentStatus(InvoiceStatus::Pending);
+            $invoice->setInvoiceStatus(InvoiceStatus::Pending);
             $invoice->setToken(uniqid('invoice_'));
             $paymentDueTime = new DateTime('now + 10 days');
             $invoice->setPaymentDueTime($paymentDueTime);
