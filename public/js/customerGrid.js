@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 `),
         ]),
     },
-    columns: ["Nom", "Type", { name: "Actions", width: "300px" }],
+    columns: ["Nom", "Type", { name: "Actions" }],
     search: true,
     pagination: true,
     sort: true,
@@ -55,9 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "max-width": "1000px",
       },
       table: {
-        "font-size": "18px",
         "text-align": "center",
-        "font-weight": "bold",
       },
     },
   }).render(document.getElementById("customer-table"));
@@ -87,7 +85,4 @@ document.addEventListener("DOMContentLoaded", function () {
         "dark:text-white"
       );
   });
-
 });
-
-

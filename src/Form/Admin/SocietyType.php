@@ -38,7 +38,7 @@ class SocietyType extends AbstractType
                 ],
             ])
             ->add('address', TextType::class, [
-                'label' => 'Addresse de la société',
+                'label' => 'Adresse de la société',
                 'label_attr' => ['class' => 'font-medium dark:text-white'],
                 'row_attr' => ['class' => 'flex flex-col px-1 my-1'],
                 'attr' => [

@@ -129,6 +129,11 @@ class UserController extends AbstractController
     #[Route('/show/{id}', name: 'show')]
     public function show(User $user): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $user->getSociety()->getId()) {
+            return $this->redirectToRoute('app_user');
+        }
+
         return $this->render('admin/user/show.html.twig', [
             'user' => $user,
         ]);
@@ -137,6 +142,11 @@ class UserController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(User $user, Request $request): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $user->getSociety()->getId()) {
+            return $this->redirectToRoute('app_user');
+        }
+
         $form = $this->createForm(AdminUserType::class, $user, [
             'user' => $this->getUser()
         ]);
@@ -155,6 +165,23 @@ class UserController extends AbstractController
                     'code' => 200,
                     'success' => false,
                     'message' => "Tous les champs sont obligatoires"
+                ));
+            }
+
+
+            $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $data['admin_user[email]']]);
+            if ($isUserExist && $isUserExist->getId() != $user->getId()) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "L'e-mail est déja utilisé"
+                ));
+            }
+            if (ROLE_HEAD === $data["admin_user[roles][]"] || ROLE_ADMIN === $data["admin_user[roles][]"]) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "Vous ne pouvez pas attribuer le rôle chef ou admin"
                 ));
             }
 
@@ -201,24 +228,9 @@ class UserController extends AbstractController
         $user->setCreatedAt(new \DateTime());
         $user->setSociety($this->getUser()->getSociety());
         $user->setRoles([$roles]);
-
-        $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $email]);
-        if ($isUserExist && $isUserExist->getId() != $user->getId()) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "L'e-mail est déja pris"
-            ));
+        if ($edit) {
+            $user->setUpdatedAt(new \DateTime());
         }
-
-        if (ROLE_HEAD === $roles) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "Vous ne pouvez pas attribuer le rôle chef"
-            ));
-        }
-
         $this->entityManagerInterface->persist($user);
         $this->entityManagerInterface->flush();
     }
@@ -226,6 +238,11 @@ class UserController extends AbstractController
     #[Route('/delete/{id}/{token}', name: 'delete')]
     public function delete(User $user, string $token): Response
     {
+        $society = $this->getUser()->getSociety();
+        if ($society->getId() != $user->getSociety()->getId()) {
+            return $this->redirectToRoute('app_user');
+        }
+        
         if ($this->isCsrfTokenValid('delete-users' . $user->getId(), $token)) {
 
             $tokens = $this->entityManagerInterface->getRepository(ResetPasswordRequest::class)->findBy(['user' => $user]);

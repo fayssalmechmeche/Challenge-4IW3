@@ -176,6 +176,14 @@ class AdminUserController extends AbstractController
                     'message' => "L'e-mail n'est pas valide"
                 ));
             }
+            $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $data['admin_user[society]']]);
+            if (!$society) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "La societé n'existe pas"
+                ));
+            }
             if ($this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $data['admin_user[email]']])) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -233,6 +241,15 @@ class AdminUserController extends AbstractController
                     'message' => "Tous les champs sont obligatoires"
                 ));
             }
+
+            $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $data['admin_user[email]']]);
+            if ($isUserExist && $isUserExist->getId() != $user->getId()) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "L'e-mail est déja utilisé"
+                ));
+            }
             if (!filter_var($data['admin_user[email]'], FILTER_VALIDATE_EMAIL)) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -254,13 +271,20 @@ class AdminUserController extends AbstractController
                     'message' => "Le rôle est obligatoire"
                 ));
             }
-
+            $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $data['admin_user[society]']]);
+            if (!$society) {
+                return new JsonResponse(array(
+                    'code' => 200,
+                    'success' => false,
+                    'message' => "La societé n'existe pas"
+                ));
+            }
 
             if ($data['admin_user[roles][]'] == ROLE_ADMIN) {
                 return new JsonResponse(array(
                     'code' => 200,
                     'success' => false,
-                    'message' => "Vous ne pouvez pas vous attribuer le rôle administrateur"
+                    'message' => "Vous ne pouvez pas attribuer le rôle administrateur"
                 ));
             }
 
@@ -312,17 +336,6 @@ class AdminUserController extends AbstractController
         $society = $data['admin_user[society]'] ?? null;
         $roles = $data["admin_user[roles][]"] ?? null;
 
-        $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
-        if (!$society) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "La societé n'existe pas"
-            ));
-        }
-
-
-
         $user->setEmail($email);
         $user->setName($name);
         $user->setLastName($lastName);
@@ -330,22 +343,8 @@ class AdminUserController extends AbstractController
         $user->setCreatedAt(new \DateTime());
         $user->setSociety($society ?? $this->getUser()->getSociety());
         $user->setRoles([$roles]);
-
-        $isUserExist = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email' => $email]);
-        if ($isUserExist && $isUserExist->getId() != $user->getId()) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "L'e-mail est déja pris"
-            ));
-        }
-
-        if (ROLE_ADMIN === $roles) {
-            return new JsonResponse(array(
-                'code' => 200,
-                'success' => false,
-                'message' => "Vous ne pouvez pas vous attribuer le rôle administrateur"
-            ));
+        if ($edit) {
+            $user->setUpdatedAt(new \DateTime());
         }
 
         $this->entityManagerInterface->persist($user);

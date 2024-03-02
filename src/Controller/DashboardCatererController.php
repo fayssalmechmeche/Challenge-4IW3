@@ -13,8 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DashboardCatererController extends AbstractController
 {
-    #[Route('/dashboard/caterer', name: 'home_index')]
-    #[IsGranted('ROLE_SOCIETY')]
+    #[Route('/dashboard', name: 'home_index')]
     public function index(
         StripeService $stripeService, 
         DevisRepository $devisRepository, 

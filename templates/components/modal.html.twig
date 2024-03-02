@@ -1,9 +1,9 @@
 <!-- Modal OVERLAY -->
-<div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full opacity-0 hidden" id="{{ modal_id }}"></div>
+<div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full opacity-0 hidden z-20" id="{{ modal_id }}"></div>
 
 <!-- Modal -->
 <div
-	class="fixed top-up hidden left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-modal-height px-9 py-5 border border-white dark:border-dark-section w-modal-width shadow-lg rounded-3xl bg-white dark:bg-dark-section overflow-y-auto" id="{{ modal_content_id }}">
+	class="fixed top-up hidden left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 max-h-modal-height px-9 py-5 border border-white dark:border-dark-section w-modal-width shadow-lg rounded-3xl bg-white dark:bg-dark-section overflow-y-auto z-20" id="{{ modal_content_id }}">
 	<!-- Close Button -->
 	<button class="absolute top-3 right-3 text-white font-medium bg-red-500 hover:bg-red-700 transition-all duration-300 ease-out rounded-lg px-2 py-1" onclick="toggleModal('customerEditModal', 'customerEditModalContent')">
 		Fermer

@@ -2,12 +2,13 @@
 <div class="navbar-hidden-space w-open-nav h-screen"></div>
 <!-- Navbar -->
 <div
-	class="vertical-nav bg-white dark:bg-dark-section w-open-nav h-screen rounded-tr-2xl rounded-br-2xl flex flex-col justify-start items-start fixed top-0 left-0 shadow-md">
+	class="vertical-nav bg-white dark:bg-dark-section w-open-nav h-screen rounded-tr-2xl rounded-br-2xl flex flex-col justify-start items-start fixed top-0 left-0 shadow-md z-10">
 	<!-- Head -->
 	<div class="w-full flex justify-center items-center relative h-20">
-		<img class="nav-logo-light dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo"/>
-		<img
-		class="nav-logo-dark hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo"/>
+		<a href="{{ path('default_index') }}">
+			<img class="nav-logo-light dark:hidden" src="{{ asset('images/lightLogo.svg') }}" alt="logo"/>
+			<img class="nav-logo-dark hidden dark:block" src="{{ asset('images/darkLogo.svg') }}" alt="logo"/>
+		</a>
 		<!-- Toggle of navbar -->
 		<span class="material-symbols-outlined navbar-toggle rotate-180 transition ease-in-out duration-300 text-white dark:text-white bg-nav-btn cursor-pointer rounded-full p-1">arrow_forward</span>
 	</div>
@@ -33,74 +34,81 @@
 			</div>
 		{% endif %}
 		<!-- end item -->
-		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_customer_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_customer_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_customer_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">person</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">Clients</p>
-			</a>
-		</div>
-		<!-- end item -->
-		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_product_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_product_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_product_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">cookie</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">Produits</p>
-			</a>
-		</div>
-		<!-- end item -->
-		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_formula_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_formula_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_formula_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">menu_book</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">Formules</p>
-			</a>
-		</div>
-		<!-- end item -->
-		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_devis_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">description</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">Devis</p>
-			</a>
-		</div>
-		<!-- end item -->
-		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('home_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">payments</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">Factures</p>
-			</a>
-		</div>
-		<!-- end item -->
-		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_category_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_category_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_category_index' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+		{% if is_granted('ROLE_SOCIETY') %}
 
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
-					category
-				</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">
-					Categories
-				</p>
-			</a>
-		</div>
+
+			<!-- Navbar item -->
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_customer_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('app_customer_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_customer_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">person</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">Clients</p>
+				</a>
+			</div>
+			<!-- end item -->
+			<!-- Navbar item -->
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_product_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('app_product_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_product_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">cookie</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">Produits</p>
+				</a>
+			</div>
+			<!-- end item -->
+			<!-- Navbar item -->
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_category_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('app_category_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_category_index' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
+						category
+					</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">
+						Categories
+					</p>
+				</a>
+			</div>
+			<!-- end item -->
+			<!-- Navbar item -->
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_formula_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('app_formula_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_formula_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">menu_book</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">Formules</p>
+				</a>
+			</div>
+			<!-- end item -->
+			<!-- Navbar item -->
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('app_devis_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">description</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">Devis</p>
+				</a>
+			</div>
+			<!-- end item -->
+			<!-- Navbar item -->
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('home_index') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_devis_index' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">payments</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">Factures</p>
+				</a>
+			</div>
+		{% endif %}
 		<!-- end item -->
 		<!-- Navbar item -->
-		<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_accountant' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
-			<a href="{{ path('app_accountant') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_accountant' ? 'text-white' : 'text-gray-500' }} hover:text-white">
+		{% if  is_granted('ROLE_ACCOUNTANT')  %}
 
-				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
-					finance
-				</span>
-				<p class="nav-text font-semibold transition ease-in-out duration-300">
-					Rapports
-				</p>
-			</a>
-		</div>
+
+			<div class="nav-link my-2 group w-95% transition ease-in-out duration-300 cursor-pointer {{ app.request.attributes.get('_route') == 'app_accountant' ? 'bg-nav-btn hover:bg-nav-btn' : 'hover:bg-nav-btn ' }} h-12 rounded-10px flex justify-start items-center">
+				<a href="{{ path('app_accountant') }}" class="flex items-center w-full h-full {{ app.request.attributes.get('_route') == 'app_accountant' ? 'text-white' : 'text-gray-500 dark:text-white' }} hover:text-white">
+					<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 mx-4">
+						finance
+					</span>
+					<p class="nav-text font-semibold transition ease-in-out duration-300">
+						Rapports
+					</p>
+				</a>
+			</div>
+		{% endif %}
 		<!-- logout -->
 		<div class="group mt-auto mb-5 w-95% transition ease-in-out duration-300 cursor-pointer hover:bg-nav-btn h-12 rounded-10px flex justify-start items-center justify-self-end">
-			<a href="{{ path('home_index') }}" class="flex items-center w-full h-full text-gray-500 dark:text-white hover:text-white">
+			<a href="{{ path('app_logout') }}" class="flex items-center w-full h-full text-gray-500 dark:text-white hover:text-white">
 				<span class="material-symbols-outlined nav-icon transition ease-in-out duration-300 text-gray-500 dark:text-white group-hover:text-white mx-4">power_settings_new</span>
 				<p class="nav-text font-semibold transition ease-in-out duration-300 text-gray-500 dark:text-white group-hover:text-white">Logout</p>
 			</a>

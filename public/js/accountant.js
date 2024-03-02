@@ -1,17 +1,3 @@
-// document.addEventListener("DOMContentLoaded", function () {
-//   fetch("/accountant/api")
-//     .then((response) => response.json())
-//     .then((data) => {
-//       createBarChart(data);
-//     })
-//     .catch((error) => {
-//       console.error("Erreur lors de la récupération des données :", error);
-//     });
-// });
-
-console.log(labelChartCA);
-console.log(dataChartCA);
-
 const chartCA = document.getElementById("chartCA");
 new Chart(chartCA, {
   type: "bar",
@@ -33,7 +19,11 @@ new Chart(chartCA, {
   options: {
     scales: {
       y: {
+        ticks: { color: "#CCC" },
         beginAtZero: true,
+      },
+      x: {
+        ticks: { color: "#CCC" },
       },
     },
     plugins: {
@@ -45,7 +35,6 @@ new Chart(chartCA, {
 });
 
 const chartProducts = document.getElementById("chartProducts");
-console.log(dataChartProducts);
 new Chart(chartProducts, {
   type: "doughnut",
   data: {
@@ -65,6 +54,7 @@ new Chart(chartProducts, {
         display: true,
         position: "right",
         labels: {
+          color: "#AAA",
           boxWidth: 10,
           boxHeight: 10,
         },
@@ -74,7 +64,6 @@ new Chart(chartProducts, {
 });
 
 const chartCustomers = document.getElementById("chartCustomers");
-console.log(dataChartCustomers);
 new Chart(chartCustomers, {
   type: "doughnut",
   data: {
@@ -94,6 +83,7 @@ new Chart(chartCustomers, {
         display: true,
         position: "right",
         labels: {
+          color: "#AAA",
           boxWidth: 10,
           boxHeight: 10,
         },
