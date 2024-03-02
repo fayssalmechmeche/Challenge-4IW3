@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
             style: "currency",
             currency: "EUR",
           }),
-          product.productCategory,
+          product.category,
           gridjs.html(`
                     <div class="w-full mx-auto flex justify-center items-center flex-wrap gap-2">
                     <button
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <form
                 action="/product/${product.id}"
                 method="POST"
-                onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer cette formule ?");'
+                onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer ce produit ?");'
             >
                 <input type="hidden" name="_method" value="DELETE" />
                 <input type="hidden" name="_token" value="${csrfToken}" />
@@ -69,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   waitForGridToRender().then(() => {
-    // Le tableau est maintenant rendu, appliquez vos modifications ici
     document.querySelector(".gridjs-wrapper").classList.add("dark:border-t-0");
     document
       .querySelector(".gridjs-search-input")
@@ -82,4 +81,3 @@ document.addEventListener("DOMContentLoaded", function () {
       );
   });
 });
-

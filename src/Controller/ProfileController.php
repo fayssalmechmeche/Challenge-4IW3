@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\ProfileFormType;
 use App\Form\Admin\SocietyType;
 use App\Form\ProfileSocietyFormType;
+use App\Repository\SocietyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/edit', name: 'profile_edit')]
-    public function edit(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, SocietyRepository $societyRepository): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -37,7 +38,9 @@ class ProfileController extends AbstractController
         $form = $this->createForm(ProfileFormType::class, $user);
         $form->handleRequest($request);
 
+
         $society = $user->getSociety();
+
         $societyForm = $this->createForm(ProfileSocietyFormType::class, $society);
         $societyForm->handleRequest($request);
 
@@ -87,6 +90,11 @@ class ProfileController extends AbstractController
                         $this->getParameter('society_logo_directory'),
                         $newFilename
                     );
+                    $old = $society->getLogo();
+
+                    if ($old) {
+                        unlink($this->getParameter('society_logo_directory') . '/' . $old);
+                    }
                 } catch (FileException $e) {
                     $this->addFlash('danger', "Une erreur est survenue lors de l'upload de l'image");
                 }

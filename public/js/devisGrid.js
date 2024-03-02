@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <form
                 action="/devis/${devis.id}"
                 method="POST"
-                onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer cette formule ?");'
+                onsubmit='return confirm("Êtes-vous sûr de vouloir supprimer ce devis ?");'
                 >
                 <input type="hidden" name="_method" value="DELETE" />
                 <input type="hidden" name="_token" value="${csrfToken}" />
@@ -106,6 +106,8 @@ function getStatusLabel(paymentStatus) {
             return "En retard";
         case "PENDING":
             return "En attente";
+        case "SIGNED":
+            return "Signé";
         default:
             return paymentStatus;
     }

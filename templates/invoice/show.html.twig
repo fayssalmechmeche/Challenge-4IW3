@@ -1,58 +1,160 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Invoice{% endblock %}
-
-{% block body %}
-    <h1>Invoice</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ invoice.id }}</td>
-            </tr>
-            <tr>
-                <th>PaymentStatus</th>
-                <td>{{ translateInvoiceStatus(invoice.paymentStatus) }}</td>
-            </tr>
-            <tr>
-                <th>Taxe</th>
-                <td>{{ invoice.taxe }}</td>
-            </tr>
-            <tr>
-                <th>TotalPrice</th>
-                <td>{{ invoice.totalPrice }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ invoice.updatedAt ? invoice.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>InvoiceNumber</th>
-                <td>{{ invoice.invoiceNumber }}</td>
-            </tr>
-            <tr>
-                <th>TotalDuePrice</th>
-                <td>{{ invoice.totalDuePrice }}</td>
-            </tr>
-            <tr>
-                <th>Remise</th>
-                <td>{{ invoice.remise }}</td>
-            </tr>
-            <tr>
-                <th>PaymentDueTime</th>
-                <td>{{ invoice.paymentDueTime ? invoice.paymentDueTime|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_invoice_index') }}">back to list</a>
-
-    <a href="{{ path('app_invoice_edit', {'id': invoice.id}) }}">edit</a>
-
-    {{ include('invoice/_delete_form.html.twig') }}
+{% block title %}Nouvelle facture
 {% endblock %}
+
+
+{% block body  %}
+
+
+    <nav class="flex justify-between w-full items-center py-3 px-5 bg-nav-bar-black">
+		<a class="transition-all duration-300 text-white cursor-pointer hover:text-red-500 flex items-center gap-1" href="{{ path('app_invoice_index') }}">
+			<span class="material-symbols-outlined">
+				arrow_circle_left</span>
+			Retour à la liste</a>
+        <a class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500" id="dl-pdf-2">Télécharger la facture</a>
+            <form method="POST">
+		<button  class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500 valid-invoice">Valider la facture</button>
+            </form>
+	</nav>
+    		{% include 'components/dark_mode.html.twig'  with { topHeight:'top-20'} %}
+
+    <div class="Generator font-roboto w-A4w  bg-white my-5 mx-auto p-5 border border-solid border-gray-300 shadow-md">
+        <div class="top h-auto w-full flex justify-between items-start">
+            <div class="society w-1/2 flex justify-center items-start flex-col">
+                <div class="logoName">
+                    <img class="w-36 h-36 border border-solid border-gray-300" src="{{ asset('images/society/'~ society.logo ?? 'placeholder.webp') }}
+" alt="logo"/>
+                </div>
+                <div class="society-info mt-15px p-5px">
+                    <div data-devis-id="{{ invoice.devis.id }}"></div>
+                    <h2 class="text-lg mb-3 font-semibold">Le nom de la société
+                    </h2>
+                    <p class="text-15px">Mail :
+                        {{ userEmail }}</p>
+                </div>
+            </div>
+            <div class="top-r w-1/2">
+                <div class="devis w-full bg-the-grey-2 p-15px border border-solid border-gray-300 rounded-10px shadow-md flex justify-between items-start flex-col">
+                    <h1 class="text-2xl font-semibold">Facture</h1>
+                    <div class="devis-info">
+                        <p class="text-15px leading-none my-1">Numéro de la facture:
+                            {{ invoiceNumber }}</p>
+                        <p class="text-15px leading-none my-1">Date de création : {{ invoice.createdAt|date('d-m-Y') }}
+
+                        <p class="text-15px leading-none my-1">
+                            Date de validite : {{ invoice.dateValidite|date('d-m-Y') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="client mt-3 px-5px">
+                    <h2 class="text-lg font-semibold">Information Client</h2>
+
+
+                    <div class="client-info mt-2" id="client-info">
+                        <div class="client-info mt-2">
+                            <p class="text-15px">Adresse :
+                                {{ invoice.devis.customer.streetNumber }}
+                                {{ invoice.devis.customer.streetName }}</p>
+                            <p class="text-15px">Code Postal :
+                                {{ invoice.devis.customer.postalCode }}</p>
+                            <p class="text-15px">Ville :
+                                {{ invoice.devis.customer.city }}</p>
+                            <p class="text-15px">Téléphone :
+                                {{ invoice.devis.customer.phoneNumber }}</p>
+                            <p class="text-15px">Mail :
+                                {{ invoice.devis.customer.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-container w-full mt-7 flex justify-start items-center flex-col">
+            <div class="objet w-full flex justify-start items-center self-center mb-5 ml-5px">
+                <h2 class="text-lg font-semibold">Objet :
+                </h2>
+                {{ invoice.devis.subject }}
+
+            </div>
+
+            {% if invoice.invoiceType.name == "Deposit" %}
+                <p>
+                    Facture pour payer l'acompte du devis numéro {{ invoice.devis.devisNumber }}
+                </p>
+            {% else %}
+                <div id="wrapper-invoice" data-devis-id="{{ invoice.devis.id }}" class="h-56"></div>
+            {% endif %}
+
+            <div class="mid w-full h-auto flex justify-between items-start">
+                <div class="condition mt-12 flex justify-start items-start flex-col w-70%"></div>
+
+                <div class="total w-35% flex justify-start items-end mt-12 mr-5px flex-col">
+                    <div class="total-sub-container flex justify-start items-center m-0">
+                        <p class="font-semibold">TOTAL HT</p>
+                        <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                            <p class="text-lg text-right">
+                                {{ totalHT }}
+                                €
+                            </p>
+                        </div>
+                    </div>
+                    <div class="total-sub-container flex justify-start items-center m-0">
+
+                        <h3 class="text-base font-semibold">Taxe</h3>
+                        <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                            <p class="text-lg text-right">
+
+
+                                {{ invoice.devis.taxe }}
+                                % ({{ taxeValue }}
+                                €)</p>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="total-sub-container flex justify-start items-center m-0">
+                        <div class="total-sub-container flex justify-start items-center m-0">
+                            <p class="font-semibold">Total TTC</p>
+                            <div class="total-tab alt ml-5px p-4 w-40 bg-light-dark">
+                                <p class="text-lg text-right text-white">
+                                    {{newTotalDuePrice}}
+                                    €
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total-sub-container flex justify-start items-center m-0">
+
+                        <h3 class="text-base font-semibold">Acompte à payer</h3>
+                        <div class="total-tab ml-5px p-4 w-40 bg-the-grey-2">
+                            <p class="text-lg text-right">{{ app.request.query.get('deposit') == "true" ? depositAmount : "0" }}
+                                €</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="signature mt-12 mr-5px ml-auto pt-3 pl-3 w-52 h-28 border border-solid border-gray-300 bg-the-grey-2">
+            <p>Signature:</p>
+        </div>
+        <div class="bottom w-full flex justify-start items-start flex-col">
+            <div class="divider w-full h-2px rounded-2xl bg-the-grey-2 my-5"></div>
+            <div class="bottom-info w-full flex justify-center items-center">
+                <p class="text-sm my-2 text-the-grey">SARL Fourchette</p>
+                <p class="text-sm my-2 text-the-grey">Capital de 1000 €</p>
+                <p class="text-sm my-2 text-the-grey">RCS:12345</p>
+                <p class="text-sm my-2 text-the-grey">Code APE: AZERTY12345</p>
+                <p class="text-sm my-2 text-the-grey">N° TVA: FR3353215643668909</p>
+            </div>
+        </div>
+    </div>
+    <div id="hiddenFieldsContainer"></div>
+    <input type="hidden" id="devisProductsData" name="devisProductsData">
+
+<div id="invoiceData" data-devis-id="{{ invoice.devis.id }}" data-invoice-number="{{ invoiceNumber }}" data-total-price="{{ invoice.devis.totalPrice }}" data-taxe="{{ invoice.devis.taxe }}" data-depositpercentage="{{ invoice.devis.depositPercentage }}" data-total-due-price="{{ newTotalDuePrice }}"></div>{% endblock %}{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/invoiceCreateGrid.js') }}" type="module"></script>
+    <script src="{{ asset('js/invoice.js') }}" type="module"></script>
+    <script src="{{ asset('js/pdfGenerator.js') }}"></script>
+    {% endblock %}

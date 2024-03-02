@@ -8,11 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
- enum PaymentStatus: string
+enum PaymentStatus: string
 {
     case null = "";
     case Pending = "PENDING";
     case Paid = "PAID";
+    case Signed = "SIGNED";
     case Partial = "PARTIAL";
     case Delayed = "DELAYED";
     case Refunded = "REFUNDED";
@@ -71,7 +72,7 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
-    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisProduct::class,cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisProduct::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $devisProducts;
 
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: DevisFormula::class, cascade: ['persist'], orphanRemoval: true)]
@@ -86,6 +87,12 @@ class Devis
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateValidite = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
 
     /**
      * @return Society|null
@@ -421,4 +428,27 @@ class Devis
         }
     }
 
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
 }

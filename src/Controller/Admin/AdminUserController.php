@@ -336,12 +336,15 @@ class AdminUserController extends AbstractController
         $society = $data['admin_user[society]'] ?? null;
         $roles = $data["admin_user[roles][]"] ?? null;
 
+        $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
+        $user->setSociety($society ?? $this->getUser()->getSociety());
+
         $user->setEmail($email);
         $user->setName($name);
         $user->setLastName($lastName);
         $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
         $user->setCreatedAt(new \DateTime());
-        $user->setSociety($society ?? $this->getUser()->getSociety());
+
         $user->setRoles([$roles]);
         if ($edit) {
             $user->setUpdatedAt(new \DateTime());

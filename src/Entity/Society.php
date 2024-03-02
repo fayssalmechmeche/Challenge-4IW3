@@ -42,6 +42,9 @@ class Society
     #[ORM\OneToMany(mappedBy: 'society', targetEntity: Product::class)]
     private Collection $devis;
 
+    #[ORM\OneToMany(mappedBy: 'society', targetEntity: Category::class)]
+    private Collection $categories;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logo = null;
 
@@ -51,6 +54,7 @@ class Society
         $this->users = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->devis = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -216,6 +220,36 @@ class Society
     public function setStripeId(?string $stripeId): static
     {
         $this->stripeId = $stripeId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setSociety($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getSociety() === $this) {
+                $category->setSociety(null);
+            }
+        }
 
         return $this;
     }

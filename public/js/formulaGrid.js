@@ -11,12 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }),
           gridjs.html(`
                       <div class="w-full mx-auto flex justify-center items-center flex-wrap gap-2">
-                          <button
-                              onclick="openFormulaEditModal(${formula.id})"
-                              class="text-white font-medium bg-orange-400 hover:bg-orange-600 transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
-                          >
-                              Modifier
-                          </button>
+                         
                           <button
                               class="text-white font-medium bg-button-blue hover:bg-button-blue-hover transition-all duration-300 ease-out rounded-lg m-1 px-3 py-2"
                               onclick="openFormulaModal(${formula.id})"
