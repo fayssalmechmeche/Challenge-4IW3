@@ -12,10 +12,12 @@
 			<span class="material-symbols-outlined">
 				arrow_circle_left</span>
 			Retour à la liste</a>
+        <a class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500" id="dl-pdf-2">Télécharger la facture</a>
             <form method="POST">
 		<button  class="bg-white py-2 px-4 cursor-pointer rounded-md transition-all duration-300 text-base font-bold hover:bg-lime-500 valid-invoice">Valider la facture</button>
             </form>
 	</nav>
+    		{% include 'components/dark_mode.html.twig'  with { topHeight:'top-20'} %}
 
     <div class="Generator font-roboto w-A4w  bg-white my-5 mx-auto p-5 border border-solid border-gray-300 shadow-md">
         <div class="top h-auto w-full flex justify-between items-start">
@@ -153,4 +155,6 @@
 <div id="invoiceData" data-devis-id="{{ invoice.devis.id }}" data-invoice-number="{{ invoiceNumber }}" data-total-price="{{ invoice.devis.totalPrice }}" data-taxe="{{ invoice.devis.taxe }}" data-depositpercentage="{{ invoice.devis.depositPercentage }}" data-total-due-price="{{ newTotalDuePrice }}"></div>{% endblock %}{% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/invoiceCreateGrid.js') }}" type="module"></script>
-    <script src="{{ asset('js/invoice.js') }}" type="module"></script>{% endblock %}
+    <script src="{{ asset('js/invoice.js') }}" type="module"></script>
+    <script src="{{ asset('js/pdfGenerator.js') }}"></script>
+    {% endblock %}
