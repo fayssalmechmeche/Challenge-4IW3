@@ -155,13 +155,10 @@ class InvoiceController extends AbstractController
             $invoice->setRemise(0);
             $invoice->setInvoiceStatus(InvoiceStatus::Pending);
             $invoice->setToken(uniqid('invoice_'));
-            $invoice->setInvoiceStatus(InvoiceStatus::Paid);
-            $invoice->setToken(uniqid());
             $paymentDueTime = new DateTime('now + 10 days');
             $invoice->setPaymentDueTime($paymentDueTime);
             $createdAt = new DateTime();
             $invoice->setCreatedAt($createdAt);
-            dd($request->request->get('dateValidite'));
             $dateValidite = new DateTime($request->request->get('dateValidite'));
             $invoice->setDateValidite($dateValidite);
             $entityManager->persist($invoice);
