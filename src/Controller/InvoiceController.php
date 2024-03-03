@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -26,7 +25,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/invoice')]
 #[IsGranted('ROLE_SOCIETY')]
 class InvoiceController extends AbstractController
-
 {
     private CsrfTokenManagerInterface $csrfTokenManager;
 
@@ -58,16 +56,9 @@ class InvoiceController extends AbstractController
             $allInvoice = [];
         }
 
-
-        $csrfToken = $this->csrfTokenManager->getToken('delete_invoice')->getValue();
-
-
-
-
         // Retourne les factures filtrées à la vue
         return $this->render('invoice/index.html.twig', [
             'invoices' => $allInvoice,
-            'csrfToken' => $csrfToken
         ]);
     }
 
@@ -164,15 +155,14 @@ class InvoiceController extends AbstractController
             $invoice->setRemise(0);
             $invoice->setInvoiceStatus(InvoiceStatus::Pending);
             $invoice->setToken(uniqid('invoice_'));
+            $invoice->setInvoiceStatus(InvoiceStatus::Paid);
+            $invoice->setToken(uniqid());
             $paymentDueTime = new DateTime('now + 10 days');
             $invoice->setPaymentDueTime($paymentDueTime);
             $createdAt = new DateTime();
             $invoice->setCreatedAt($createdAt);
             $dateValidite = new DateTime($request->request->get('dateValidite'));
             $invoice->setDateValidite($dateValidite);
-            if (empty($dateValiditeValue)) {
-                // Ici, vous pouvez ajouter un message flash pour indiquer à l'utilisateur que la date de validité est requise
-                $this->addFlash('error', 'La date de validité est requise pour créer une facture.');
 
                 // Retourner à la vue sans exécuter le flush
                 return $this->redirectToRoute('app_invoice_index', []);
