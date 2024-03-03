@@ -38,7 +38,7 @@
 {# data for the js #}
 	<div style="display: none;" id="invoiceData">
     {% for invoice in invoices %}
-        <input type="hidden" class="invoice-id" value="{{ invoice.devis.id }}" />
+        <input type="hidden" class="invoice-id" value="{{ invoice.id }}" />
         <input type="hidden" class="invoice-number" value="{{ invoice.invoiceNumber }}" />
         <input type="hidden" class="total-due-price" value="{{ invoice.totalDuePrice }}" />
         <input type="hidden" class="translated-status" value="{{ invoice.translatedStatus }}" />

@@ -44,7 +44,7 @@ class DevisRepository extends ServiceEntityRepository
             ->andWhere('d.society = :society')
             ->andWhere('d.paymentStatus = :status')
             ->setParameter('society', $society)
-            ->setParameter('status', 'PENDING')
+            ->setParameter('status', 'SIGNED')
             ->getQuery()
             ->getResult();
     }
