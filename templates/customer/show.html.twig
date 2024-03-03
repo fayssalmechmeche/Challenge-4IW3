@@ -13,48 +13,48 @@
 
 
 	<!-- Contenu de notre modal ici  -->
-	<h2 class="text-3xl mb-5">Détails du Client</h2>
+	<h2 class="text-3xl mb-5 dark:text-white">Détails du Client</h2>
 
 	<div class="flex flex-wrap gap-y-5 gap-x-10">
 		{% if customer.nameSociety %}
 			<div class="flex flex-col px-1 my-1">
-				<p class="text-xl font-medium">Nom de la Société</p>
+				<p class="text-xl font-medium dark:text-white">Nom de la Société</p>
 				<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">{{ customer.nameSociety }}</p>
 			</div>
 		{% else %}
 			<div class="flex flex-col px-1 my-1">
-				<p class="text-xl font-medium">Nom du Client</p>
+				<p class="text-xl font-medium dark:text-white">Nom du Client</p>
 				<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">{{ customer.name }}</p>
 			</div>
 			<div class="flex flex-col px-1 my-1">
-				<p class="text-xl font-medium">Prénom du Client</p>
+				<p class="text-xl font-medium dark:text-white">Prénom du Client</p>
 				<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">{{ customer.lastName }}</p>
 			</div>
 		{% endif %}
 
 		<div class="flex flex-col px-1 my-1">
-			<p class="text-xl font-medium">Devis en attente (brut)
+			<p class="text-xl font-medium dark:text-white">Devis en attente (brut)
 			</p>
 			{# <p class="text-xl">{{ customer.devisCounts.pending }}</p> #}
 			<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
 		</div>
 		<div class="flex flex-col px-1 my-1">
-			<p class="text-xl font-medium">Devis payés (brut)</p>
+			<p class="text-xl font-medium dark:text-white">Devis payés (brut)</p>
 			{# <p class="text-xl">{{ customer.devisCounts.paid }}</p> #}
 			<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
 		</div>
 		<div class="flex flex-col px-1 my-1">
-			<p class="text-xl font-medium">Devis partiellement payés (brut)</p>
+			<p class="text-xl font-medium dark:text-white">Devis partiellement payés (brut)</p>
 			{# <p class="text-xl">{{ customer.devisCounts.paid }}</p> #}
 			<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
 		</div>
 		<div class="flex flex-col px-1 my-1">
-			<p class="text-xl font-medium">Devis remboursés (brut)</p>
+			<p class="text-xl font-medium dark:text-white">Devis remboursés (brut)</p>
 			{# <p class="text-xl">{{ customer.devisCounts.refunded }}</p> #}
 			<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
 		</div>
 		<div class="flex flex-col px-1 my-1">
-			<p class="text-xl font-medium">Total de devis(brut)</p>
+			<p class="text-xl font-medium dark:text-white">Total de devis(brut)</p>
 			{# <p class="text-xl">{{ customer.totalDevisCount }}</p> #}
 			<p class="rounded-xl dark:bg-dark-card dark:text-white w-96 h-10 mt-1 px-2 border border-solid border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent shadow-form flex justify-start items-center">3</p>
 		</div>
