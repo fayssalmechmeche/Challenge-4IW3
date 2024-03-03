@@ -21,9 +21,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/invoice')]
+#[IsGranted('ROLE_SOCIETY')]
 class InvoiceController extends AbstractController
 
 {
