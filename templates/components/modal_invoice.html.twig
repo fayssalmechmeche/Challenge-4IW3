@@ -1,8 +1,8 @@
 
-<div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" id="{{ modal_id }}"></div>
+<div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-20" id="{{ modal_id }}"></div>
 
 <!-- Modal -->
-<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 border-white dark:border-dark-section bg-white dark:bg-dark-section max-h-modal-height px-9 py-5 border w-modal-width2 shadow-lg rounded-3xl  overflow-y-auto hidden" id="{{ modal_content_id }}">
+<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 border-white dark:border-dark-section bg-white dark:bg-dark-section max-h-modal-height px-9 py-5 border w-modal-width2 shadow-lg rounded-3xl  overflow-y-auto hidden z-20" id="{{ modal_content_id }}">
     <!-- Close Button -->
     <button class="absolute top-3 right-3 text-gray-700 font-medium bg-transparent hover:bg-gray-200 transition-all duration-300 ease-out rounded-lg p-2" onclick="toggleModal('invoiceCreateModal', 'invoiceCreateModalContent')">
         <!-- Use an X icon or similar for close button -->
