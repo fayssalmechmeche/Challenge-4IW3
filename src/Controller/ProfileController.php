@@ -90,6 +90,11 @@ class ProfileController extends AbstractController
                         $this->getParameter('society_logo_directory'),
                         $newFilename
                     );
+                    $old = $society->getLogo();
+
+                    if ($old) {
+                        unlink($this->getParameter('society_logo_directory') . '/' . $old);
+                    }
                 } catch (FileException $e) {
                     $this->addFlash('danger', "Une erreur est survenue lors de l'upload de l'image");
                 }

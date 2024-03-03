@@ -21,9 +21,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/invoice')]
+#[IsGranted('ROLE_SOCIETY')]
 class InvoiceController extends AbstractController
 
 {
@@ -31,7 +32,7 @@ class InvoiceController extends AbstractController
 
     public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
     {
-      $this->csrfTokenManager = $csrfTokenManager;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     #[Route('/', name: 'app_invoice_index', methods: ['GET'])]
@@ -162,7 +163,7 @@ class InvoiceController extends AbstractController
             $invoice->setInvoiceType($deposit == "true" ? InvoiceType::Deposit : InvoiceType::Invoice);
             $invoice->setRemise(0);
             $invoice->setInvoiceStatus(InvoiceStatus::Pending);
-            $invoice->setToken(uniqid());
+            $invoice->setToken(uniqid('invoice_'));
             $paymentDueTime = new DateTime('now + 10 days');
             $invoice->setPaymentDueTime($paymentDueTime);
             $createdAt = new DateTime();
@@ -174,16 +175,14 @@ class InvoiceController extends AbstractController
                 $this->addFlash('error', 'La date de validité est requise pour créer une facture.');
 
                 // Retourner à la vue sans exécuter le flush
-                return $this->redirectToRoute('app_invoice_index', [
-
-                ]);
+                return $this->redirectToRoute('app_invoice_index', []);
             }
             $entityManager->persist($invoice);
             $entityManager->flush();
 
             $mailjetService->sendEmail(
                 $invoice->getDevis()->getCustomer()->getEmail(),
-                'Nouvelle facture créée',
+                $invoice->getDevis()->getCustomer()->getName(),
                 MailjetService::TEMPLATE_INVOICE_NO_DEPOSIT,
                 [
                     'firstName' => $invoice->getDevis()->getCustomer()->getName(),
@@ -277,10 +276,10 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        
+
         $entityManager->remove($invoice);
         $entityManager->flush();
-        
+
         $this->addFlash('success', 'La facture a bien été supprimé.');
         return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -39,7 +39,6 @@ class AdminUserController extends AbstractController
         $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(true);
         $usersNotVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfied(false);
         if ($request->isXmlHttpRequest()) {
-            dump($request);
             $isShow = $request->query->get('isShow');
             if ($isShow) {
                 $usersVerified = $this->entityManagerInterface->getRepository(User::class)->countUsersVerfiedBySociety(true, $isShow);
@@ -132,7 +131,6 @@ class AdminUserController extends AbstractController
             $content = $request->getContent();
 
             $data = json_decode($content, true);
-            dump($content);
             if (!$this->isCsrfTokenValid("admin_user", $data['admin_user[_token]'])) {
                 return new JsonResponse(array(
                     'code' => 200,
@@ -227,7 +225,6 @@ class AdminUserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $content = $request->getContent();
             $data = json_decode($content, true);
-            dump($data);
             if (
                 isset($data['admin_user[email]']) && $data['admin_user[email]'] == ""
                 || isset($data['admin_user[name]']) && $data['admin_user[name]'] == ""
@@ -336,12 +333,15 @@ class AdminUserController extends AbstractController
         $society = $data['admin_user[society]'] ?? null;
         $roles = $data["admin_user[roles][]"] ?? null;
 
+        $society = $this->entityManagerInterface->getRepository(Society::class)->findOneBy(['id' => $society]);
+        $user->setSociety($society ?? $this->getUser()->getSociety());
+
         $user->setEmail($email);
         $user->setName($name);
         $user->setLastName($lastName);
         $user->setPassword($this->getUser()->getSociety()->getName() . uniqid());
         $user->setCreatedAt(new \DateTime());
-        $user->setSociety($society ?? $this->getUser()->getSociety());
+
         $user->setRoles([$roles]);
         if ($edit) {
             $user->setUpdatedAt(new \DateTime());

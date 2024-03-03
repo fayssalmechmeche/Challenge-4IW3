@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Devis;
 use App\Entity\Invoice;
 use App\Entity\InvoiceStatus;
 use App\Entity\InvoiceType;
+use App\Entity\PaymentStatus;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Psr\Log\LoggerInterface;
@@ -30,7 +32,7 @@ class StripeController extends AbstractController
 
         // on verifie si la facture existe en bdd
         /** @var Invoice $invoice */
-        $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['token' => $token, 'user' => $this->getUser()]);
+        $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['token' => $token]);
         if (!$invoice) {
             return $this->redirectToRoute('default_index');
         }
@@ -51,7 +53,7 @@ class StripeController extends AbstractController
             if ($session && $session->payment_status == "paid") {
                 // si oui on redirige vers la page de succes
                 // if status is paid, we update the invoice status
-                $invoice->setPaymentStatus(InvoiceStatus::Paid);
+                $invoice->setInvoiceStatus(InvoiceStatus::Paid);
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre facture a déjà été payée');
                 return $this->redirectToRoute('checkout_success', ['token' => $invoice->getToken()]);
@@ -74,33 +76,85 @@ class StripeController extends AbstractController
         return $this->redirect($session->url);
     }
 
-    #[Route('/checkout/success/{token}', name: 'checkout_success')]
-    public function success(string $token, EntityManagerInterface $entityManager): Response
-    {
-        $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['token' => $token]);
-
-        if (!$invoice) {
+    #[Route('/checkout/devis/{token}', name: 'checkout_devis')]
+    public function checkoutDevis(
+        string $token,
+        StripeService $stripeService,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ) {
+        /**  @var Devis $devis */
+        $devis = $entityManager->getRepository(Devis::class)->findOneBy(['token' => $token]);
+        if (!$devis) {
             return $this->redirectToRoute('default_index');
         }
 
-        return $this->render('checkout/success.html.twig', [
-            'invoice' => $invoice,
-        ]);
+        if ($devis->getPaymentStatus() && $devis->getPaymentStatus() != PaymentStatus::Pending) {
+            $this->addFlash('success', 'Votre devis a déjà été payé');
+            return $this->redirectToRoute('checkout_success', ['token' => $devis->getToken()]);
+        }
+
+        if ($devis->getStripeSessionId()) {
+            $session = $stripeService->retriveSession($devis->getStripeSessionId());
+            if ($session && $session->payment_status == "paid") {
+                $devis->setPaymentStatus(PaymentStatus::Signed);
+                $entityManager->flush();
+                $this->addFlash('success', 'Votre devis a déjà été signé');
+                return $this->redirectToRoute('checkout_success', ['token' => $devis->getToken()]);
+            }
+            if ($session->status != "expired") {
+                $stripeService->cancelSession($session->id);
+            }
+            $session = $stripeService->createPaymentIntentDevis($devis);
+            $devis->setStripeSessionId($session->id);
+        } else {
+            $session = $stripeService->createPaymentIntentDevis($devis);
+            $devis->setStripeSessionId($session->id);
+        }
+        $entityManager->flush();
+        return $this->redirect($session->url);
+    }
+
+    #[Route('/checkout/success/{token}', name: 'checkout_success')]
+    public function success(string $token, EntityManagerInterface $entityManager): Response
+    {
+        if (strpos($token, "devis_") === 0) {
+            $devis = $entityManager->getRepository(Devis::class)->findOneBy(['token' => $token]);
+            if (!$devis) {
+                return $this->redirectToRoute('default_index');
+            }
+        } elseif (strpos($token, "invoice_") === 0) {
+            $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['token' => $token]);
+            if (!$invoice) {
+                return $this->redirectToRoute('default_index');
+            }
+        } else {
+            return $this->redirectToRoute('default_index');
+        }
+        return $this->render('checkout/success.html.twig', []);
     }
 
     #[Route('/checkout/cancel/{token}', name: 'checkout_cancel')]
     public function cancel(string $token, EntityManagerInterface $entityManager): Response
     {
-        $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(array('token' => $token));
-
-        if ($invoice->getPaymentStatus() == InvoiceStatus::Paid || $invoice->getPaymentStatus() == InvoiceStatus::Partial) {
-            $this->addFlash('success', 'La facture a déjà été payée ou partiellement payée');
+        if (strpos($token, "devis_") === 0) {
+            $devis = $entityManager->getRepository(Devis::class)->findOneBy(['token' => $token]);
+            if (!$devis) {
+                return $this->redirectToRoute('default_index');
+            }
+        } elseif (strpos($token, "invoice_") === 0) {
+            $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['token' => $token]);
+            if (!$invoice) {
+                return $this->redirectToRoute('default_index');
+            }
+            if ($invoice->getPaymentStatus() == InvoiceStatus::Paid || $invoice->getPaymentStatus() == InvoiceStatus::Partial) {
+                $this->addFlash('success', 'La facture a déjà été payée ou partiellement payée');
+                return $this->redirectToRoute('default_index');
+            }
+        } else {
             return $this->redirectToRoute('default_index');
         }
-
-        return $this->render('checkout/cancel.html.twig', [
-            'invoice' => $invoice,
-        ]);
+        return $this->render('checkout/cancel.html.twig', []);
     }
 
     #[Route('/checkout/complete/{token}', name: 'checkout_partial_complete')]
@@ -109,14 +163,13 @@ class StripeController extends AbstractController
         if (!$invoice) {
             return $this->redirectToRoute('default_index');
         }
-        if ($invoice->getPaymentStatus() == InvoiceStatus::Paid) {
+        if ($invoice->setInvoiceStatus() == InvoiceStatus::Paid) {
             $this->addFlash('success', 'La facture a déjà été payée');
             return $this->redirectToRoute('checkout_success', ['token' => $invoice->getToken()]);
         }
-        $invoice->setPaymentStatus(InvoiceStatus::Paid);
+        $invoice->setInvoiceStatus(InvoiceStatus::Paid);
         $entityManager->flush();
         $this->addFlash('success', 'La facture a bien été payée');
-
         return $this->redirectToRoute('checkout_success', ['token' => $token]);
     }
 
@@ -157,17 +210,28 @@ class StripeController extends AbstractController
                 case 'checkout.session.completed':
                     /** @var Session $object */
                     /** @var Invoice $invoice */
-                    $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['stripeSessionId' => $object->id]);
-                    if (!$invoice) {
-                        $logger->error('Invoice not found');
-                        return new JsonResponse([['error' => 'Invoice not found', 'status' => 403]]);
-                    }
-                    if ($event['data']['object']['metadata']['type'] == 'invoice') {
-                        $invoice->setPaymentStatus(InvoiceStatus::Paid);
+
+                    if (strpos($event['data']['object']['metadata']['type'], "devis_") === 0) {
+                        /** @var Devis $devis */
+                        $devis = $entityManager->getRepository(Devis::class)->findOneBy(['stripeSessionId' => $object->id]);
+                        if (!$devis) {
+                            $logger->error('Devis not found');
+                            return new JsonResponse([['error' => 'Devis not found', 'status' => 403]]);
+                        }
+                        $devis->setPaymentStatus(PaymentStatus::Signed);
                     } else {
-                        $paymentDue = $invoice->getTotalDuePrice() - floatval($event['data']['object']['metadata']['price']);
-                        $invoice->setTotalDuePrice($paymentDue);
-                        $invoice->setPaymentStatus(InvoiceStatus::Partial);
+                        $invoice = $entityManager->getRepository(Invoice::class)->findOneBy(['stripeSessionId' => $object->id]);
+                        if (!$invoice) {
+                            $logger->error('Invoice not found');
+                            return new JsonResponse([['error' => 'Invoice not found', 'status' => 403]]);
+                        }
+                        if ($event['data']['object']['metadata']['type'] == 'invoice') {
+                            $invoice->setInvoiceStatus(InvoiceStatus::Paid);
+                        } else {
+                            $paymentDue = $invoice->getTotalDuePrice() - floatval($event['data']['object']['metadata']['price']);
+                            $invoice->setTotalDuePrice($paymentDue);
+                            $invoice->setInvoiceStatus(InvoiceStatus::Partial);
+                        }
                     }
                     $entityManager->flush();
                     break;

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CustomerRepository;
 use App\Repository\DevisRepository;
 use App\Repository\InvoiceRepository;
+use App\Repository\ProductRepository;
 use App\Service\Stripe\StripeService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -73,5 +74,53 @@ class DashboardCatererController extends AbstractController
             'nbInvoicePending' => $devisRepository->findInvoicePending($society),
             'totalPriceByMonth' => $totalPriceByMonth, 
         ]);
+    }
+
+    #[Route('/api/customer', name: 'api_customer_dashboard', methods: ['GET'])]
+    public function apiCustomer(CustomerRepository $customerRepository): Response
+    {
+        $society = $this->getUser()->getSociety();
+
+        if ($society) {
+            $customers = $customerRepository->findBy(['society' => $society]);
+        } else {
+            $customers = [];
+        }
+
+        $data = [];
+        foreach ($customers as $customer) {
+            $data[] = [
+                'id' => $customer->getId(),
+                'name' => $customer->getName(),
+                'lastName' => $customer->getLastName(),
+                'nameSociety' => $customer->getNameSociety(),
+            ];
+        }
+        return $this->json($data);
+    }
+    
+    #[Route('/api/product', name: 'api_product_dashboard', methods: ['GET'])]
+    public function apiProduct(ProductRepository $productRepository): Response
+    {
+        $society = $this->getUser()->getSociety();
+
+        if ($society) {
+            $products = $productRepository->findBy(['society' => $society]);
+        } else {
+            $products = [];
+        }
+
+        $data = [];
+        foreach ($products as $product) {
+            $categoryName = $product->getCategory() ? $product->getCategory()->getName() : 'Aucune';
+            $data[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'price' => $product->getPrice(),
+                'category' => $categoryName,
+            ];
+        }
+
+        return $this->json($data);
     }
 }

@@ -4,14 +4,14 @@
 {% endblock %}
 
 {% block content %}
-	<h1 class="px-5 text-5xl mt-2 mb-10">Rapports financiers</h1>
+	<h1 class="px-5 text-5xl mt-2 mb-10 dark:text-white">Rapports financiers</h1>
 
 	<!-- first block -->
 	<div
 		class="px-5 mb-10 lg:w-ds-block mx-auto lg:h-72 flex lg:justify-between lg:items-center lg:flex-row flex-col justify-start items-start gap-10 lg:gap-0">
 		<!-- sold block -->
-		<div class="relative px-10 w-[535px] h-72 flex flex-col justify-center items-center bg-white rounded-3xl shadow-xl">
-			<p class="text-grey-p text-base">Rapports devis :</p>
+		<div class="relative px-10 w-[535px] h-72 flex flex-col justify-center items-center bg-white  dark:bg-dark-card rounded-3xl shadow-xl">
+			<p class="text-grey-p text-base dark:text-white">Rapports devis :</p>
 			<div class="flex gap-1">
 				<button onclick="generateDevisXLSX();" class="text-white w-48 font-medium bg-green-600 hover:bg-green-500 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
 					Excel des devis
@@ -20,7 +20,7 @@
 					Pdf des devis
 				</button>
 			</div>
-			<p class="text-grey-p text-base">Rapports produits commandés :</p>
+			<p class="text-grey-p text-base dark:text-white">Rapports produits commandés :</p>
 			<div class="flex gap-1">
 				<button onclick="generateDevisProductXLSX();" class="text-white w-48 font-medium bg-green-600 hover:bg-green-500 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
 					Excel des produits
@@ -29,7 +29,7 @@
 					Pdf des produits
 				</button>
 			</div>
-			<p class="text-grey-p text-base">Rapports formules commandées :</p>
+			<p class="text-grey-p text-base dark:text-white">Rapports formules commandées :</p>
 			<div class="flex gap-1">
 				<button onclick="generateDevisFormulaXLSX();" class="text-white w-48 font-medium bg-green-600 hover:bg-green-500 transition-all duration-300 ease-out rounded-lg my-3 px-3 py-2">
 					Excel des formules
@@ -40,8 +40,8 @@
 			</div>
 		</div>
 		<!-- Chart Block -->
-		<div class="lg:ml-10 relative px-10 w-[535px] h-72 flex flex-col justify-center items-center bg-white rounded-3xl shadow-xl">
-			<p class="text-grey-p text-base">Montant factures payées par mois (en €) :</p>
+		<div class="lg:ml-10 relative px-10 w-[535px] h-72 flex flex-col justify-center items-center bg-white  dark:bg-dark-card rounded-3xl shadow-xl">
+			<p class="text-grey-p text-base dark:text-white">Montant factures payées par mois (en €) :</p>
 			<canvas id="chartCA">
 				<p>Chart CA</p>
 			</canvas>
@@ -53,15 +53,15 @@
 	<div
 		class="px-5 mb-10 lg:w-ds-block mx-auto lg:h-72 flex lg:justify-between lg:items-center lg:flex-row flex-col justify-start items-start gap-10 lg:gap-0">
 		<!-- sold block -->
-		<div class="relative flex flex-col px-5 pb-10 w-[535px] h-72 items-center bg-white rounded-3xl shadow-xl">
-			<p class="text-grey-p text-base">Total commandes par produits :</p>
+		<div class="relative flex flex-col px-5 pb-10 w-[535px] h-72 items-center bg-white dark:bg-dark-card rounded-3xl shadow-xl">
+			<p class="text-grey-p text-base dark:text-white">Total commandes par produits :</p>
 			<canvas id="chartProducts">
 				<p>Chart Products</p>
 			</canvas>
 		</div>
 		<!-- Chart Block -->
-		<div class="relative flex flex-col px-5 pb-10 w-[535px] h-72 items-center bg-white rounded-3xl shadow-xl">
-			<p class="text-grey-p text-base">Total commandes par clients :</p>
+		<div class="relative flex flex-col px-5 pb-10 w-[535px] h-72 items-center bg-white dark:bg-dark-card rounded-3xl shadow-xl">
+			<p class="text-grey-p text-base dark:text-white">Total commandes par clients :</p>
 			<canvas id="chartCustomers">
 				<p>Chart Clients</p>
 			</canvas>
@@ -73,56 +73,56 @@
 	<div
 		class="px-5 lg:w-ds-block mx-auto lg:h-fit flex lg:justify-between lg:items-center mb-10 lg:flex-row flex-col justify-start items-start gap-10 lg:gap-0">
 		<!-- card-info Most Product-->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Produit le plus vendu</p>
-			<h2 class="text-3xl font-bold">{{nameMostSellProduct.name is defined ? nameMostSellProduct.name : 'Aucun'}}</h2>
-			<p class="text-grey-p text-base">Quantité:
+		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2 dark:bg-dark-card">
+			<p class="text-grey-p text-base dark:text-white">Produit le plus vendu</p>
+			<h2 class="text-3xl font-bold dark:text-white">{{nameMostSellProduct.name is defined ? nameMostSellProduct.name : 'Aucun'}}</h2>
+			<p class="text-grey-p text-base dark:text-white">Quantité:
 				<span class=" font-semibold">
 					{{nameMostSellProduct.totalQuantity is defined ? nameMostSellProduct.totalQuantity : 'Aucun'}}</span>
 			</p>
-			<p class="text-grey-p text-base">Gains:
+			<p class="text-grey-p text-base dark:text-white">Gains:
 				<span class="text-[#4FD18B] font-semibold">
 					{{nameMostSellProduct.totalSpending is defined ? nameMostSellProduct.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
 			</p>
 		</div>
 		<!-- card-info Less Product -->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Produit le moins vendu</p>
-			<h2 class="text-3xl font-bold">{{nameLessSellProduct.name is defined ? nameLessSellProduct.name : 'Aucun'}}</h2>
-			<p class="text-grey-p text-base">Quantité:
+		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2 dark:bg-dark-card">
+			<p class="text-grey-p text-base dark:text-white">Produit le moins vendu</p>
+			<h2 class="text-3xl font-bold dark:text-white">{{nameLessSellProduct.name is defined ? nameLessSellProduct.name : 'Aucun'}}</h2>
+			<p class="text-grey-p text-base dark:text-white">Quantité:
 				<span class=" font-semibold">
 					{{nameLessSellProduct.totalQuantity is defined ? nameLessSellProduct.totalQuantity : 'Aucun' }}</span>
 			</p>
-			<p class="text-grey-p text-base">Gains:
+			<p class="text-grey-p text-base dark:text-white">Gains:
 				<span class="text-[#4FD18B] font-semibold">
 					{{nameLessSellProduct.totalSpending is defined ? nameLessSellProduct.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
 			</p>
 		</div>
 		<!-- card-info Highest Customer -->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Client le plus fidèle</p>
-			<h2 class="text-3xl font-bold">{{customerWithHighestSpending.name is defined ? customerWithHighestSpending.name : 'Aucun'}}</h2>
-			<p class="text-grey-p text-base">Commandes:
+		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2 dark:bg-dark-card">
+			<p class="text-grey-p text-base dark:text-white">Client le plus fidèle</p>
+			<h2 class="text-3xl font-bold dark:text-white">{{customerWithHighestSpending.name is defined ? customerWithHighestSpending.name : 'Aucun'}}</h2>
+			<p class="text-grey-p text-base dark:text-white">Commandes:
 				<span class=" font-semibold">
 					{{customerWithHighestSpending.totalOrders is defined ? customerWithHighestSpending.totalOrders : 'Aucun'}}</span>
 			</p>
-			<p class="text-grey-p text-base">Dépensé:
+			<p class="text-grey-p text-base dark:text-white">Dépensé:
 				<span class="text-[#4FD18B] font-semibold">
 					{{customerWithHighestSpending.totalSpending is defined ? customerWithHighestSpending.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
 			</p>
 		</div>
 		<!-- card-info Lowest Customer-->
-		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2">
-			<p class="text-grey-p text-base">Client le moins fidèle</p>
-			<h2 class="text-3xl font-bold">{{customerWithLowestSpending.name is defined ? customerWithLowestSpending.name : 'Aucun'}}</h2>
-			<p class="text-grey-p text-base">Commandes:
+		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2 dark:bg-dark-card">
+			<p class="text-grey-p text-base dark:text-white">Client le moins fidèle</p>
+			<h2 class="text-3xl font-bold dark:text-white">{{customerWithLowestSpending.name is defined ? customerWithLowestSpending.name : 'Aucun'}}</h2>
+			<p class="text-grey-p text-base dark:text-white">Commandes:
 				<span class=" font-semibold">
 					{{customerWithLowestSpending.totalOrders is defined ? customerWithLowestSpending.totalOrders : 'Aucun'}}</span>
 			</p>
-			<p class="text-grey-p text-base">Dépensé:
+			<p class="text-grey-p text-base dark:text-white">Dépensé:
 				<span class="text-[#4FD18B] font-semibold">
 					{{customerWithLowestSpending.totalSpending is defined ? customerWithLowestSpending.totalSpending ~ ' €' : 'Aucun'}}
 				</span>
