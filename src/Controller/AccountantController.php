@@ -19,11 +19,10 @@ class AccountantController extends AbstractController
 {
     #[Route('/accountant', name: 'app_accountant')]
     public function index(
-        DevisRepository $devisRepository, 
-        DevisProductRepository $devisProductRepository, 
+        DevisRepository $devisRepository,
+        DevisProductRepository $devisProductRepository,
         InvoiceRepository $invoiceRepository
-    ): Response
-    {
+    ): Response {
 
         $society = $this->getUser()->getSociety();
         $devis = $devisRepository->findBy(['society' => $society]);
@@ -36,7 +35,6 @@ class AccountantController extends AbstractController
                 $totalPriceDevisByMonth[$month] = 0;
             }
             $totalPriceDevisByMonth[$month] += $d->getTotalDuePrice();
-
         }
         // Trier par date
         uksort($totalPriceDevisByMonth, function ($a, $b) {
@@ -47,7 +45,7 @@ class AccountantController extends AbstractController
 
 
         // dd($invoiceRepository->findAllInvoiceAmountForSociety($society));
-        $invoice = $invoiceRepository->findAllInvoiceAmountForSociety($society);//TODO Society
+        $invoice = $invoiceRepository->findAllInvoiceAmountForSociety($society); //TODO Society
         $totalPriceByMonth = [];
 
         //Calcul du totalDuePrice des factures par mois
@@ -56,8 +54,7 @@ class AccountantController extends AbstractController
             if (!isset($totalPriceByMonth[$month])) {
                 $totalPriceByMonth[$month] = 0;
             }
-            $totalPriceByMonth[$month] += $i->getTotalDuePrice();
-
+            $totalPriceByMonth[$month] += $i->getTotalPrice();
         }
         // Trier par date
         uksort($totalPriceByMonth, function ($a, $b) {
@@ -65,7 +62,7 @@ class AccountantController extends AbstractController
             $dateB = strtotime("01-$b");
             return $dateA - $dateB;
         });
-        
+
         return $this->render('accountant/index.html.twig', [
             'devis' => $devisRepository->findBy(['society' => $society]),
             'customers' => $devisRepository->findAllCustomerWithOrdersAndTotalDuePrice($society),
