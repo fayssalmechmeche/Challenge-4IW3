@@ -49,7 +49,7 @@ class InvoiceRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
-        return $lastInvoice ? $lastInvoice->getTotalDuePrice() : null;
+        return $lastInvoice ? $lastInvoice->getTotalPrice() : null;
     }
 
     public function findAllInvoiceAmountForSociety(Society $society): ?array

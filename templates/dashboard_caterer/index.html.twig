@@ -51,7 +51,7 @@
 				<!-- card-info -->
 				{% include 'components/card-info.twig' with {
 					description: 'Prévision ce mois :',
-					amount:'+ ' ~ amountDevisMonth ~ ' €',
+					amount:'+ ' ~ amountDevisMonth ~ '€',
 					percentage: differenceLastAndCurrentMonthDevis|number_format(0)
 				
 				} %}
