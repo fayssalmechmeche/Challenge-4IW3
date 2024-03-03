@@ -38,7 +38,7 @@ class StripeController extends AbstractController
         }
 
         // on verifie si la commande a déjà été payée en bdd
-        if ($invoice->getPaymentStatus() && $invoice->getPaymentStatus() != InvoiceStatus::Pending) {
+        if ($invoice->getInvoiceStatus() && $invoice->getInvoiceStatus() != InvoiceStatus::Pending) {
             // si oui on redirige vers la page de succes
             $this->addFlash('success', 'Votre facture a déjà été payée');
             return $this->redirectToRoute('checkout_success', ['token' => $invoice->getToken()]);
