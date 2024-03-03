@@ -177,12 +177,6 @@ class ResetPasswordController extends AbstractController
 
             $user->setPassword($encodedPassword);
             $this->entityManager->flush();
-            $link = $this->generateUrl('app_login', [], UrlGeneratorInterface::ABSOLUTE_URL);
-            $this->mailjet->sendEmail($user->getEmail(), $user->getName() . " " . $user->getLastName(), MailjetService::TEMPLATE_CONFIRM_REGISTER, [
-                'confirmation_link' => $link,
-                'firstName' => $user->getName(),
-                'name' => $user->getLastName()
-            ]);
             $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter.');
 
             // The session is cleaned up after the password has been changed.
