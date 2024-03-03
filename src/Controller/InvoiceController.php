@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/invoice')]
@@ -145,7 +146,6 @@ class InvoiceController extends AbstractController
         $new = $totalTTC;
 
         if ($request->isMethod('POST')) {
-
             $invoice->setInvoiceNumber($newInvoiceNumber);
             $invoice->setTaxe($taxeValue);
             $invoice->setTotalPrice(round($new));
@@ -163,10 +163,6 @@ class InvoiceController extends AbstractController
             $invoice->setCreatedAt($createdAt);
             $dateValidite = new DateTime($request->request->get('dateValidite'));
             $invoice->setDateValidite($dateValidite);
-
-                // Retourner à la vue sans exécuter le flush
-                return $this->redirectToRoute('app_invoice_index', []);
-            }
             $entityManager->persist($invoice);
             $entityManager->flush();
 
