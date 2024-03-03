@@ -168,9 +168,10 @@ class InvoiceController extends AbstractController
             $invoice->setPaymentDueTime($paymentDueTime);
             $createdAt = new DateTime();
             $invoice->setCreatedAt($createdAt);
+            dd($request->request->get('dateValidite'));
             $dateValidite = new DateTime($request->request->get('dateValidite'));
             $invoice->setDateValidite($dateValidite);
-            if (empty($dateValiditeValue)) {
+            if (empty($dateValidite)) {
                 // Ici, vous pouvez ajouter un message flash pour indiquer à l'utilisateur que la date de validité est requise
                 $this->addFlash('error', 'La date de validité est requise pour créer une facture.');
 
@@ -182,7 +183,7 @@ class InvoiceController extends AbstractController
 
             $mailjetService->sendEmail(
                 $invoice->getDevis()->getCustomer()->getEmail(),
-                $invoice->getDevis()->getCustomer()->getName(),
+                $invoice->getDevis()->getCustomer()->getNameSociety() ? $invoice->getDevis()->getCustomer()->getNameSociety() : $invoice->getDevis()->getCustomer()->getName() . ' ' . $invoice->getDevis()->getCustomer()->getLastName(),
                 MailjetService::TEMPLATE_INVOICE_NO_DEPOSIT,
                 [
                     'firstName' => $invoice->getDevis()->getCustomer()->getName(),
