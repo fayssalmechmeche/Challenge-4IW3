@@ -44,7 +44,7 @@ class DevisRepository extends ServiceEntityRepository
             ->andWhere('d.society = :society')
             ->andWhere('d.paymentStatus = :status')
             ->setParameter('society', $society)
-            ->setParameter('status', 'PENDING')
+            ->setParameter('status', 'SIGNED')
             ->getQuery()
             ->getResult();
     }
@@ -106,14 +106,23 @@ class DevisRepository extends ServiceEntityRepository
 
     public function findAmountInvoicePaid(Society $society)
     {
-        return $this->createQueryBuilder('d')
-            ->select('SUM(i.totalPrice) as totalReceived')  //TODO TotalDuePrice int
+        $result = $this->createQueryBuilder('d')
+            ->select('i.totalDuePrice')
             ->innerJoin('d.invoices', 'i')
-            ->where("i.invoiceStatus = 'PAID'")
+            ->where('i.invoiceStatus = :status')
             ->andWhere('d.society = :society')
+            ->setParameter('status', 'PAID')
             ->setParameter('society', $society)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
+
+        $totalReceived = 0;
+
+        foreach ($result as $item) {
+            $totalReceived += (float) $item['totalDuePrice']; //Cast du string en float
+        }
+
+        return $totalReceived;
     }
 
     public function findInvoicePending(Society $society)
@@ -121,7 +130,7 @@ class DevisRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->select('COUNT(i.id) as totalPending')
             ->innerJoin('d.invoices', 'i')
-            ->where("i.invoiceStatus = 'PENDING'")
+            ->where("i.invoiceStatus = 'DELAYED'")
             ->andWhere('d.society = :society')
             ->setParameter('society', $society)
             ->getQuery()

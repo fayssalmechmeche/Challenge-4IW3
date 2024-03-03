@@ -155,8 +155,6 @@ class InvoiceController extends AbstractController
             $invoice->setRemise(0);
             $invoice->setInvoiceStatus(InvoiceStatus::Pending);
             $invoice->setToken(uniqid('invoice_'));
-            $invoice->setInvoiceStatus(InvoiceStatus::Paid);
-            $invoice->setToken(uniqid());
             $paymentDueTime = new DateTime('now + 10 days');
             $invoice->setPaymentDueTime($paymentDueTime);
             $createdAt = new DateTime();
@@ -165,14 +163,14 @@ class InvoiceController extends AbstractController
             $invoice->setDateValidite($dateValidite);
             $entityManager->persist($invoice);
             $entityManager->flush();
-
+            $deposit == "true" ? $this->generateUrl('checkout_index', ['token' => $invoice->getToken(), 'deposit' => true], UrlGeneratorInterface::ABSOLUTE_URL) : $this->generateUrl('checkout_index', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
             $mailjetService->sendEmail(
                 $invoice->getDevis()->getCustomer()->getEmail(),
-                $invoice->getDevis()->getCustomer()->getName(),
+                $invoice->getDevis()->getCustomer()->getNameSociety() ? $invoice->getDevis()->getCustomer()->getNameSociety() : $invoice->getDevis()->getCustomer()->getName() . ' ' . $invoice->getDevis()->getCustomer()->getLastName(),
                 MailjetService::TEMPLATE_INVOICE_NO_DEPOSIT,
                 [
-                    'firstName' => $invoice->getDevis()->getCustomer()->getName(),
-                    'name' => $invoice->getDevis()->getCustomer()->getLastName(),
+                    'firstName' => $invoice->getDevis()->getCustomer()->getNameSociety() ? $invoice->getDevis()->getCustomer()->getNameSociety() :  $invoice->getDevis()->getCustomer()->getName(),
+                    'name' => $invoice->getDevis()->getCustomer()->getNameSociety() ? '' : $invoice->getDevis()->getCustomer()->getLastName(),
                     'invoice_link' => $deposit == "true" ? $this->generateUrl('checkout_index', ['token' => $invoice->getToken(), 'deposit' => true], UrlGeneratorInterface::ABSOLUTE_URL) : $this->generateUrl('checkout_index', ['token' => $invoice->getToken()], UrlGeneratorInterface::ABSOLUTE_URL)
                 ]
             );
