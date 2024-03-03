@@ -232,6 +232,10 @@ class InvoiceController extends AbstractController
     public function show(Invoice $invoice): Response
     {
         $society = $this->getSociety();
+        if ($society->getId() != $invoice->getSociety()->getId()) {
+            return $this->redirectToRoute('app_invoice_index');
+        }
+
         $devis = $invoice->getDevis();
         $invoiceNumber = $invoice->getInvoiceNumber();
         $totalTTC = $invoice->getTotalDuePrice();
@@ -260,6 +264,10 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
+        $society = $this->getSociety();
+        if ($society->getId() != $invoice->getSociety()->getId()) {
+            return $this->redirectToRoute('app_invoice_index');
+        }
 
         $entityManager->remove($invoice);
         $entityManager->flush();
