@@ -1,3 +1,50 @@
+# Liste des Tâches du Projet
+
+Ce document détaille la répartition des tâches entre les membres de l'équipe pour le développement front-end et back-end.
+
+## Pseudo Github
+
+Frederic : FredericESGI
+
+Achraf : Kherraz-Med-Achraf
+
+Youri : Yghlis
+
+Fayssal : fayssalmechmeche
+
+## Répartition des Tâches
+
+| Fonctionnalité                                       | Front-End            | Back-End             |
+| ----------------------------------------------------- | -------------------- | -------------------- |
+| Inscription / Connexion (Mot de passe oublié inclus) | Frederic             | Fayssal              |
+| Gestion des rôles                                    | Fayssal              | Fayssal              |
+| Superadmin                                            | Frederic / Fayssal   | Frederic / Fayssal   |
+| Facture                                               | Achraf / Youri       | Youri / Achraf       |
+| Devis                                                 | Achraf / Youri       | Achraf / Youri       |
+| Clients                                               | Achraf               | Youri                |
+| Produits                                              | Achraf               | Youri                |
+| Formule                                               | Achraf               | Youri                |
+| Catégorie                                            | Frederic             | Frederic             |
+| Envoi de mail                                         | Fayssal              | Fayssal              |
+| Stripe (en général)                                 | Fayssal              | Fayssal              |
+| Statut des paiements des devis et factures            | Rien                 | Youri                |
+| Dashboard                                             | Achraf               | Achraf               |
+| Dashboard superadmin                                  | Frédéric / Fayssal | Frédéric / Fayssal |
+| Gestion des sociétés                                | Fayssal / Frédéric | Fayssal / Frédéric |
+| Rapports financiers                                   | Frédéric / Fayssal | Frédéric / Fayssal |
+| Profil                                                | Achraf               | Achraf / Fayssal     |
+| PDF devis facture                                     | Achraf               | Achraf               |
+
+## Note
+
+Cette liste est susceptible d'être mise à jour au fur et à mesure de l'avancement du projet.
+
+lien github : https://github.com/fayssalmechmeche/Challenge-4IW3
+
+lien figma : https://www.figma.com/file/3ftoKivF4TxUTXdGKx4MIP/Untitled?type=design&node-id=0%3A1&mode=design&t=tuhlzoCXMtbmT2Xo-1
+
+lien du site : http://astroshe.live/
+
 # Symfony Docker (PHP8 / Caddy / Postgresql)
 
 A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
