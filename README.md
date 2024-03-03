@@ -45,6 +45,8 @@ lien figma : https://www.figma.com/file/3ftoKivF4TxUTXdGKx4MIP/Untitled?type=des
 
 lien du site : http://astroshe.live/
 
+STRIPE CB : 4242 4242 4242 4242     CODE SECRET : 123    DATE: SUPERIEUR A AUJOURD'HUI
+
 # Symfony Docker (PHP8 / Caddy / Postgresql)
 
 A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
