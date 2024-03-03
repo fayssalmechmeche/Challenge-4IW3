@@ -6,7 +6,7 @@
 {% block content %}
 
 
-	<div class="flex flex-col mx-auto h-fit w-95% rounded-2xl bg-white dark:bg-dark-section p-3 gap-10">
+	<div class="flex flex-col mx-auto h-fit w-95% rounded-2xl bg-white bg-opacity-70 dark:bg-dark-section dark:bg-opacity-100 p-3 gap-10">
 		<h1 class="px-5 text-5xl mt-2 mb-10 dark:text-white">Mon dashboard</h1>
 
 		<!-- first block -->
@@ -45,12 +45,12 @@
 		</div>
 
 		<!-- Section Card -->
-		<div class="flex gap-10 justify-evenly flex-wrap">
+		<div class="flex gap-4 justify-evenly flex-wrap">
 			<div
-				class="flex gap-10 justify-evenly flex-wrap flex-grow">
+				class="flex gap-4 justify-evenly flex-wrap flex-grow">
 				<!-- card-info -->
 				{% include 'components/card-info.twig' with {
-					description: 'Prévision pour ce mois :',
+					description: 'Prévision ce mois :',
 					amount:'+ ' ~ amountDevisMonth ~ ' €',
 					percentage: differenceLastAndCurrentMonthDevis|number_format(0)
 				
@@ -64,7 +64,7 @@
 				} %}
 			</div>
 			<div
-				class="flex gap-10 justify-evenly flex-wrap flex-grow">
+				class="flex gap-4 justify-evenly flex-wrap flex-grow">
 				<!-- card-info -->
 				{% include 'components/card-info.twig' with {
 					description: 'En attente :',
@@ -85,12 +85,12 @@
 			<div class="flex-grow w-[370px] max-md:w-full">
 				<h1 class='text-4xl font-bold mb-3 dark:text-white'>Liste des Clients</h1>
 				<!-- Conteneur pour le tableau Grid.js client -->
-				<div class="max-h-96 flex justify-between items-start overflow-scroll" id="customer-table"></div>
+				<div class="max-h-96 flex justify-between items-start overflow-y-scroll" id="customer-table"></div>
 			</div>
 			<div class="flex-grow w-[370px] max-md:w-full">
 				<h1 class='text-4xl font-bold mb-3 dark:text-white'>Liste des Produits</h1>
 				<!-- Conteneur pour le tableau Grid.js produit -->
-				<div class="max-h-96 flex justify-between items-start overflow-scroll" id="product-table"></div>
+				<div class="max-h-96 flex justify-between items-start overflow-y-scroll" id="product-table"></div>
 			</div>
 		</div>
 	</div>
