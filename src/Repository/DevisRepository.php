@@ -151,7 +151,7 @@ class DevisRepository extends ServiceEntityRepository
     public function findCustomerWithHighestTotalOrdersAndHisTotalSpending(Society $society)
     {
         return $this->createQueryBuilder('d')
-            ->select('c.name', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
+            ->select('c.name', 'c.nameSociety', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
             ->innerJoin('d.customer', 'c')
             ->where('d.society = :society')
             ->groupBy('c.id')
@@ -165,7 +165,7 @@ class DevisRepository extends ServiceEntityRepository
     public function findCustomerWithLowestTotalOrdersAndHisTotalSpending(Society $society)
     {
         return $this->createQueryBuilder('d')
-            ->select('c.name', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
+            ->select('c.name', 'c.nameSociety', 'COUNT(d.id) as totalOrders', 'SUM(d.totalDuePrice) as totalSpending')
             ->innerJoin('d.customer', 'c')
             ->where('d.society = :society')
             ->groupBy('c.id')

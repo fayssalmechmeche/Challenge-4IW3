@@ -103,7 +103,7 @@
 		<!-- card-info Highest Customer -->
 		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2 dark:bg-dark-card">
 			<p class="text-grey-p text-base dark:text-white">Client le plus fidèle</p>
-			<h2 class="text-3xl font-bold dark:text-white">{{customerWithHighestSpending.name is defined ? customerWithHighestSpending.name : 'Aucun'}}</h2>
+			<h2 class="text-3xl font-bold dark:text-white">{{ customerWithHighestSpending ? customerWithHighestSpending.nameSociety ? customerWithHighestSpending.nameSociety : customerWithHighestSpending.name : 'Aucun'}}</h2>
 			<p class="text-grey-p text-base dark:text-white">Commandes:
 				<span class=" font-semibold">
 					{{customerWithHighestSpending.totalOrders is defined ? customerWithHighestSpending.totalOrders : 'Aucun'}}</span>
@@ -117,7 +117,7 @@
 		<!-- card-info Lowest Customer-->
 		<div class="px-7 py-3 bg-white w-60 rounded-xl shadow-xl flex flex-col justify-start items-start gap-2 dark:bg-dark-card">
 			<p class="text-grey-p text-base dark:text-white">Client le moins fidèle</p>
-			<h2 class="text-3xl font-bold dark:text-white">{{customerWithLowestSpending.name is defined ? customerWithLowestSpending.name : 'Aucun'}}</h2>
+			<h2 class="text-3xl font-bold dark:text-white">{{ customerWithLowestSpending ? customerWithLowestSpending.nameSociety ? customerWithLowestSpending.nameSociety : customerWithLowestSpending.name : 'Aucun'}}</h2>
 			<p class="text-grey-p text-base dark:text-white">Commandes:
 				<span class=" font-semibold">
 					{{customerWithLowestSpending.totalOrders is defined ? customerWithLowestSpending.totalOrders : 'Aucun'}}</span>
