@@ -135,7 +135,7 @@ class DevisProductExcelService
                 $this->sheet->setCellValue('D' . $line, $quantity);
                 $this->sheet->setCellValue('E' . $line, $matchingDevisProduct->getPrice() / 100);
                 $this->sheet->setCellValue('F' . $line, ($matchingDevisProduct->getPrice() / 100) * $quantity);
-                $this->sheet->setCellValue('G' . $line, $matchingDevisProduct->getProduct()->getCategory()->getName());
+                $this->sheet->setCellValue('G' . $line, $matchingDevisProduct->getProduct()->getCategory() ? $matchingDevisProduct->getProduct()->getCategory()->getName() : "Non catégorisé");
                 $line++;
             }
         }
